@@ -1,0 +1,100 @@
+{
+ "version": "5",
+ "armado": "2026-10-04",
+ "herramientas": [
+  {
+   "n": 1,
+   "carpeta": "m2-h1-objetivo-kyc",
+   "clave": "m2s1",
+   "prefijo": "A",
+   "peso": 2,
+   "abierta": true,
+   "estado": "integrada",
+   "archivo_usado": "M2 · datos Página 1 · v2.json"
+  },
+  {
+   "n": 2,
+   "carpeta": "m2-h2-reportes-dolares-sistemas",
+   "clave": "m2s2",
+   "prefijo": "B",
+   "peso": 3,
+   "abierta": true,
+   "estado": "integrada",
+   "archivo_usado": "M2 · datos Página 2 · v2.json"
+  },
+  {
+   "n": 3,
+   "carpeta": "m2-h3-otras-obligaciones-lpb",
+   "clave": "m2s3",
+   "prefijo": "C",
+   "peso": 3,
+   "abierta": true,
+   "estado": "integrada",
+   "archivo_usado": "M2 · datos Página 3 · v1.json"
+  },
+  {
+   "n": 4,
+   "carpeta": "m2-h4-ccc-oficial",
+   "clave": "m2s4",
+   "prefijo": "D",
+   "peso": 2,
+   "abierta": true,
+   "estado": "integrada",
+   "archivo_usado": "M2 · datos Página 4 · v1.json"
+  },
+  {
+   "n": 5,
+   "carpeta": "m2-h5-novedosos-cambios-itf",
+   "clave": "m2s5",
+   "prefijo": "E",
+   "peso": 4,
+   "abierta": true,
+   "estado": "integrada",
+   "archivo_usado": "M2 · datos Página 5 · v1.json"
+  },
+  {
+   "n": 6,
+   "carpeta": "m2-h6-sanciones-pr-plazos",
+   "clave": "m2s6",
+   "prefijo": "F",
+   "peso": 3,
+   "abierta": true,
+   "estado": "integrada",
+   "archivo_usado": "M2 · datos Página 6 · v1.json"
+  },
+  {
+   "n": 7,
+   "carpeta": "m2-h7-tipologias",
+   "clave": "m2s8",
+   "prefijo": "H",
+   "peso": 2,
+   "abierta": true,
+   "estado": "integrada",
+   "archivo_usado": "M2 · datos Página 8 · v3.json"
+  },
+  {
+   "n": 8,
+   "carpeta": "m2-h8-lfpiorpi",
+   "clave": "m2s7",
+   "prefijo": "G",
+   "peso": 2,
+   "abierta": true,
+   "estado": "integrada",
+   "archivo_usado": "M2 · datos Página 7 · v2.json"
+  }
+ ],
+ "simulacro": {
+  "carpeta": "m2-simulacro",
+  "pesos": {
+   "h1": 2,
+   "h2": 3,
+   "h3": 3,
+   "h4": 2,
+   "h5": 4,
+   "h6": 3,
+   "h7": 2,
+   "h8": 2
+  },
+  "reactivos": 604
+ }
+}

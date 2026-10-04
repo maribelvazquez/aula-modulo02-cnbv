@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aula del Repaso · Módulo 2</title>
+<meta name="description" content="Portal de estudio del Área 2 del temario CNBV PLD/FT, agosto 2026: una herramienta por grupo de temas, el simulacro mixto y la biblioteca de fuentes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* PLANTILLA · Portal del Aula 360Educa (molde del Aula del Módulo 1, oct-2026). Motor fijo: el contenido vive en <script id="aula">.
+   Layout: banda carbón de marca arriba, columna única sobre crema; entradas numeradas por subárea; biblioteca de fuentes en renglones; pie carbón.
+   360Educa no tiene tema oscuro: la página se queda en crema en cualquier tema del visor. */
+:root{
+  --crema:#faf5ec; --blanco:#ffffff; --negro:#1b1b1e; --carbon:#393e41;
+  --gris:#747975; --rule:#dfdede; --verde:#64c27b; --verde-claro:#87d895;
+  --tinte:rgba(100,194,123,.14); --apagado:#efeae0;
+  --display:Montserrat, Arial, sans-serif; --sans:Inter, Arial, sans-serif;
+  --r-sm:6px; --r-md:12px; --r-lg:20px; --pill:999px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--crema);color:var(--negro);font-family:var(--sans);font-size:16px;line-height:1.6;margin:0}
+a{color:var(--negro)}
+a:focus-visible{outline:3px solid var(--carbon);outline-offset:3px;border-radius:var(--r-md)}
+.wrap{max-width:860px;margin:0 auto;padding-inline:20px}
+
+/* Encabezado */
+.top{background:var(--carbon);color:var(--blanco);padding-block:28px 40px}
+.marcas{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+.marcas span+span::before{content:"·";margin-right:14px;color:var(--verde-claro)}
+.eyebrow{font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;margin:40px 0 10px;color:#d9dbdc}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(34px,7vw,52px);line-height:1.08;margin:0;text-wrap:balance}
+h1 em{font-style:normal;display:inline-block;background:var(--verde);color:var(--negro);padding:0 .22em;border-radius:var(--r-sm)}
+.lede{max-width:60ch;margin:16px 0 0;color:#eceeef;font-size:17px}
+.acceso{display:inline-flex;align-items:center;gap:8px;margin-top:22px;padding:6px 14px;border:1px solid rgba(255,255,255,.35);border-radius:var(--pill);font-size:13px;color:#eceeef}
+.acceso svg{flex:none}
+.membrete{height:6px;background:var(--verde-claro)}
+
+/* Secciones */
+main{padding-block:48px 64px;display:grid;gap:64px}
+.sec-head{display:grid;gap:6px;margin-bottom:24px}
+h2{font-family:var(--display);font-weight:800;font-size:28px;line-height:1.2;margin:0;text-wrap:balance}
+.sec-head p{margin:0;max-width:62ch;color:var(--carbon)}
+
+.grupo{display:grid;gap:12px}
+.grupo+.grupo{margin-top:32px}
+.grupo h3{display:flex;align-items:baseline;gap:10px;margin:0 0 4px;font-family:var(--display);font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--carbon)}
+.grupo h3 b{font-weight:800;background:var(--verde);color:var(--negro);padding:2px 9px;border-radius:var(--pill);letter-spacing:.04em;flex:none}
+
+/* Entradas */
+.entrada{display:grid;grid-template-columns:112px 1fr;background:var(--blanco);border:1px solid var(--rule);border-radius:var(--r-md);overflow:hidden;text-decoration:none;color:var(--negro);transition:border-color .15s, transform .15s}
+a.entrada:hover{border-color:var(--carbon);transform:translateY(-1px)}
+.num{background:var(--verde);display:flex;align-items:flex-start;justify-content:center;padding:20px 8px;font-family:var(--display);font-weight:800;font-size:26px;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.01em;text-align:center}
+.num.largo{font-size:19px}
+.cuerpo{padding:18px 20px;display:grid;gap:4px;min-width:0}
+.cuerpo h4{font-family:var(--display);font-weight:700;font-size:20px;line-height:1.25;margin:0;text-wrap:balance}
+.fuente{font-size:13px;color:var(--carbon);font-weight:500}
+.que{font-size:15px;margin:2px 0 0}
+.abrir{margin-top:8px;font-size:14px;font-weight:600;display:inline-flex;gap:6px;align-items:center;text-decoration:underline;text-underline-offset:3px}
+.entrada.pronto{background:transparent;border-style:dashed}
+.entrada.pronto .num{background:var(--apagado);color:var(--carbon)}
+.chip{justify-self:start;margin-top:8px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:3px 10px;border-radius:var(--pill);border:1px solid var(--carbon);color:var(--carbon)}
+
+/* Biblioteca */
+.guia{background:var(--blanco);border:1px solid var(--rule);border-radius:var(--r-md);padding:18px 20px;display:grid;gap:10px;font-size:15px}
+.guia p{margin:0}
+.leyenda{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;font-size:13px;color:var(--carbon)}
+.leyenda span{display:inline-flex;gap:8px;align-items:center}
+.lista{margin-top:20px;border-top:1px solid var(--rule)}
+.doc{display:grid;grid-template-columns:96px 1fr;gap:16px;padding-block:18px;border-bottom:1px solid var(--rule)}
+.tag{justify-self:start;font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:.04em;padding:5px 10px;border-radius:var(--r-sm);background:var(--verde);color:var(--negro);white-space:nowrap}
+.tag.guia-tag{background:var(--blanco);border:1.5px solid var(--carbon)}
+.doc-body{min-width:0;display:grid;gap:4px}
+.doc-body h4{margin:0;font-family:var(--display);font-weight:700;font-size:17px;line-height:1.3}
+.meta{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:13px;color:var(--carbon);font-variant-numeric:tabular-nums}
+.nonorma{font-weight:600;text-transform:uppercase;letter-spacing:.06em;font-size:11px;border:1px solid var(--carbon);border-radius:var(--pill);padding:1px 8px}
+.doc-body p{margin:0;font-size:15px}
+.doc-body .ext{font-size:14px;font-weight:600;text-underline-offset:3px;justify-self:start;margin-top:2px}
+.pend{font-size:13px;color:var(--carbon);font-style:italic}
+
+/* Pie */
+footer{background:var(--carbon);color:#eceeef;padding-block:32px;font-size:13px}
+footer .wrap{display:grid;gap:10px}
+.firma{font-family:var(--display);font-weight:800;font-size:18px;color:var(--blanco);letter-spacing:.02em}
+.firma small{font-family:var(--sans);font-weight:500;font-size:13px;color:#d9dbdc;letter-spacing:0;margin-left:6px}
+footer p{margin:0;max-width:70ch}
+
+@media (max-width:560px){
+  .entrada{grid-template-columns:1fr}
+  .num{justify-content:flex-start;padding:14px 20px 12px;font-size:24px}
+  .num.largo{font-size:19px}
+  .doc{grid-template-columns:1fr;gap:10px}
+  .grupo h3{flex-wrap:wrap}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="marcas" aria-label="Marcas" id="marcas"></div>
+    <p class="eyebrow" id="eyebrow"></p>
+    <h1 id="h1"></h1>
+    <p class="lede" id="lede"></p>
+    <p class="acceso" id="acceso"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span></span></p>
+  </div>
+</header>
+<div class="membrete" aria-hidden="true"></div>
+
+<main class="wrap">
+  <section aria-labelledby="t-temas">
+    <div class="sec-head">
+      <h2 id="t-temas"></h2>
+      <p id="temas-intro"></p>
+    </div>
+    <div id="entradas"></div>
+  </section>
+
+  <section aria-labelledby="t-bib" id="bib">
+    <div class="sec-head">
+      <h2 id="t-bib">Biblioteca</h2>
+    </div>
+    <div class="guia" id="guia"></div>
+    <div class="lista" id="biblioteca"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="firma" id="firma"></div>
+    <p id="pie"></p>
+  </div>
+</footer>
+
+<!-- ===================== DATOS DEL AULA (los arma construir_aula.py) ===================== -->
+<script type="application/json" id="aula">
+{"titulo":"Aula del Repaso · Módulo 2","descripcion":"Portal de estudio del Área 2 del temario CNBV PLD/FT, agosto 2026: una herramienta por grupo de temas, el simulacro mixto y la biblioteca de fuentes.","marcas":["GMC360","360EDUCA"],"eyebrow":"Certificación CNBV PLD/FT · 2ª convocatoria 2026","h1_antes":"Aula del Repaso ·","h1_resaltado":"Módulo 2","lede":"Conocimientos técnicos en PLD/FT: las disposiciones de cada sujeto obligado del sistema financiero, las tipologías de lavado y la LFPIORPI. Aquí tienes una herramienta de estudio por grupo de temas del Área 2 del temario de agosto de 2026, un simulacro que los mezcla y la biblioteca con las fuentes que los sostienen.","acceso":"Material exclusivo para alumnos inscritos","temas_titulo":"Los 20 temas del Área 2","temas_intro":"Cada tema abre su herramienta en la parte que lo explica: mapa para ver el todo, Modo recitar para memorizar y simulador con reactivos de opción múltiple. Recórrelos en el orden del temario: primero las DCG del sistema financiero, con Bancos de eje, luego las tipologías y al final la LFPIORPI.","grupos":[{"clave":"2.1","nombre":"Leyes relativas al sistema financiero y DCG aplicables a los sujetos obligados","temas":[{"n":"2.1.1","t":"Objetivo","f":"H1 · Primera y segunda disposición de las 12 DCG","q":"Para qué existen las DCG, a quién obligan y con quién operan: Cliente, Usuario o los dos, sujeto por sujeto.","href":"m2-h1-objetivo-kyc/index.html#t2-1-1"},{"n":"2.1.2","t":"Política de identificación y conocimiento del cliente o usuario","f":"H1 · Bancos Cap. II y III (3ª a 32ª) y sus equivalentes","q":"Expedientes, niveles de cuenta, identificación no presencial, perfil, grado de riesgo y PEP, con Bancos de eje.","href":"m2-h1-objetivo-kyc/index.html#t2-1-2"},{"n":"2.1.3","t":"Reportes","f":"H2 · Bancos 34ª a 42ª y sus equivalentes","q":"Relevantes, inusuales, 24 horas, internas preocupantes, dólares en efectivo y transferencias: umbral, plazo y quién reporta.","href":"m2-h2-reportes-dolares-sistemas/index.html#t2-1-3"},{"n":"2.1.4","t":"Restricciones de dólares en efectivo","f":"H2 · Bancos Cap. III Bis (33ª Bis a 33ª Quáter) y sus equivalentes","q":"Sólo cuatro DCG restringen los dólares en efectivo, y con las mismas cifras: 4,000 · 14,000 · 300 · 1,500 USD.","href":"m2-h2-reportes-dolares-sistemas/index.html#t2-1-4"},{"n":"2.1.5","t":"Sistemas automatizados","f":"H2 · Bancos 51ª y sus equivalentes","q":"Lo que debe hacer el sistema, lo que sólo exige Bancos desde 2024 y el plazo de adecuación de cada DCG.","href":"m2-h2-reportes-dolares-sistemas/index.html#t2-1-5"},{"n":"2.1.6","t":"Otras obligaciones","f":"H3 · Las 12 DCG, sujeto por sujeto, con Bancos de eje","q":"Manual, metodología, capacitación, reserva, conservación y auditoría, en tres bloques: lo escribo y lo enseño; lo callo, lo guardo y lo reviso; hasta dónde llego.","href":"m2-h3-otras-obligaciones-lpb/index.html#t2-1-6"},{"n":"2.1.7","t":"Intercambio de información","f":"H3 · Las 12 DCG, sujeto por sujeto, con Bancos de eje","q":"Quién puede intercambiar información y con quién: con entidades del mismo tipo, dentro del grupo o con el extranjero, y los cinco sujetos que no intercambian.","href":"m2-h3-otras-obligaciones-lpb/index.html#t2-1-7"},{"n":"2.1.8","t":"Lista de personas bloqueadas","f":"H3 · Las 12 DCG, sujeto por sujeto, con Bancos de eje","q":"Qué hacer cuando alguien aparece en la Lista de Personas Bloqueadas: suspender, reportar en 24 horas, avisar y los plazos para acudir a la autoridad.","href":"m2-h3-otras-obligaciones-lpb/index.html#t2-1-8"},{"n":"2.1.9","t":"Comité de Comunicación y Control","f":"H4 · Las 12 DCG, sujeto por sujeto, con Bancos de eje (43ª a 46ª)","q":"Quién integra el Comité, cuándo sesiona y qué dictamina; qué sujetos pueden no tenerlo y quién ejerce entonces sus funciones.","href":"m2-h4-ccc-oficial/index.html#t2-1-9"},{"n":"2.1.10","t":"Oficial de cumplimiento","f":"H4 · Las 12 DCG, sujeto por sujeto, con Bancos de eje (47ª y 48ª)","q":"Cómo se designa, certifica y avisa al Oficial de Cumplimiento, y qué sujetos no lo tienen o usan otra figura.","href":"m2-h4-ccc-oficial/index.html#t2-1-10"},{"n":"2.1.11","t":"Obligaciones de los modelos novedosos","f":"H5 · LRITF arts. 80 y 86, y las DCG","q":"Qué es un modelo novedoso y por qué no es una ITF: su autorización temporal y la obligación PLD que le aplica.","href":"m2-h5-novedosos-cambios-itf/index.html#t2-1-11"},{"n":"2.1.12","t":"Centros cambiarios","f":"H5 · LGOAAC arts. 81-A y 95 Bis · DCG de centros cambiarios","q":"Por qué un centro cambiario no es una casa de cambio chica, y en qué se aparta su DCG de la de Bancos.","href":"m2-h5-novedosos-cambios-itf/index.html#t2-1-12"},{"n":"2.1.13","t":"Transmisores de dinero","f":"H5 · LGOAAC art. 81-A Bis · DCG de transmisores de dinero","q":"Quién ayuda al transmisor (agente relacionado y persona jurídica coadyuvante) y en qué se aparta su DCG de la de Bancos.","href":"m2-h5-novedosos-cambios-itf/index.html#t2-1-13"},{"n":"2.1.14","t":"Instituciones de tecnología financiera","f":"H5 · LRITF art. 58 · DCG de las ITF","q":"IFC e IFPE, sólo Clientes y por artículos: en qué se aparta la DCG de las ITF de la de Bancos.","href":"m2-h5-novedosos-cambios-itf/index.html#t2-1-14"},{"n":"2.1.15","t":"Sanciones","f":"H6 · LIC, LGOAAC y LRITF","q":"Qué ley sanciona a cada sujeto, con cuánto y con qué reducciones; las sanciones financieras no son las de la LFPIORPI.","href":"m2-h6-sanciones-pr-plazos/index.html#t2-1-15"},{"n":"2.1.16","t":"Propietario real","f":"H6 · Las 12 DCG y los Lineamientos de propietario real","q":"Quién es el propietario real: las DCG obligan y los Lineamientos orientan, sujeto por sujeto.","href":"m2-h6-sanciones-pr-plazos/index.html#t2-1-16"},{"n":"2.1.17","t":"Plazos de cumplimiento regulatorio","f":"H6 · Las 12 DCG y sus transitorios","q":"Los plazos que vencen (avisos, envíos, revisiones y conservación) y los meses para adecuarse a la última reforma de cada DCG.","href":"m2-h6-sanciones-pr-plazos/index.html#t2-1-17"},{"n":"2.1 · Tip.","t":"Tipologías UIF y de organismos internacionales","f":"H7 · UIF 2009 a 2023, Egmont y GAFI (así en el temario)","q":"Las 26 tipologías de la UIF en el orden de la bibliografía y en cuatro bloques para distinguirlas, más GAFI y Egmont.","href":"m2-h7-tipologias/index.html#t2-1-tip"}]},{"clave":"2.2","nombre":"LFPIORPI","temas":[{"n":"2.2.1","t":"Actividades vulnerables","f":"H8 · LFPIORPI, arts. 17 a 31 (reforma DOF 16-jul-2025)","q":"Las 17 actividades del art. 17 con sus umbrales de identificación y de Aviso, y las obligaciones del art. 18.","href":"m2-h8-lfpiorpi/index.html#t2-2-1"},{"n":"2.2.2","t":"Uso de efectivo","f":"H8 · LFPIORPI, arts. 32 y 33","q":"Lo que no se puede pagar en efectivo: 8 025 UMA en derechos reales sobre inmuebles y 3 210 en los demás supuestos.","href":"m2-h8-lfpiorpi/index.html#t2-2-2"}]}],"cierre":{"clave":"Área 2","nombre":"Para cerrar","entrada":{"n":"Área 2","t":"Simulacro mixto del Módulo 2","f":"Los bancos de todas las herramientas, con sus ids originales","q":"Simulacros de 30 o 50 que mezclan los temas como en el examen, con cada herramienta pesando por su número de temas. Hoy reúne 8 de 8 herramientas: un simulacro de 30 lleva H1 3 · H2 4 · H3 4 · H4 3 · H5 6 · H6 4 · H7 3 · H8 3.","href":"m2-simulacro/index.html"}},"biblioteca":{"titulo":"Biblioteca","guia":["Son las fuentes que el temario de agosto de 2026 enlista para el Área 2. Úsala para ir al texto oficial cuando una respuesta del simulador te deje duda, y para saber de qué documento sale cada tema.","Cómo leerla: la etiqueta de la izquierda es la abreviatura con la que la citamos en clase y en las herramientas. La fecha es la de publicación o de la última reforma que marca el temario. Las tipologías van una por documento, en el orden de la bibliografía del temario."],"fuentes":[{"e":"LIC","nombre":"Ley de Instituciones de Crédito","fecha":"Última reforma 14-nov-2025 (así en el temario)","norma":true,"uso":"Fundamento de las DCG de Bancos (art. 115) y de las sanciones a las instituciones de crédito. Se estudia en H1 a H6.","url":"https://www.diputados.gob.mx/LeyesBiblio/pdf/LIC.pdf"},{"e":"LGOAAC","nombre":"Ley General de Organizaciones y Actividades Auxiliares del Crédito · arts. 81-A, 81-A Bis, 87-D, 95 y 95 Bis","fecha":"Última reforma 14-nov-2025 (así en el temario)","norma":true,"uso":"Fundamento de las DCG de SOFOM, casas de cambio, centros cambiarios y transmisores de dinero.","url":"https://www.diputados.gob.mx/LeyesBiblio/pdf/LGOAAC.pdf"},{"e":"LRITF","nombre":"Ley para Regular las Instituciones de Tecnología Financiera","fecha":"Última reforma 14-nov-2025 (así en el temario)","norma":true,"uso":"Fundamento de las DCG de las ITF (art. 58).","url":"https://www.diputados.gob.mx/LeyesBiblio/pdf/LRITF.pdf"},{"e":"DCG Bancos","nombre":"Disposiciones de carácter general en PLD/FT · Instituciones de crédito (art. 115 LIC)","fecha":"DOF 20-abr-2009 · última reforma 28-ago-2024","norma":true,"uso":"El eje del 2.1: cada diferencia se estudia como «igual que Bancos, salvo…». La reforma del DOF 10-jul-2026 es posterior al temario y no entra en reactivos.","url":"https://www.gob.mx/cms/uploads/attachment/file/978360/DCG_Bancos_compilado_28.08.2024.pdf"},{"e":"DCG SOFOM","nombre":"Disposiciones de carácter general en PLD/FT · Sociedades financieras de objeto múltiple (art. 115 LIC en relación con 87-D y 95 Bis LGOAAC)","fecha":"DOF 17-mar-2011 · última reforma 09-sep-2021","norma":true,"uso":"Se estudia en el 2.1, sujeto por sujeto (H1 a H6).","url":"https://www.gob.mx/cms/uploads/attachment/file/978361/DCG_SOFOMES_compilado_2021.pdf"},{"e":"DCG CB","nombre":"Disposiciones de carácter general en PLD/FT · Casas de bolsa (art. 212 LMV)","fecha":"DOF 09-sep-2010 · última reforma 09-sep-2021","norma":true,"uso":"Se estudia en el 2.1, sujeto por sujeto (H1 a H6).","url":"https://www.gob.mx/cms/uploads/attachment/file/978394/DCG_Casas_de_Bolsa_compilado_2021.pdf"},{"e":"DCG AI","nombre":"Disposiciones de carácter general en PLD/FT · Asesores en inversiones (art. 226 Bis LMV)","fecha":"DOF 31-dic-2014 · última reforma 20-ene-2023","norma":true,"uso":"Se estudia en el 2.1, sujeto por sujeto (H1 a H6).","url":"https://www.gob.mx/cms/uploads/attachment/file/978418/DCG_Asesores_en_Inversion__compilado_2023.pdf"},{"e":"DCG FI","nombre":"Disposiciones de carácter general en PLD/FT · Fondos de inversión (art. 91 LFI)","fecha":"DOF 31-dic-2014 · última reforma 09-sep-2021","norma":true,"uso":"Se estudia en el 2.1, sujeto por sujeto (H1 a H6).","url":"https://www.gob.mx/cms/uploads/attachment/file/978375/DCG__Fondos_de_Inversi_n_compilado_2021.pdf"},{"e":"DCG SOCAP","nombre":"Disposiciones de carácter general en PLD/FT · Sociedades cooperativas de ahorro y préstamo (arts. 71 y 72 LRASCAP)","fecha":"DOF 31-dic-2014 · última reforma 09-sep-2021","norma":true,"uso":"Se estudia en el 2.1, sujeto por sujeto (H1 a H6).","url":"https://www.gob.mx/cms/uploads/attachment/file/978395/DCG_SOCAPS_compilado_2021.pdf"},{"e":"DCG SOFIPO","nombre":"Disposiciones de carácter general en PLD/FT · Sociedades financieras populares (arts. 46 Bis y 124 LACP)","fecha":"DOF 31-dic-2014 · última reforma 09-sep-2021","norma":true,"uso":"Se estudia en el 2.1, sujeto por sujeto (H1 a H6).","url":"https://www.gob.mx/cms/uploads/attachment/file/682039/Compilado_DCG_PLDFT_SOFIPOS_Ref_2021.pdf"},{"e":"DCG UC","nombre":"Disposiciones de carácter general en PLD/FT · Uniones de crédito (art. 129 LUC)","fecha":"DOF 26-oct-2012 · última reforma 20-ene-2023","norma":true,"uso":"Se estudia en el 2.1, sujeto por sujeto (H1 a H6).","url":"https://www.gob.mx/cms/uploads/attachment/file/978378/DCG_Uniones_de_Cr_dito__compilado_2023.pdf"},{"e":"DCG CC","nombre":"Disposiciones de carácter general en PLD/FT · Casas de cambio (art. 95 LGOAAC)","fecha":"DOF 25-sep-2009 · última reforma 21-mar-2019","norma":true,"uso":"Se estudia en el 2.1, sujeto por sujeto (H1 a H6).","url":"https://www.gob.mx/cms/uploads/attachment/file/978362/DCG_Casas_de_Cambio_compilado_2019.pdf"},{"e":"DCG CCam","nombre":"Disposiciones de carácter general en PLD/FT · Centros cambiarios (art. 95 Bis LGOAAC)","fecha":"DOF 10-abr-2012 · última reforma 19-ene-2023","norma":true,"uso":"Se estudia en el 2.1, sujeto por sujeto (H1 a H6).","url":"https://www.gob.mx/cms/uploads/attachment/file/978371/DCG_Centros_Cambiarios_compilado_2023.pdf"},{"e":"DCG TD","nombre":"Disposiciones de carácter general en PLD/FT · Transmisores de dinero (art. 95 Bis LGOAAC)","fecha":"DOF 10-abr-2012 · última reforma 05-abr-2023","norma":true,"uso":"Se estudia en el 2.1, sujeto por sujeto (H1 a H6).","url":"https://www.gob.mx/cms/uploads/attachment/file/978369/DCG_Transmisores_de_Dinero_compilado_2023.pdf"},{"e":"DCG ITF","nombre":"Disposiciones de carácter general en PLD/FT · Instituciones de tecnología financiera (art. 58 LRITF)","fecha":"DOF 10-sep-2018 · sin reformas","norma":true,"uso":"Se estudia en el 2.1, sujeto por sujeto (H1 a H6).","url":"https://www.gob.mx/cms/uploads/attachment/file/909810/DCG_Instituciones_de_Tecnolog_a_Financiera__2018.pdf"},{"e":"Lin. PR","nombre":"Lineamientos sobre propietario real","fecha":"2019 (fecha de expedición por confirmar)","norma":false,"uso":"Orientan sobre cómo identificar al propietario real; las DCG son las que obligan. Se estudia en 2.1.16 (H6).","url":"https://www.gob.mx/cms/uploads/attachment/file/449541/Lineamientos_Propietario_Real_270319.pdf"},{"e":"UIF 2009","nombre":"Tipología UIF · Informe de Tipologías 2009","fecha":"UIF · 2009","norma":false,"uso":"Se estudia en H7.","url":"https://www.gob.mx/cms/uploads/attachment/file/708596/Tipologias_UIF_Mexico.pdf"},{"e":"UIF 2016","nombre":"Tipología UIF · Informe de Tipologías 2016","fecha":"UIF · 2016","norma":false,"uso":"Se estudia en H7.","url":"https://www.gob.mx/cms/uploads/attachment/file/708597/Tipologias_2016.pdf"},{"e":"UIF 2018","nombre":"Tipología UIF · Fraudes informáticos","fecha":"UIF · 2018","norma":false,"uso":"Se estudia en H7.","url":"https://www.gob.mx/cms/uploads/attachment/file/708598/Tipologia_2018_Fraudes_Informaticos_VF.pdf"},{"e":"UIF 2019","nombre":"Tipología UIF · Universidad","fecha":"UIF · 2019","norma":false,"uso":"Se estudia en H7.","url":"https://www.gob.mx/cms/uploads/attachment/file/708600/Tipologia_Universidad.pdf"},{"e":"UIF 2019","nombre":"Tipología UIF · Trata de personas","fecha":"UIF · 2019","norma":false,"uso":"Se estudia en H7.","url":"https://www.gob.mx/cms/uploads/attachment/file/708599/Trata_Personas.pdf"},{"e":"UIF 2020","nombre":"Tipología UIF · OSFL","fecha":"UIF · 2020","norma":false,"uso":"Se estudia en H7.","url":"https://www.gob.mx/cms/uploads/attachment/file/708605/Tipologia_OSFL.pdf"},{"e":"UIF 2020","nombre":"Tipología UIF · Asociación altruista","fecha":"UIF · 2020","norma":false,"uso":"Se estudia en H7.","url":"https://www.gob.mx/cms/uploads/attachment/file/708604/Asociacion_Altruista.pdf"},{"e":"UIF 2020","nombre":"Tipología UIF · Cohecho internacional","fecha":"UIF · 2020","norma":false,"uso":"Se estudia en H7.","url":"https://www.gob.mx/cms/uploads/attachment/file/708603/Cohecho_Internacional.pdf"},{"e":"UIF 2020","nombre":"Tipología UIF · Ex servidor público","fecha":"UIF · 2020","norma":false,"uso":"Se estudia en H7.","url":"https://www.gob.mx/cms/uploads/attachment/file/708602/Ex-Servidor_P_blico.pdf"},{"e":"UIF 2020","nombre":"Tipología UIF · Estafa Maestra / Pemex","fecha":"UIF · 2020","norma":false,"uso":"Se estudia en H7.","url":"https://www.gob.mx/cms/uploads/attachment/file/708601/EstafaMaestra_Pemex.pdf"},{"e":"UIF 2021","nombre":"Tipología UIF · Licenciado","fecha":"UIF · 2021","norma":false,"uso":"Se estudia en H7.","url":"https://www.gob.mx/cms/uploads/attachment/file/708610/tipologia_licenciado.pdf"},{"e":"UIF 2021","nombre":"Tipología UIF · Fentanilo","fecha":"UIF · 2021","norma":false,"uso":"Se estudia en H7.","url":"https://www.gob.mx/cms/uploads/attachment/file/708609/tipologia_fentanilo.pdf"},{"e":"UIF 2021","nombre":"Tipología UIF · León Chino","fecha":"UIF · 2021","norma":false,"uso":"Se estudia en H7.","url":"https://www.gob.mx/cms/uploads/attachment/file/708608/tipologia_leon_chino.pdf"},{"e":"UIF 2021","nombre":"Tipología UIF · Cajeros electrónicos","fecha":"UIF · 2021","norma":false,"uso":"Se estudia en H7.","url":"https://www.gob.mx/cms/uploads/attachment/file/708607/tipologia_cajeros_electronicos.pdf"},{"e":"UIF 2021","nombre":"Tipología UIF · Trata-lenocinio","fecha":"UIF · 2021","norma":false,"uso":"Se estudia en H7.","url":"https://www.gob.mx/cms/uploads/attachment/file/708606/Tipologia_Trata_Lenocinio.pdf"},{"e":"UIF 2022","nombre":"Tipología UIF · PEPs","fecha":"UIF · 2022","norma":false,"uso":"Se estudia en H7.","url":"https://www.gob.mx/cms/uploads/attachment/file/873339/Tipologia_PEPS.pdf"},{"e":"UIF 2022","nombre":"Tipología UIF · A.v. (activos virtuales)","fecha":"UIF · 2022","norma":false,"uso":"Se estudia en H7.","url":"https://www.gob.mx/cms/uploads/attachment/file/873338/A.v.pdf"},{"e":"Egmont","nombre":"Tipologías Egmont","fecha":"«2022» en el temario; el documento no trae fecha","norma":false,"uso":"25 casos agrupados por delito. Se estudian en H7.","url":"https://www.gob.mx/cms/uploads/attachment/file/708595/Tipologias_EGMONT.pdf"},{"e":"GAFI","nombre":"Tipologías GAFI","fecha":"«2022» en el temario; es la traducción UIF de oct-2006 del reporte GAFI 2004-2005","norma":false,"uso":"Casos de seguros y de remesas, con los indicadores del sector asegurador. Se estudian en H7.","url":"https://www.gob.mx/cms/uploads/attachment/file/708594/Tipologias_GAFI.pdf"},{"e":"UIF 2023","nombre":"Tipología UIF · Montadeudas","fecha":"UIF · 2023","norma":false,"uso":"Se estudia en H7.","url":"https://www.gob.mx/cms/uploads/attachment/file/873271/Tipolog_a_montadeudas_VF.PDF"},{"e":"LFPIORPI","nombre":"Ley Federal para la Prevención e Identificación de Operaciones con Recursos de Procedencia Ilícita","fecha":"DOF 17-oct-2012 · última reforma 16-jul-2025","norma":true,"uso":"Actividades vulnerables y uso de efectivo (2.2.1 y 2.2.2, H8).","url":"https://www.diputados.gob.mx/LeyesBiblio/pdf/LFPIORPI.pdf"}]},"pie":{"firma":"360EDUCA","small":"by GMC360","texto":"Material de estudio para la certificación de la CNBV en PLD/FT. No sustituye la consulta de los textos oficiales publicados en el DOF y por cada emisor."}}
+</script>
+<!-- ======================================================================================= -->
+
+<script>
+(function(){
+const A = JSON.parse(document.getElementById("aula").textContent);
+const $ = id => document.getElementById(id);
+const esc = s => String(s==null?"":s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const flecha = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+
+$("marcas").innerHTML = (A.marcas||["GMC360","360EDUCA"]).map(m=>`<span>${esc(m)}</span>`).join("");
+$("eyebrow").textContent = A.eyebrow||"";
+$("h1").innerHTML = `${esc(A.h1_antes||"")} <em>${esc(A.h1_resaltado||"")}</em>`;
+$("lede").textContent = A.lede||"";
+if(A.acceso) $("acceso").querySelector("span").textContent = A.acceso; else $("acceso").hidden = true;
+$("t-temas").textContent = A.temas_titulo||"";
+$("temas-intro").textContent = A.temas_intro||"";
+
+const entrada = (x, boton) => {
+  const url = x.href||"";
+  const dentro = `<div class="num${String(x.n).length>6?" largo":""}">${esc(x.n)}</div>
+    <div class="cuerpo">
+      <h4>${esc(x.t)}</h4>
+      ${x.f?`<span class="fuente">${esc(x.f)}</span>`:""}
+      ${x.q?`<p class="que">${esc(x.q)}</p>`:""}
+      ${url ? `<span class="abrir">${esc(boton)} ${flecha}</span>` : `<span class="chip">${esc(x.pronto||"Próximamente")}</span>`}
+    </div>`;
+  return url
+    ? `<a class="entrada" href="${esc(url)}">${dentro}</a>`
+    : `<div class="entrada pronto" aria-disabled="true">${dentro}</div>`;
+};
+
+$("entradas").innerHTML = (A.grupos||[]).map(g => `
+  <div class="grupo">
+    <h3><b>${esc(g.clave)}</b>${esc(g.nombre)}</h3>
+    ${g.temas.map(x => entrada(x, A.boton_herramienta||"Abrir herramienta")).join("")}
+  </div>`).join("") + (A.cierre ? `
+  <div class="grupo">
+    <h3><b>${esc(A.cierre.clave)}</b>${esc(A.cierre.nombre)}</h3>
+    ${entrada(A.cierre.entrada, A.boton_simulacro||"Hacer el simulacro")}
+  </div>` : "");
+
+const B = A.biblioteca;
+if(!B){ $("bib").hidden = true; }
+else {
+  $("t-bib").textContent = B.titulo||"Biblioteca";
+  $("guia").innerHTML = (B.guia||[]).map(p=>`<p>${esc(p)}</p>`).join("") +
+    `<div class="leyenda"><span><b class="tag">ABC</b> ${esc(B.leyenda_norma||"Norma: obliga")}</span><span><b class="tag guia-tag">ABC</b> ${esc(B.leyenda_guia||"Guía, estándar o diagnóstico: orienta, no obliga")}</span></div>`;
+  $("biblioteca").innerHTML = (B.fuentes||[]).map(d => `<div class="doc">
+      <b class="tag${d.norma ? "" : " guia-tag"}">${esc(d.e)}</b>
+      <div class="doc-body">
+        <h4>${esc(d.nombre)}</h4>
+        <div class="meta"><span>${esc(d.fecha)}</span>${d.norma ? "" : '<span class="nonorma">No es norma</span>'}</div>
+        <p>${esc(d.uso)}</p>
+        ${d.url ? `<a class="ext" href="${esc(d.url)}" target="_blank" rel="noopener">Texto oficial ↗</a>` : `<span class="pend">${esc(B.sin_liga||"Liga oficial por confirmar")}</span>`}
+      </div>
+    </div>`).join("");
+}
+const P = A.pie||{};
+$("firma").innerHTML = `${esc(P.firma||"360EDUCA")}<small>${esc(P.small||"by GMC360")}</small>`;
+$("pie").textContent = P.texto||"";
+})();
+</script>
+</body>
+</html>
