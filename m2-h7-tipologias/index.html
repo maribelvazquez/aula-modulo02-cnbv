@@ -313,6 +313,73 @@ footer b{color:var(--ink)}
   .trow2 .tb{border-color:#999} *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+/* ---------- tablero (matriz reporte × sujeto con filtros) y cuatro tablas ---------- */
+.tbf{display:flex;flex-direction:column;gap:10px;margin:0 0 14px}
+.tbf .row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.tbf .row>.lbl{min-width:96px}
+.tbf .row .row{flex-wrap:nowrap;min-width:0;max-width:100%}.tbf select{min-width:0;flex:1 1 auto;width:auto;font:inherit;font-weight:600;font-size:14px;border:2px solid var(--line);border-radius:999px;padding:6px 12px;background:var(--surface);color:var(--ink);max-width:100%}
+.fchip{border:2px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 11px;font-weight:700;font-size:13px;cursor:pointer;color:var(--ink)}
+.fchip[aria-pressed="true"]{background:var(--accion);border-color:var(--accion);color:var(--accion-ink)}
+.fchip.sw{display:inline-flex;align-items:center;gap:6px}.fchip.sw i{width:10px;height:10px;border-radius:50%;background:var(--c);display:inline-block}
+.tbtabs{display:flex;gap:6px;margin:4px 0 12px}
+.tbwrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface);-webkit-overflow-scrolling:touch}
+table.tbm{border-collapse:separate;border-spacing:0;width:100%;min-width:760px;font-size:14px}
+.tbm th,.tbm td{border-bottom:1px solid var(--line);padding:6px 4px;text-align:center;vertical-align:middle}
+.tbm thead th{position:sticky;top:0;background:var(--surface);z-index:2;font-family:var(--f-display);font-size:11.5px;letter-spacing:.02em;line-height:1.15;padding:8px 3px;border-bottom:3px solid var(--cl,var(--line))}
+.tbm thead th.sj{border-bottom-color:var(--c)}
+.tbm th.rp{text-align:left;position:sticky;left:0;background:var(--surface);z-index:1;min-width:190px;max-width:240px;font-weight:600;font-size:13.5px;padding-left:12px;border-right:1px solid var(--line)}
+.tbm thead th.rp{z-index:3}
+.tbm tr.grp th{background:var(--c);color:var(--ci);text-align:left;font-family:var(--f-display);font-size:13px;letter-spacing:.04em;padding:7px 12px;position:sticky;left:0}
+.tbm tr.grp th span{font-family:var(--f-body);font-weight:500;letter-spacing:0;opacity:.9;margin-left:6px}
+.tbm .rg{display:block;font-weight:500;font-size:12px;color:var(--muted);margin-top:2px;line-height:1.3}
+.tbc{width:100%;min-width:40px;height:36px;border:0;background:transparent;cursor:pointer;border-radius:8px;font-weight:800;font-size:18px;color:var(--negro)}
+.tbc.si{background:var(--principal-halo)}
+.tbc.si .mk::before{content:"✓"}
+.tbc.no .mk::before{content:"·";color:var(--line)}
+.tbc.dud .mk::after{content:"?";font-size:11px;vertical-align:super;color:var(--muted)}
+.tbc:hover,.tbc:focus-visible{outline:2px solid var(--accion);outline-offset:-2px}
+.tbm td.dim .tbc{opacity:.18}
+.tbm td.hit .tbc{background:var(--principal);color:var(--principal-ink)}
+.tbm .colsel{background:rgba(166,99,204,.07)}
+body.recite .tbc.si:not(.shown) .mk::before,body.recite .tbc.no:not(.shown) .mk::before{content:"?";color:var(--muted)}
+body.recite .tbc:not(.shown){background:var(--surface-2)}
+.tbcount{font-size:13px;color:var(--muted);margin:8px 2px 0}
+.tbfichas{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:12px}
+.tbficha{background:var(--surface);border:1px solid var(--line);border-top:6px solid var(--c);border-radius:12px;padding:12px 14px;font-size:14.5px}
+.tbficha h4{margin:0 0 2px;font-family:var(--f-display);font-size:16px}
+.tbficha .who{font-weight:700;font-size:13px;color:var(--muted);margin-bottom:6px}
+.tbficha dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:3px 10px}
+.tbficha dt{font-family:var(--f-display);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-top:2px}
+.tbficha dd{margin:0}
+.tbficha .nt{margin-top:6px;font-size:13px;color:var(--muted)}
+.tbreglas{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px;margin:0 0 16px}
+.tbregla{background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--c);border-radius:10px;padding:9px 12px;font-size:14px}
+.tbregla b{display:block;font-family:var(--f-display);font-size:14px;margin-bottom:2px}
+.ctbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 12px}
+.ctscore{margin-left:auto;font-weight:700;font-variant-numeric:tabular-nums}
+.ctq{font-family:var(--f-display);font-weight:700;font-size:clamp(18px,2.2vw,24px);margin:4px 0 12px}
+.ctgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:14px}
+.cttab{background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:10px;cursor:pointer;text-align:left;font:inherit;color:var(--ink);overflow-x:auto}
+.cttab:hover{border-color:var(--accion)}
+.cttab .tl{font-family:var(--f-display);font-weight:800;font-size:15px;margin:0 0 6px 4px}
+.cttab table{border-collapse:collapse;width:100%;font-size:13px}
+.cttab th,.cttab td{border:1px solid var(--line);padding:6px 4px;text-align:center}
+.cttab th{font-family:var(--f-display);font-size:11px;background:var(--surface-2)}
+.cttab th.r{text-align:left;font-family:var(--f-body);font-weight:600;font-size:12.5px}
+.cttab td.on{background:var(--principal-halo);font-weight:800}
+.cttab td.bad{outline:3px solid var(--coral);outline-offset:-3px}
+.cttab.ok{border:3px solid var(--principal-linea);box-shadow:inset 0 6px 0 var(--principal)}
+.cttab.mine:not(.ok){border:3px solid var(--negro)}
+.cttab[disabled]{cursor:default}
+.ctfb{margin-top:14px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 16px}
+.ctfb ul{margin:6px 0 0;padding-left:18px}.ctfb li{margin:6px 0}
+.ctfill td button{width:100%;min-height:34px;border:0;background:transparent;cursor:pointer;font-weight:800;font-size:16px}
+.ctfill td.on button{background:var(--principal-halo)}
+.ctfill td.right{box-shadow:inset 0 0 0 3px var(--principal-linea)}
+.ctfill td.wrong{box-shadow:inset 0 0 0 3px var(--coral)}
+.tbc.tx .mk::before{content:none}.tbc .mt{display:block;font-size:11.5px;font-weight:700;line-height:1.15;padding:2px 3px}.tbc.tx{height:auto;min-height:36px}body.recite .tbc.tx:not(.shown) .mt{display:none}body.recite .tbc.tx:not(.shown) .mk::before{content:"?";color:var(--muted)}
+@media print{.tbf,.ctbar{display:none}}
 </style>
 </head>
 <body>
@@ -438,6 +505,10 @@ R.simulador = s=>head({titulo:s.titulo||"Modo examen",para:s.para,intro:s.intro|
 R.repaso = s=>head({titulo:s.titulo||"Repaso",para:s.para,intro:s.intro||"Tandas al azar de un banco de repaso. Lee la pregunta y las cuatro opciones, decide tu respuesta y luego revélala."})+
   (s.fallas&&s.fallas.length?`${s.fallas_titulo?`<div class="lbl" style="margin:0 0 8px">${esc(s.fallas_titulo)}</div>`:""}<div class="cards rp-fallas">${s.fallas.map((f,i)=>`<div class="card ${colorDe(f.color,i)}"><div class="bar"></div><div class="cbody"><h3>${esc(f.titulo)}</h3><p>${f.texto}</p></div></div>`).join("")}</div>`:"")+
   `<div class="lbl" style="margin:22px 0 8px">${s.pool?"Elige cuántas preguntas":"Bloques"}</div><div class="modes" id="rpi-${s.id}" role="group" aria-label="Repaso"></div><div class="quiz rp-box" id="rp-${s.id}" aria-live="polite"></div>`;
+/* ---------- tablero: matriz reporte × sujeto con filtros (tipo "tablero") ---------- */
+R.tablero = s=>head(s)+`<div class="tbf" id="tbf-${s.id}"></div><div class="tbtabs" role="group" aria-label="Vista"><button class="fchip" data-tbv="${s.id}:tabla" aria-pressed="true">Tabla</button><button class="fchip" data-tbv="${s.id}:fichas" aria-pressed="false">${esc(s.fichas||"Fichas (base de reportes)")}</button><button class="linkbtn" data-tbclr="${s.id}">Quitar filtros</button></div><div id="tbo-${s.id}"></div><div class="tbcount" id="tbn-${s.id}"></div>${s.nota?`<p class="note">${s.nota}</p>`:""}`;
+/* ---------- cuatro tablas: práctica tipo examen (tipo "cuatrotablas") ---------- */
+R.cuatrotablas = s=>head(s)+`<div class="ctbar"><button class="fchip" data-ctm="${s.id}:elige" aria-pressed="true">¿Cuál tabla es la correcta?</button><button class="fchip" data-ctm="${s.id}:llena" aria-pressed="false">Llena la tabla</button><span class="ctscore" id="cts-${s.id}"></span></div><div id="ct-${s.id}" aria-live="polite"></div>`;
 $("#secciones").innerHTML = D.secciones.map((s,i)=>`<section class="block${s.tipo==="simulador"?" sim":""}" id="${s.id}">${R[s.tipo](s,i)}</section>`).join("");
 
 /* ---------- conectores del mapa ---------- */
@@ -495,6 +566,140 @@ document.addEventListener("click",e=>{
   const pn=e.target.closest("[data-pnav]");
   if(pn){ const [sid,i]=pn.dataset.pnav.split(":"); showPaso(sid,+i); }
 });
+
+
+/* ---------- tablero y cuatro tablas ---------- */
+const TB={}, CT={};
+const tbSec=id=>D.secciones.find(x=>x.id===id);
+const tbCell=(s,r,j)=>(s._ix||(s._ix=Object.fromEntries(s.celdas.map(c=>[c.rep+"|"+c.suj,c]))))[r+"|"+j]||{rep:r,suj:j,aplica:false,seguro:false};
+const uniq=a=>[...new Set(a.filter(Boolean))];
+function tbInit(s){
+  const st=TB[s.id]={suj:new Set(),grp:new Set(),frec:"",monto:"",plazo:"",vista:"tabla"};
+  const on=s.celdas.filter(c=>c.aplica);
+  const sel=(k,lab,vals)=>!vals.length?"":`<div class="row"><span class="lbl">${lab}</span><select data-tbs="${s.id}:${k}"><option value="">Todos</option>${vals.map(v=>`<option>${esc(v)}</option>`).join("")}</select></div>`;
+  $("#tbf-"+s.id).innerHTML=
+    `<div class="row"><span class="lbl">Sujeto</span>${s.sujetos.map((j,i)=>`<button class="fchip sw ${colorDe(j.color,i)}" data-tbf="${s.id}:suj:${j.k}" aria-pressed="false" title="${esc(j.t)}"><i></i>${esc(j.corto||j.k)}</button>`).join("")}</div>`+
+    `<div class="row"><span class="lbl">Tipo</span>${s.grupos.map((g,i)=>`<button class="fchip sw ${colorDe(g.color,i)}" data-tbf="${s.id}:grp:${g.k}" aria-pressed="false"><i></i>${esc(g.t)}</button>`).join("")}</div>`+
+    `<div class="row" style="gap:14px">${sel("frec","Frecuencia",uniq(on.map(c=>c.frec_tag)))}${sel("monto","Monto",uniq(on.map(c=>c.monto_tag)))}${sel("plazo","Plazo",uniq(on.map(c=>c.plazo_tag)))}</div>`;
+  tbDraw(s.id);
+}
+function tbMatch(st,c){return (!st.frec||c.frec_tag===st.frec)&&(!st.monto||c.monto_tag===st.monto)&&(!st.plazo||c.plazo_tag===st.plazo);}
+function tbDraw(id){
+  const s=tbSec(id), st=TB[id], val=st.frec||st.monto||st.plazo;
+  const cols=s.sujetos.map((j,i)=>({...j,ci:i})).filter(j=>!st.suj.size||st.suj.has(j.k));
+  let hits=0, shown=0;
+  if(st.vista==="tabla"){
+    let body="";
+    s.grupos.forEach((g,gi)=>{
+      if(st.grp.size&&!st.grp.has(g.k)) return;
+      const rows=s.reportes.filter(r=>r.g===g.k).map(r=>{
+        const cells=cols.map(j=>{const c=tbCell(s,r.k,j.k), m=c.aplica&&val&&tbMatch(st,c); if(m)hits++; return {c,j,m};});
+        if(val&&!cells.some(x=>x.m)) return "";
+        shown++;
+        return `<tr><th class="rp" scope="row">${esc(r.t)}${r.regla?`<span class="rg">${esc(r.regla)}</span>`:""}</th>${cells.map(({c,j,m})=>`<td class="${val?(m?"hit":"dim"):""}"><button class="tbc ${c.aplica?"si":"no"}${c.aplica&&c.marca?" tx":""}${c.seguro===false?" dud":""}" data-tbc="${id}|${r.k}|${j.k}" aria-label="${esc(r.t)} · ${esc(j.t)}: ${c.aplica?(c.marca?esc(c.marca):"sí"):"no"}"><span class="mk">${c.aplica&&c.marca?`<span class="mt">${esc(c.marca)}</span>`:""}</span></button></td>`).join("")}</tr>`;
+      }).join("");
+      if(rows) body+=`<tr class="grp ${colorDe(g.color,gi)}"><th colspan="${cols.length+1}">${esc(g.t)}${g.pregunta?`<span>${esc(g.pregunta)}</span>`:""}</th></tr>`+rows;
+    });
+    $("#tbo-"+id).innerHTML=`<div class="tbwrap"><table class="tbm"><thead><tr><th class="rp" scope="col">${esc(s.col_titulo||"Reporte")}</th>${cols.map(j=>`<th class="sj ${colorDe(j.color,j.ci)}" scope="col" title="${esc(j.t)}">${esc(j.corto||j.k)}</th>`).join("")}</tr></thead><tbody>${body}</tbody></table></div>`;
+    $("#tbn-"+id).textContent=val?`${hits} casillas cumplen el filtro en ${shown} reportes.`:`✓ = su DCG lo prevé · punto = no lo prevé · ? = texto dudoso. Toca una casilla para ver monto, plazo y disposición.`;
+  } else {
+    const list=[];
+    s.reportes.forEach(r=>{ if(st.grp.size&&!st.grp.has(r.g)) return; cols.forEach(j=>{const c=tbCell(s,r.k,j.k); if(c.aplica&&tbMatch(st,c)) list.push({r,j,c});}); });
+    $("#tbo-"+id).innerHTML=`<div class="tbfichas">${list.map(({r,j,c})=>`<div class="tbficha ${colorDe(j.color,j.ci)}"><h4>${esc(r.t)}</h4><div class="who">${esc(j.t)} · ${esc(c.ref||"")}</div><dl>${c.que?`<dt>Qué</dt><dd>${esc(c.que)}</dd>`:""}${c.desde?`<dt>Desde</dt><dd>${esc(c.desde)}</dd>`:""}${c.cuando?`<dt>Cuándo</dt><dd>${esc(c.cuando)}</dd>`:""}${c.frec?`<dt>Frecuencia</dt><dd>${esc(c.frec)}</dd>`:""}${c.a_quien?`<dt>A quién</dt><dd>${esc(c.a_quien)}</dd>`:""}</dl>${c.nota?`<div class="nt">${esc(c.nota)}</div>`:""}</div>`).join("")}</div>`;
+    $("#tbn-"+id).textContent=`${list.length} fichas.`;
+  }
+}
+function tbOpen(id,rk,jk){
+  const s=tbSec(id), r=s.reportes.find(x=>x.k===rk), j=s.sujetos.find(x=>x.k===jk), c=tbCell(s,rk,jk), gi=s.grupos.findIndex(g=>g.k===r.g);
+  $("#dHead").className="dhead "+colorDe(s.grupos[gi].color,gi);
+  $("#dTitle").textContent=r.t;
+  const fila=(k,v)=>v?`<li><b>${k}:</b> ${esc(v)}</li>`:"";
+  $("#dBody").innerHTML=`<div class="lbl">${esc(j.t)}${c.ref?` · ${esc(c.ref)}`:""}</div><div class="hook">${c.aplica?"Sí: su DCG lo prevé":"Su DCG no lo prevé"}${c.seguro===false?" · texto dudoso":""}</div><ul>${fila("Qué",c.que)}${fila("Desde",c.desde)}${fila("Cuándo",c.cuando)}${fila("Frecuencia",c.frec)}${fila("A quién",c.a_quien)}${fila("Ojo",c.nota)}</ul>${r.regla?`<p style="margin-top:12px"><b>La regla del renglón:</b> ${esc(r.regla)}</p>`:""}`;
+  lastFocus=document.activeElement; $("#scrim").hidden=false; $("#drawer").hidden=false; $("#dClose").focus();
+}
+D.secciones.filter(s=>s.tipo==="tablero").forEach(tbInit);
+document.addEventListener("change",e=>{const t=e.target.closest("[data-tbs]"); if(!t) return; const [id,k]=t.dataset.tbs.split(":"); TB[id][k]=t.value; tbDraw(id);});
+document.addEventListener("click",e=>{
+  const f=e.target.closest("[data-tbf]");
+  if(f){const [id,k,v]=f.dataset.tbf.split(":"), set=TB[id][k]; set.has(v)?set.delete(v):set.add(v); f.setAttribute("aria-pressed",set.has(v)); tbDraw(id); return;}
+  const v=e.target.closest("[data-tbv]");
+  if(v){const [id,w]=v.dataset.tbv.split(":"); TB[id].vista=w; document.querySelectorAll(`[data-tbv^="${id}:"]`).forEach(b=>b.setAttribute("aria-pressed",b===v)); tbDraw(id); return;}
+  const cl=e.target.closest("[data-tbclr]");
+  if(cl){const id=cl.dataset.tbclr, st=TB[id]; st.suj.clear(); st.grp.clear(); st.frec=st.monto=st.plazo=""; document.querySelectorAll(`[data-tbf^="${id}:"]`).forEach(b=>b.setAttribute("aria-pressed","false")); document.querySelectorAll(`[data-tbs^="${id}:"]`).forEach(x=>x.value=""); tbDraw(id); return;}
+  const c=e.target.closest("[data-tbc]");
+  if(c){ if(document.body.classList.contains("recite")&&!c.classList.contains("shown")){c.classList.add("shown");return;} const [id,rk,jk]=c.dataset.tbc.split("|"); tbOpen(id,rk,jk); return; }
+  const m=e.target.closest("[data-ctm]");
+  if(m){const [id,mode]=m.dataset.ctm.split(":"); document.querySelectorAll(`[data-ctm^="${id}:"]`).forEach(b=>b.setAttribute("aria-pressed",b===m)); CT[id].mode=mode; ctNew(id); return;}
+  const pk=e.target.closest("[data-ctp]");
+  if(pk){const [id,i]=pk.dataset.ctp.split(":"); ctPick(id,+i); return;}
+  const tg=e.target.closest("[data-ctt]");
+  if(tg){const [id,r,c]=tg.dataset.ctt.split(":"), g=CT[id]; if(g.done) return; g.mine[r][c]=!g.mine[r][c]; tg.parentElement.classList.toggle("on",g.mine[r][c]); tg.textContent=g.mine[r][c]?"✓":""; return;}
+  const ck=e.target.closest("[data-ctchk]");
+  if(ck){ctCheck(ck.dataset.ctchk); return;}
+  const nx=e.target.closest("[data-ctnew]");
+  if(nx){ctNew(nx.dataset.ctnew); return;}
+});
+const rnd=n=>Math.floor(Math.random()*n);
+const mixA=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;};
+function ctNew(id){
+  const s=tbSec(id), src=tbSec(s.fuente), g=CT[id], nR=s.filas||4, nC=s.columnas||4;
+  const reps=src.reportes.filter(r=>!(s.excluir||[]).includes(r.k));
+  const allOn=r=>src.sujetos.every(j=>tbCell(src,r.k,j.k).aplica);
+  let R0,C0,M;
+  for(let t=0;t<400;t++){
+    const cs=mixA(src.sujetos).slice(0,nC), rs=mixA(reps).slice(0,nR);
+    if(rs.filter(allOn).length>1) continue;
+    if(rs.some(r=>cs.some(j=>tbCell(src,r.k,j.k).seguro===false))) continue;
+    const m=rs.map(r=>cs.map(j=>!!tbCell(src,r.k,j.k).aplica));
+    const pats=new Set(m.map(x=>x.join()));
+    if(pats.size<Math.min(3,nR)) continue;
+    if(m.filter(x=>!x.some(Boolean)).length>1) continue;
+    R0=rs;C0=cs;M=m;break;
+  }
+  if(!M){R0=reps.slice(0,nR);C0=src.sujetos.slice(0,nC);M=R0.map(r=>C0.map(j=>!!tbCell(src,r.k,j.k).aplica));}
+  Object.assign(g,{src,rows:R0,cols:C0,M,done:false});
+  if(g.mode==="llena"){g.mine=M.map(x=>x.map(()=>false)); return ctDrawFill(id);}
+  const key=m=>m.map(x=>x.map(Number).join("")).join("|"), seen=new Set([key(M)]), opts=[M];
+  let guard=0;
+  while(opts.length<4&&guard++<500){
+    const d=M.map(x=>x.slice()), k=1+rnd(2);
+    for(let q=0;q<k;q++){const r=rnd(nR),c=rnd(nC); d[r][c]=!d[r][c];}
+    const kk=key(d); if(!seen.has(kk)){seen.add(kk);opts.push(d);}
+  }
+  g.opts=mixA(opts.map((m,i)=>({m,ok:i===0})));
+  ctDrawPick(id);
+}
+const ctHead=g=>`<tr><th></th>${g.cols.map(j=>`<th title="${esc(j.t)}">${esc(j.corto||j.k)}</th>`).join("")}</tr>`;
+function ctDrawPick(id){
+  const g=CT[id];
+  $("#ct-"+id).innerHTML=`<div class="ctq">¿Cuál tabla dice correctamente qué reporte presenta cada sujeto?</div><div class="ctgrid">${g.opts.map((o,i)=>`<button class="cttab" data-ctp="${id}:${i}"><div class="tl">Tabla ${"ABCD"[i]}</div><table>${ctHead(g)}${g.rows.map((r,ri)=>`<tr><th class="r">${esc(r.corto||r.t)}</th>${g.cols.map((j,ci)=>`<td class="${o.m[ri][ci]?"on":""}" data-rc="${ri}:${ci}">${o.m[ri][ci]?"✓":""}</td>`).join("")}</tr>`).join("")}</table></button>`).join("")}</div><div id="ctfb-${id}"></div>`;
+  ctScore(id);
+}
+function ctWhy(g,ri,ci){const r=g.rows[ri], j=g.cols[ci], c=tbCell(g.src,r.k,j.k); return `<li><b>${esc(j.t)} · ${esc(r.t)}:</b> ${c.aplica?`<b>sí</b>${c.desde&&c.desde!=="sin monto"?` — ${esc(c.desde)}`:""}${c.cuando?`; ${esc(c.cuando)}`:""}`:"<b>no</b> — su DCG no lo prevé"}${c.ref?` <span class="art">${esc(c.ref)}</span>`:""}</li>`;}
+function ctPick(id,i){
+  const g=CT[id]; if(g.done) return; g.done=true; const o=g.opts[i]; g.n=(g.n||0)+1; if(o.ok) g.ok=(g.ok||0)+1;
+  const tabs=document.querySelectorAll(`#ct-${id} .cttab`);
+  g.opts.forEach((x,k)=>{const t=tabs[k]; t.disabled=true; if(x.ok) t.classList.add("ok"); if(k===i) t.classList.add("mine");
+    t.querySelectorAll("td[data-rc]").forEach(td=>{const [r,c]=td.dataset.rc.split(":").map(Number); if(x.m[r][c]!==g.M[r][c]) td.classList.add("bad");});});
+  const diff=[]; g.M.forEach((row,r)=>row.forEach((v,c)=>{ if(g.opts.some(x=>x.m[r][c]!==v)) diff.push([r,c]); }));
+  const mineDiff=diff.filter(([r,c])=>o.m[r][c]!==g.M[r][c]);
+  $("#ctfb-"+id).innerHTML=`<div class="ctfb fb">${o.ok?'<span class="ok">Correcto</span>':`<span class="no">Incorrecto</span> La correcta es la <b>tabla ${"ABCD"[g.opts.findIndex(x=>x.ok)]}</b>.`}<div class="lbl" style="margin-top:10px">${o.ok?"Las casillas que cambiaban en las otras":"Lo que fallaba en tu tabla"}</div><ul>${(o.ok?diff:mineDiff).map(([r,c])=>ctWhy(g,r,c)).join("")}</ul><div class="qactions"><button class="btn" data-ctnew="${id}">Otra</button></div></div>`;
+  ctScore(id);
+}
+function ctDrawFill(id){
+  const g=CT[id];
+  $("#ct-"+id).innerHTML=`<div class="ctq">Marca qué reporte presenta cada sujeto y califica.</div><div class="cttab ctfill" style="cursor:default;max-width:640px"><table>${ctHead(g)}${g.rows.map((r,ri)=>`<tr><th class="r">${esc(r.corto||r.t)}</th>${g.cols.map((j,ci)=>`<td><button data-ctt="${id}:${ri}:${ci}" aria-label="${esc(r.t)} · ${esc(j.t)}"></button></td>`).join("")}</tr>`).join("")}</table></div><div class="qactions" style="margin-top:12px"><button class="btn" data-ctchk="${id}">Calificar</button><button class="btn ghost" data-ctnew="${id}">Otra tabla</button></div><div id="ctfb-${id}"></div>`;
+  ctScore(id);
+}
+function ctCheck(id){
+  const g=CT[id]; if(g.done) return; g.done=true; const bad=[];
+  document.querySelectorAll(`#ct-${id} [data-ctt]`).forEach(b=>{const [,r,c]=b.dataset.ctt.split(":").map(Number), td=b.parentElement, ok=g.mine[r][c]===g.M[r][c]; td.classList.add(ok?"right":"wrong"); if(!ok){bad.push([r,c]); b.textContent=g.M[r][c]?"✓":"·";}});
+  g.n=(g.n||0)+1; if(!bad.length) g.ok=(g.ok||0)+1;
+  $("#ctfb-"+id).innerHTML=`<div class="ctfb fb">${bad.length?`<span class="no">${bad.length} casilla${bad.length>1?"s":""} mal</span><ul>${bad.map(([r,c])=>ctWhy(g,r,c)).join("")}</ul>`:'<span class="ok">Todo correcto</span>'}<div class="qactions"><button class="btn" data-ctnew="${id}">Otra</button></div></div>`;
+  ctScore(id);
+}
+function ctScore(id){const g=CT[id]; $("#cts-"+id).textContent=g.n?`Aciertos: ${g.ok||0} de ${g.n}`:"";}
+D.secciones.filter(s=>s.tipo==="cuatrotablas").forEach(s=>{CT[s.id]={mode:"elige"}; ctNew(s.id);});
 
 /* ---------- repaso (tandas al azar o secuencia fija) ---------- */
 // Con "pool": tandas al azar de 10/20/30 (configurable en "tandas") que no repiten hasta agotar el banco de repaso;

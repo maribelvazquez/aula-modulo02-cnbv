@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Explorador del intercambio · 2.1.7</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: herramienta de estudio en una columna ancha; arriba las 5 puertas (ritmo 7·3·2·1·1), debajo matriz, asistente, requisitos, transferencias, trampas y práctica. Paleta de la guía 360Educa, ruta Sector financiero. */
+:root{
+  --bg:#faf5ec; --surface:#ffffff; --surface-2:#f3ede1; --line:#e4dccd;
+  --fg:#1b1b1e; --muted:#5b5f62; --carbon:#393e41;
+  --verde:#64c27b; --verde-claro:#87d895; --verde-tint:#e3f4e6;
+  --morado:#a663cc; --morado-tint:#f1e6f8;
+  --turquesa:#80bcb5; --amarillo:#faa916; --coral:#ff8361; --coral-tint:#ffe9e2;
+  --no:#b9b2a5; --on-color:#1b1b1e; --on-dark:#ffffff;
+  --f-display:"Montserrat", "Helvetica Neue", Arial, sans-serif;
+  --f-body:"Inter", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#17181a; --surface:#212326; --surface-2:#2a2c30; --line:#393c41;
+  --fg:#f2eee6; --muted:#b4b0a8; --carbon:#d6d2ca;
+  --verde:#6fcb86; --verde-claro:#87d895; --verde-tint:#1f3a28;
+  --morado:#b884d6; --morado-tint:#33253d;
+  --turquesa:#8fc8c1; --amarillo:#f7b23b; --coral:#ff9373; --coral-tint:#3d2620;
+  --no:#5f5b55; --on-color:#1b1b1e; --on-dark:#ffffff; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#17181a; --surface:#212326; --surface-2:#2a2c30; --line:#393c41;
+  --fg:#f2eee6; --muted:#b4b0a8; --carbon:#d6d2ca;
+  --verde:#6fcb86; --verde-claro:#87d895; --verde-tint:#1f3a28;
+  --morado:#b884d6; --morado-tint:#33253d;
+  --turquesa:#8fc8c1; --amarillo:#f7b23b; --coral:#ff9373; --coral-tint:#3d2620;
+  --no:#5f5b55; --on-color:#1b1b1e; --on-dark:#ffffff; color-scheme:dark }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.55;margin:0}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:18px;padding-block:20px 64px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:clamp(28px,5vw,44px);font-weight:800;letter-spacing:-.01em}
+h2{font-size:clamp(21px,3vw,27px);font-weight:800}
+h3{font-size:16px;font-weight:700}
+p{margin:0}
+.eyebrow{font-family:var(--f-display);font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.hl{background:var(--verde);color:var(--on-color);padding:0 .18em;border-radius:4px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.lede{max-width:68ch;color:var(--carbon);font-size:16px}
+.membrete{height:3px;background:var(--verde-claro);border:0;margin:14px 0 0}
+header.top{display:grid;gap:12px;padding-block:8px 18px}
+nav.idx{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);display:flex;gap:6px;overflow-x:auto;padding-block:8px;margin-bottom:8px;scrollbar-width:thin}
+nav.idx a{flex:0 0 auto;font-size:13px;font-weight:600;color:var(--fg);text-decoration:none;padding:6px 11px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+nav.idx a:hover{border-color:var(--morado)}
+section{padding-block:30px 6px;display:grid;gap:14px;scroll-margin-top:60px}
+.sub{color:var(--muted);max-width:72ch}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.num{font-variant-numeric:tabular-nums}
+.ref{font-size:12px;color:var(--muted);font-weight:600}
+.mini{font-size:13px}
+/* Puertas */
+.doors{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.door{appearance:none;text-align:left;font:inherit;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:grid;gap:6px;cursor:pointer;position:relative}
+.door:hover{border-color:var(--carbon)}
+.door[aria-pressed="true"]{outline:3px solid var(--morado);outline-offset:-1px}
+.door .n{font-family:var(--f-display);font-weight:800;font-size:40px;line-height:1}
+.door .t{font-family:var(--f-display);font-weight:700;font-size:15px}
+.door .d{font-size:13px;color:var(--muted)}
+.door .tag{justify-self:start;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:999px;background:var(--surface-2)}
+.door.debe .tag{background:var(--amarillo);color:var(--on-color)}
+.ritmo{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;font-family:var(--f-display);font-weight:800;font-size:22px}
+.ritmo span.lbl{font-family:var(--f-body);font-weight:500;font-size:14px;color:var(--muted)}
+.extra{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
+.extra .card{display:grid;gap:6px}
+.pill{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:999px;justify-self:start}
+.pill.star{background:var(--amarillo);color:var(--on-color)}
+.pill.warn{background:var(--coral);color:var(--on-color)}
+/* Matriz */
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:760px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+thead th{font-family:var(--f-display);font-size:12.5px;font-weight:700;background:var(--surface-2);position:sticky;top:0}
+thead th button{all:unset;cursor:pointer;display:grid;gap:2px}
+thead th button:focus-visible{outline:2px solid var(--morado);outline-offset:3px}
+thead th small{font-family:var(--f-body);font-weight:500;color:var(--muted);font-size:11px}
+th.col-x{background:var(--coral-tint)}
+tbody th{font-weight:600;font-size:14px;white-space:nowrap;border-left:6px solid var(--fam,var(--line))}
+tbody th button{all:unset;cursor:pointer}
+tbody th button:focus-visible{outline:2px solid var(--morado);outline-offset:3px}
+td.cell{text-align:center;padding:5px}
+.c{all:unset;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:5px;min-width:74px;min-height:30px;padding:3px 8px;border-radius:7px;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums}
+.c:focus-visible{outline:2px solid var(--morado);outline-offset:2px}
+.c.si{background:var(--verde);color:var(--on-color)}
+.c.debe{background:var(--amarillo);color:var(--on-color)}
+.c.medio{border:2px dashed var(--carbon);color:var(--fg)}
+.c.no{color:var(--no);font-weight:600}
+tr.fam-sep th, tr.fam-sep td{border-top:2px solid var(--line)}
+table.dim tbody td.cell:not(.on) .c{opacity:.28}
+table.dim thead th.on{background:var(--morado);color:var(--on-dark)}
+table.dim thead th.on small{color:var(--on-dark)}
+tbody tr.rowon th{background:var(--morado-tint)}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--muted);align-items:center}
+.legend .c{min-width:auto;cursor:default}
+.detail{border-left:6px solid var(--morado)}
+.detail h3{margin-bottom:4px}
+.detail ul{margin:8px 0 0;padding-left:18px;display:grid;gap:4px}
+/* Asistente */
+.wiz{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+@media (max-width:820px){.wiz{grid-template-columns:1fr}}
+fieldset{border:0;margin:0;padding:0;display:grid;gap:8px}
+legend{font-family:var(--f-display);font-weight:700;font-size:14px;margin-bottom:6px}
+legend b{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--carbon);color:var(--bg);font-size:12px;margin-right:6px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips input{position:absolute;opacity:0;pointer-events:none}
+.chips label{cursor:pointer;font-size:13px;font-weight:600;padding:6px 11px;border-radius:999px;border:1px solid var(--line);background:var(--surface);display:inline-flex;align-items:center;gap:6px}
+.chips label i{width:9px;height:9px;border-radius:50%;background:var(--fam,var(--line))}
+.chips input:checked + label{background:var(--morado);border-color:var(--morado);color:var(--on-dark)}
+.chips input:focus-visible + label{outline:2px solid var(--morado);outline-offset:2px}
+.verdict{display:grid;gap:10px;align-content:start}
+.vbadge{justify-self:start;font-family:var(--f-display);font-weight:800;font-size:22px;padding:4px 14px;border-radius:8px}
+.vbadge.si{background:var(--verde);color:var(--on-color)}
+.vbadge.debe{background:var(--amarillo);color:var(--on-color)}
+.vbadge.no{background:var(--carbon);color:var(--bg)}
+.vbadge.medio{border:2px dashed var(--carbon)}
+.req{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.req li{display:grid;grid-template-columns:22px 1fr;gap:6px;font-size:14px}
+.req li::before{content:"✓";font-weight:800;color:var(--verde)}
+.note{font-size:13.5px;background:var(--surface-2);border-radius:8px;padding:10px 12px}
+.note.warn{background:var(--coral-tint)}
+/* Requisitos */
+table.req-t{min-width:980px;font-size:13px}
+table.req-t td{vertical-align:top}
+table.req-t tbody th{border-left:0;white-space:normal;min-width:150px;font-size:13px}
+.yes{font-weight:700}
+.y::before{content:"Sí · ";font-weight:800;color:var(--verde)}
+.n0{color:var(--muted)}
+.colfilter{display:flex;flex-wrap:wrap;gap:6px}
+.colfilter button{font:inherit;font-size:13px;font-weight:600;padding:6px 11px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer}
+.colfilter button[aria-pressed="true"]{background:var(--carbon);color:var(--bg);border-color:var(--carbon)}
+/* Transferencias */
+.tl{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;counter-reset:t}
+.tl .card{display:grid;gap:6px;border-top:5px solid var(--amarillo)}
+.tl .k{font-family:var(--f-display);font-weight:800;font-size:18px}
+/* Trampas */
+.traps{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px}
+.trap{display:grid;gap:6px;border:2px dashed var(--carbon);background:var(--surface)}
+.trap h3{font-size:15px}
+/* Práctica */
+.quiz{display:grid;gap:12px}
+.qbox{display:grid;gap:12px}
+.qtext{font-size:17px;font-weight:600;max-width:70ch}
+.qbtns{display:flex;gap:8px;flex-wrap:wrap}
+.btn{font:inherit;font-weight:700;padding:9px 18px;border-radius:8px;border:0;cursor:pointer;background:var(--morado);color:var(--on-dark)}
+.btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line)}
+.btn:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+.qfb{font-size:14.5px;border-radius:8px;padding:10px 12px;background:var(--surface-2)}
+.qfb b.ok{color:var(--verde)} .qfb b.bad{color:var(--coral)}
+.score{font-family:var(--f-display);font-weight:800}
+footer{margin-top:40px;font-size:12.5px;color:var(--muted);display:grid;gap:6px;max-width:80ch}
+@media (prefers-reduced-motion:no-preference){ .c,.door,.chips label{transition:background .15s, opacity .15s, border-color .15s} }
+</style>
+
+
+</head>
+<body>
+<nav aria-label="Aula" style="display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;padding:9px 16px;background:#1b1b1e;color:#fff;font:600 13px/1.3 Inter,Arial,sans-serif"><b style="font-family:Montserrat,Arial,sans-serif;letter-spacing:.04em">Módulo 2</b><a style="color:#fff" href="../m2-h3-otras-obligaciones-lpb/index.html#t2-1-7">← Volver a H3 · 2.1.7</a><a style="color:#fff" href="../index.html">Portal del Aula</a><a style="color:#fff" href="../m2-simulacro/index.html">Simulacro mixto</a></nav>
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">360Educa · Módulo 2 · Certificación CNBV PLD/FT · Temario agosto 2026</div>
+  <h1>2.1.7 · <span class="hl">Intercambio de información</span></h1>
+  <p class="lede">Quién puede compartir qué, con quién y con qué requisitos, en las 12 DCG del temario. Elige una puerta, toca una celda de la matriz o pregúntale al asistente «¿Puedo compartir esto?». Todo está cotejado contra el texto de estudio (Bancos al 28-ago-2024).</p>
+  <hr class="membrete">
+</header>
+
+<nav class="idx" aria-label="Secciones">
+  <a href="#puertas">Las 5 puertas</a><a href="#matriz">Matriz por sujeto</a><a href="#asistente">¿Puedo compartir esto?</a><a href="#requisitos">Requisitos lado a lado</a><a href="#transferencias">Transferencias</a><a href="#trampas">Trampas</a><a href="#practica">Práctica</a>
+</nav>
+
+<section id="puertas">
+  <h2>Las 5 puertas del intercambio PLD</h2>
+  <p class="sub">Cada puerta es una forma distinta de intercambiar, con su propio fundamento y sus propios requisitos. El número grande es <b>cuántos de los 12 sujetos</b> la tienen. Para recordarlas: <b>7 · 3 · 2 · 1 · 1</b>. Toca una puerta para marcar en la matriz quién la tiene.</p>
+  <div class="ritmo" aria-hidden="true">7 · 3 · 2 · 1 · 1 <span class="lbl">grupo · mismo tipo · extranjeras · transferencias · LPB</span></div>
+  <div class="doors" id="doors"></div>
+  <div class="extra">
+    <div class="card">
+      <span class="pill star">Comodín</span>
+      <h3>La puerta que sólo abre la ITF · art. 79</h3>
+      <p class="mini">La ITF <b>podrá</b> intercambiar con otras Entidades Financieras y con <b>centros cambiarios, transmisores de dinero y asesores en inversiones</b> «autorizados para ello en las leyes que los regulan», con las reglas del intercambio entre ITF, salvo que se opongan a las de la contraparte. Ojo: las DCG de Centros, Transmisores y Asesores <b>no</b> tienen regla de intercambio PLD.</p>
+      <span class="ref">ITF arts. 79 y 78</span>
+    </div>
+    <div class="card">
+      <span class="pill warn">No confundir</span>
+      <h3>Compartir el expediente de identificación</h3>
+      <p class="mini">Dentro del grupo, otra entidad puede integrar y conservar el expediente del Cliente, con su <b>consentimiento</b> y un <b>convenio</b>, para abrir una nueva relación. Es tema de identificación (2.1.2), <b>no</b> intercambio PLD. Lo tienen los mismos 7 del grupo, más Asesores con la entidad financiera con la que tiene relación.</p>
+      <span class="ref">Bancos 9ª · SOFOM 9ª · CB 8ª · Fondos 8ª · SOFIPO 9ª · CC 7ª · ITF art. 20 · Asesores 8ª</span>
+    </div>
+  </div>
+</section>
+
+<section id="matriz">
+  <h2>Matriz por sujeto</h2>
+  <p class="sub">Doce sujetos en el orden de las familias (el color de la orilla es su familia: agrupación didáctica, no legal). Toca un encabezado para ver quién tiene esa puerta, un sujeto para ver todo lo que puede hacer, o una celda para su fundamento.</p>
+  <div class="legend">
+    <span><span class="c si">✓ 62ª</span> lo prevé su DCG</span>
+    <span><span class="c debe">● 62ª Quáter</span> obligatorio</span>
+    <span><span class="c medio">◐ 8ª</span> con matiz</span>
+    <span><span class="c no">—</span> su DCG no lo prevé</span>
+  </div>
+  <div class="tablewrap"><table id="mtx" aria-describedby="mtx-help"></table></div>
+  <p id="mtx-help" class="mini sub">Desliza la tabla a los lados en pantallas angostas.</p>
+  <div class="card detail" id="detail" aria-live="polite"></div>
+</section>
+
+<section id="asistente">
+  <h2>¿Puedo compartir esto?</h2>
+  <p class="sub">Arma el caso en tres pasos. El asistente te dice si la DCG lo permite, con qué requisitos y en qué disposición. Así pregunta el examen: combinando sujeto, contraparte y tipo de información.</p>
+  <div class="wiz">
+    <div class="card" style="display:grid;gap:16px">
+      <fieldset><legend><b>1</b>¿Quién comparte?</legend><div class="chips" id="w-s"></div></fieldset>
+      <fieldset><legend><b>2</b>¿Con quién?</legend><div class="chips" id="w-c"></div></fieldset>
+      <fieldset><legend><b>3</b>¿Qué quiere compartir?</legend><div class="chips" id="w-q"></div></fieldset>
+    </div>
+    <div class="card verdict" id="w-out" aria-live="polite"></div>
+  </div>
+</section>
+
+<section id="requisitos">
+  <h2>Requisitos lado a lado</h2>
+  <p class="sub">Aquí está lo que más confunde: cada puerta pide cosas distintas. Lee por renglón para comparar. Filtra las columnas si quieres ver sólo dos.</p>
+  <div class="colfilter" id="colf"></div>
+  <div class="tablewrap"><table class="req-t" id="reqt"></table></div>
+</section>
+
+<section id="transferencias">
+  <h2>Transferencias: el único «deberán» · Bancos 62ª Quáter</h2>
+  <p class="sub">Los bancos <b>deberán</b> intercambiar entre sí la información de <b>todas</b> sus transferencias nacionales en moneda extranjera e internacionales, enviadas o recibidas, con la identificación y, en su caso, la documentación de los Clientes y Usuarios. Ninguna otra DCG lo prevé.</p>
+  <div class="tl">
+    <div class="card"><span class="eyebrow">Fr. I</span><span class="k">Por plataforma</span><p class="mini">Exclusivamente por las plataformas autorizadas por la <b>Secretaría</b> o la que opere el <b>Banco de México</b>.</p></div>
+    <div class="card"><span class="eyebrow">Fr. IV</span><span class="k">Mismo día hábil</span><p class="mini">Cargar las transferencias enviadas y recibidas al cierre de operación de la plataforma del mismo día hábil.</p></div>
+    <div class="card"><span class="eyebrow">Fr. V</span><span class="k">Día hábil bancario siguiente</span><p class="mini">Cargar información y documentación de los Clientes y Usuarios, a más tardar el día hábil bancario siguiente a que se cuente con ella.</p></div>
+    <div class="card"><span class="eyebrow">Fr. VIII</span><span class="k">Consentimiento</span><p class="mini">El Cliente o Usuario otorga su consentimiento para que su información se proporcione a la plataforma.</p></div>
+    <div class="card"><span class="eyebrow">Fr. X</span><span class="k">Cuánto se consulta</span><p class="mini">Clientes: mientras subsista la relación. Usuarios: los <b>2 días hábiles bancarios</b> siguientes a la transferencia.</p></div>
+    <div class="card"><span class="eyebrow">Fr. III · VII · XI</span><span class="k">Acceso y uso</span><p class="mini">Sólo funcionarios expresamente autorizados. El Cliente puede pedir lo almacenado y quién lo consultó. Uso sólo para los arts. 52 y 115 Bis LIC.</p></div>
+  </div>
+</section>
+
+<section id="trampas">
+  <h2>Trampas de examen</h2>
+  <div class="traps" id="traps"></div>
+</section>
+
+<section id="practica">
+  <h2>Práctica rápida: ¿verdadero o falso?</h2>
+  <p class="sub">Dieciséis afirmaciones. Cada respuesta trae su fundamento.</p>
+  <div class="card quiz" id="quiz"></div>
+</section>
+
+<footer>
+  <span>Fuente: las 12 Disposiciones de carácter general en PLD/FT de la bibliografía del temario CNBV (agosto 2026), en las versiones de la carpeta M02. Bancos al 28-ago-2024; ITF, texto original de 2018. Almacenes generales de depósito, Afores, sociedades de inversión, Financiera Nacional de Desarrollo y SOFINCO no están entre las 12 DCG del temario.</span>
+  <span>Agrupación por familias: criterio didáctico de 360Educa; las diferencias se aprenden sujeto por sujeto. Material didáctico; no sustituye la publicación oficial.</span>
+</footer>
+</div>
+
+<script>
+(function(){
+const FAM={cred:"var(--verde)",burs:"var(--morado)",ahor:"var(--turquesa)",camb:"var(--coral)",fin:"var(--amarillo)"};
+const SUJ=[
+ {id:"ban",n:"Bancos",f:"cred"},{id:"sofom",n:"SOFOM",f:"cred"},
+ {id:"cb",n:"Casas de bolsa",f:"burs"},{id:"ase",n:"Asesores en inversiones",f:"burs"},{id:"fon",n:"Fondos de inversión",f:"burs"},
+ {id:"socap",n:"SOCAP",f:"ahor"},{id:"sofipo",n:"SOFIPO",f:"ahor"},{id:"uc",n:"Uniones de crédito",f:"ahor"},
+ {id:"cc",n:"Casas de cambio",f:"camb"},{id:"cca",n:"Centros cambiarios",f:"camb"},{id:"td",n:"Transmisores de dinero",f:"camb"},
+ {id:"itf",n:"ITF",f:"fin"}];
+const N=Object.fromEntries(SUJ.map(s=>[s.id,s.n]));
+const COLS=[
+ {k:"G",t:"Grupo financiero",s:"convenio + aviso previo"},
+ {k:"M",t:"Mismo tipo",s:"30 días naturales"},
+ {k:"E",t:"Extranjeras",s:"convenio + aviso previo"},
+ {k:"T",t:"Transferencias",s:"obligatorio"},
+ {k:"L",t:"Contenido de la LPB",s:"5 destinatarios"},
+ {k:"X",t:"Expediente compartido",s:"2.1.2 · no es PLD",x:true}];
+const DOORS=[
+ {k:"G",n:7,t:"Grupo financiero",d:"Con las entidades de su mismo grupo, con convenio e informe previo a la Comisión.",tag:"podrán"},
+ {k:"M",n:3,t:"Mismo tipo",d:"Banco con banco, SOFIPO con SOFIPO, ITF con ITF. Sin convenio de confidencialidad ni aviso a la Comisión; respuesta en 30 días naturales.",tag:"podrán"},
+ {k:"E",n:2,t:"Extranjeras",d:"Bancos e ITF con entidades financieras extranjeras, con convenio y aviso previo.",tag:"podrán"},
+ {k:"T",n:1,t:"Transferencias",d:"Sólo Bancos, por plataforma: transferencias en moneda extranjera e internacionales.",tag:"deberán",debe:true},
+ {k:"L",n:1,t:"Contenido de la LPB",d:"Sólo Bancos, con 5 tipos de destinatarios.",tag:"podrán"}];
+/* celda: [estado, etiqueta, título, puntos[], ref] */
+const C={
+ ban:{
+  G:["si","62ª Sexies","Bancos · grupo financiero",["Cualquier tipo de información sobre Operaciones con Clientes y Usuarios, sus antecedentes o actividad conocida.","Además, <b>estadística</b> de reportes 37ª, 41ª y 42ª y circunstancias del dictamen de OI u OIP (sólo Bancos).","Convenio: tratamiento confidencial y cargos de los funcionarios autorizados.","Informar a la Comisión la suscripción del convenio <b>antes</b> del intercambio, en su formato oficial.","Conservar la documentación soporte a disposición de la Secretaría y la Comisión."],"Bancos 62ª Sexies"],
+  M:["si","62ª y Septies","Bancos · entre bancos",["Información de Operaciones de Clientes y Usuarios y sus antecedentes, <b>sólo</b> para prevenir 139 Quáter, 400 Bis CPF y 52 LIC.","La piden funcionarios autorizados, con motivo y clase de información; puede ser electrónica.","Respuesta en <b>no más de 30 días naturales</b> desde la solicitud.","Sólo la usa quien la pidió, salvo que se diga que puede compartirse.","Puede compartirse <b>sin solicitud previa</b>; por la plataforma que establezcan.","62ª Septies: también estadística de reportes y del dictamen."],"Bancos 62ª y 62ª Septies"],
+  E:["si","62ª Bis·Ter·Octies","Bancos · entidades extranjeras",["<b>62ª Bis:</b> información de la 33ª Bis 1 (régimen ilimitado de USD), si deriva de una operación con dólares entre ambas; convenio y aviso previo.","<b>62ª Ter:</b> con EF extranjeras análogas, en formato oficial de la Secretaría; convenio, aviso previo y <b>copia del formato a la Secretaría, previa o simultánea</b>; debe derivar de una Operación entre ellas.","<b>62ª Octies:</b> antecedentes y estadística de reportes 37ª y 41ª con filiales del exterior, entidades donde invierte y corresponsales; convenio y aviso previo."],"Bancos 62ª Bis, 62ª Ter y 62ª Octies"],
+  T:["debe","62ª Quáter","Bancos · transferencias (obligatorio)",["<b>Deberán</b> intercambiar entre sí todas sus transferencias nacionales en moneda extranjera e internacionales.","Por plataforma autorizada por la Secretaría o la de Banco de México.","Carga al cierre del mismo día hábil; consentimiento del Cliente o Usuario."],"Bancos 62ª Quáter"],
+  L:["si","62ª Quinquies","Bancos · contenido de la LPB",["I oficinas de representación con relación comercial · II filiales del exterior · III EF del exterior donde tenga inversión en su capital · IV corresponsales extranjeros · V EF del mismo grupo.","Medidas de confidencialidad en el Manual u otro documento."],"Bancos 62ª Quinquies"],
+  X:["si","9ª","Bancos · expediente compartido en grupo",["Otra entidad del grupo integra y conserva el expediente, con <b>consentimiento del Cliente</b> y convenio.","Es identificación (2.1.2), no intercambio PLD."],"Bancos 9ª"]},
+ sofom:{G:["si","52ª-1","SOFOM · grupo",["Información sobre Operaciones con Clientes y Usuarios.","Convenio y aviso previo a la Comisión."],"SOFOM 52ª-1"],X:["si","9ª","SOFOM · expediente compartido",["Con consentimiento del Cliente y convenio."],"SOFOM 9ª"]},
+ cb:{G:["si","61ª-1","Casas de bolsa · grupo",["Información sobre Operaciones con Clientes y Usuarios.","Convenio y aviso previo a la Comisión."],"Casas de bolsa 61ª-1"],X:["si","8ª","Casas de bolsa · expediente compartido",["Con consentimiento del Cliente y convenio."],"Casas de bolsa 8ª"]},
+ ase:{X:["medio","8ª","Asesores · expediente integrado por otra entidad",["No es intercambio PLD: sólo para Asesores que no estén en el supuesto del tercer párrafo del art. 225 LMV, la entidad financiera con la que tengan relación puede integrar el expediente.","Requiere autorización expresa del Cliente y convenio.","Su DCG no tiene ninguna regla de intercambio PLD."],"Asesores en inversiones 8ª"]},
+ fon:{G:["si","55-1ª","Fondos · grupo",["Información sobre Operaciones con sus <b>Clientes</b>.","Convenio y aviso previo a la Comisión.","La disposición está numerada «55-1ª»."],"Fondos de inversión 55-1ª"],X:["si","8ª","Fondos · expediente compartido",["Con consentimiento del Cliente y convenio."],"Fondos de inversión 8ª"]},
+ sofipo:{G:["si","64ª Bis","SOFIPO · grupo",["Información sobre Operaciones con Clientes y Usuarios.","Convenio y aviso previo a la Comisión."],"SOFIPO 64ª Bis"],M:["si","63ª–64ª","SOFIPO · entre SOFIPO",["Información de Operaciones de Clientes y Usuarios, sólo para prevenir 139 Quáter y 400 Bis CPF.","Solicitud <b>mediante escrito</b> con motivo y clase de información.","Respuesta <b>por escrito firmado</b> por funcionarios autorizados, en no más de 30 días naturales.","Puede compartirse sin solicitud previa; conservar el soporte.","Sólo operaciones (sin antecedentes) y sin 52 LIC en la finalidad.","Sin la plataforma tecnológica de la 62ª VI de Bancos (usa los mecanismos que establezcan), sin estadística y sin transferencias obligatorias."],"SOFIPO 64ª"],X:["si","9ª","SOFIPO · expediente compartido",["Con consentimiento del Cliente y convenio."],"SOFIPO 9ª"]},
+ cc:{G:["si","51ª-1","Casas de cambio · grupo",["Información sobre Operaciones con sus <b>Usuarios</b>.","Convenio y aviso previo a la Comisión.","<b>Sólo grupo:</b> no tiene intercambio con otras casas de cambio."],"Casas de cambio 51ª-1"],X:["si","7ª","Casas de cambio · expediente compartido",["Expediente del <b>Usuario</b>, con su consentimiento y convenio."],"Casas de cambio 7ª"]},
+ itf:{G:["si","art. 80","ITF · grupo",["Información sobre Operaciones, actividades y servicios con sus Clientes.","Convenio y aviso previo a la CNBV."],"ITF art. 80"],M:["si","arts. 77–78","ITF · entre ITF",["Finalidad: 139 Quáter, 400 Bis CPF <b>y delitos contra sus Clientes o la propia ITF</b>.","Solicitud por escrito; respuesta por escrito firmado en no más de 30 días naturales.","Puede compartirse sin solicitud previa.","Además, art. 79: con otras EF, centros cambiarios, transmisores y asesores autorizados en sus leyes."],"ITF arts. 77–79"],E:["si","art. 81","ITF · entidades extranjeras",["<b>Sólo</b> con las entidades financieras extranjeras que determine la Secretaría.","Formato oficial de la Secretaría; convenio; aviso previo a la CNBV; copia del formato a la Secretaría, previa o simultánea.","Debe derivar de una Operación entre ellas.","Sin intercambio de la LPB."],"ITF art. 81"],X:["si","art. 20","ITF · expediente compartido",["Con autorización expresa del Cliente y convenio."],"ITF art. 20"]}
+};
+const NOTES={
+ ase:"Asesores en inversiones no tiene ninguna regla de intercambio PLD. Su reserva no trae la salvedad de intercambio.",
+ socap:"SOCAP no prevé el intercambio en ninguna modalidad, ni comparte expediente en grupo.",
+ uc:"Uniones de crédito no prevé el intercambio en ninguna modalidad.",
+ cca:"Centros cambiarios no prevé el intercambio. El art. 79 de ITF los nombra, pero su propia DCG no lo regula.",
+ td:"Transmisores de dinero no prevé el intercambio. El art. 79 de ITF los nombra, pero su propia DCG no lo regula.",
+ cc:"Casas de cambio sólo intercambia dentro de su grupo financiero."};
+function cell(s,k){return (C[s]&&C[s][k])||["no","—",N[s]+" · "+COLS.find(c=>c.k===k).t,["Su DCG no lo prevé."],""];}
+
+/* Puertas */
+const doorsEl=document.getElementById("doors");
+let selCol=null;
+DOORS.forEach(d=>{const b=document.createElement("button");b.className="door"+(d.debe?" debe":"");b.type="button";b.setAttribute("aria-pressed","false");b.dataset.k=d.k;
+ b.innerHTML=`<span class="tag">${d.tag}</span><span class="n num">${d.n}</span><span class="t">${d.t}</span><span class="d">${d.d}</span>`;
+ b.addEventListener("click",()=>{setCol(selCol===d.k?null:d.k);document.getElementById("matriz").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});});
+ doorsEl.appendChild(b);});
+
+/* Matriz */
+const t=document.getElementById("mtx");
+let h="<thead><tr><th scope='col'>Sujeto</th>"+COLS.map(c=>`<th scope="col" data-k="${c.k}" class="${c.x?"col-x":""}"><button type="button" data-col="${c.k}">${c.t}<small>${c.s}</small></button></th>`).join("")+"</tr></thead><tbody>";
+let prev=null;
+SUJ.forEach(s=>{const sep=prev&&prev!==s.f?" class='fam-sep'":"";prev=s.f;
+ h+=`<tr data-s="${s.id}"${sep}><th scope="row" style="--fam:${FAM[s.f]}"><button type="button" data-row="${s.id}">${s.n}</button></th>`+
+ COLS.map(c=>{const v=cell(s.id,c.k);const sym=v[0]==="si"?"✓":v[0]==="debe"?"●":v[0]==="medio"?"◐":"";
+  return `<td class="cell" data-k="${c.k}"><button type="button" class="c ${v[0]}" data-s="${s.id}" data-k="${c.k}" aria-label="${s.n}, ${c.t}: ${v[0]==="no"?"no lo prevé":v[1]}">${sym} ${v[1]}</button></td>`;}).join("")+"</tr>";});
+t.innerHTML=h+"</tbody>";
+const det=document.getElementById("detail");
+function showCell(s,k){const v=cell(s,k);det.innerHTML=`<span class="eyebrow">${COLS.find(c=>c.k===k).t}</span><h3>${v[2]}</h3><ul>${v[3].map(p=>`<li>${p}</li>`).join("")}</ul>${v[4]?`<p class="ref" style="margin-top:8px">${v[4]}</p>`:""}${v[0]==="no"&&NOTES[s]?`<p class="note" style="margin-top:8px">${NOTES[s]}</p>`:""}`;}
+function showRow(s){t.querySelectorAll("tbody tr").forEach(r=>r.classList.toggle("rowon",r.dataset.s===s));
+ const tiene=COLS.filter(c=>!c.x&&cell(s,c.k)[0]!=="no");
+ const x=cell(s,"X");
+ det.innerHTML=`<span class="eyebrow">Sujeto</span><h3>${N[s]}: ${tiene.length?"tiene "+tiene.length+" de 5 puertas":"no tiene ninguna puerta"}</h3><ul>${COLS.filter(c=>!c.x).map(c=>{const v=cell(s,c.k);return `<li><b>${c.t}:</b> ${v[0]==="no"?"no lo prevé":v[4]}</li>`}).join("")}<li><b>Expediente compartido (2.1.2):</b> ${x[0]==="no"?"no lo prevé":x[4]}</li></ul>${NOTES[s]?`<p class="note" style="margin-top:8px">${NOTES[s]}</p>`:""}`;}
+function setCol(k){selCol=k;t.classList.toggle("dim",!!k);
+ t.querySelectorAll("thead th").forEach(th=>th.classList.toggle("on",th.dataset.k===k));
+ t.querySelectorAll("td.cell").forEach(td=>td.classList.toggle("on",td.dataset.k===k));
+ doorsEl.querySelectorAll(".door").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.k===k)));
+ if(k){const col=COLS.find(c=>c.k===k);const si=SUJ.filter(s=>cell(s.id,k)[0]!=="no"),no=SUJ.filter(s=>cell(s.id,k)[0]==="no");
+  det.innerHTML=`<span class="eyebrow">Puerta</span><h3>${col.t}: ${si.length} de 12</h3><ul><li><b>Sí:</b> ${si.map(s=>s.n+" ("+cell(s.id,k)[1]+")").join(" · ")}</li><li><b>No:</b> ${no.map(s=>s.n).join(" · ")}</li></ul>`;}
+ else setDefault();}
+function setDefault(){det.innerHTML=`<span class="eyebrow">Cómo leerla</span><h3>Cinco sujetos no tienen ninguna puerta</h3><p class="mini">Asesores, SOCAP, Uniones, Centros cambiarios y Transmisores no intercambian información PLD en ninguna modalidad. Bancos tiene las cinco; ITF, tres (sin transferencias ni LPB); SOFIPO, dos; SOFOM, Casas de bolsa, Fondos y Casas de cambio, sólo grupo.</p>`;}
+t.addEventListener("click",e=>{const c=e.target.closest(".c");if(c){t.querySelectorAll("tbody tr").forEach(r=>r.classList.remove("rowon"));showCell(c.dataset.s,c.dataset.k);return;}
+ const col=e.target.closest("[data-col]");if(col){setCol(selCol===col.dataset.col?null:col.dataset.col);return;}
+ const row=e.target.closest("[data-row]");if(row){setCol(null);showRow(row.dataset.row);}});
+setDefault();
+
+/* Asistente */
+const CP=[{id:"mismo",n:"Otra entidad de su mismo tipo (fuera de su grupo)"},{id:"grupo",n:"Una entidad de su grupo financiero"},{id:"ext",n:"Una entidad financiera extranjera"},{id:"otra",n:"Otro tipo de entidad mexicana, fuera de su grupo"}];
+const QQ=[{id:"ops",n:"Operaciones y antecedentes de clientes"},{id:"stat",n:"Estadística de reportes y del dictamen"},{id:"lpb",n:"Contenido de la LPB"},{id:"trans",n:"Información de transferencias"},{id:"exp",n:"Expediente de identificación del cliente"}];
+function chips(el,name,items,fam){el.innerHTML=items.map((x,i)=>`<input type="radio" name="${name}" id="${name}-${x.id}" value="${x.id}" ${i===0?"checked":""}><label for="${name}-${x.id}" ${fam?`style="--fam:${FAM[x.f]}"`:""}>${fam?"<i></i>":""}${x.n}</label>`).join("");}
+chips(document.getElementById("w-s"),"ws",SUJ,true);chips(document.getElementById("w-c"),"wc",CP);chips(document.getElementById("w-q"),"wq",QQ);
+const GRUPO={ban:"62ª Sexies",sofom:"52ª-1",cb:"61ª-1",fon:"55-1ª",sofipo:"64ª Bis",cc:"51ª-1",itf:"art. 80"};
+const EXPG={ban:"9ª",sofom:"9ª",cb:"8ª",fon:"8ª",sofipo:"9ª",cc:"7ª",itf:"art. 20"};
+const R_GRUPO=["Convenio con tratamiento confidencial y cargos de los funcionarios autorizados","Informar a la Comisión la suscripción del convenio, antes del intercambio y en su formato oficial","Conservar la documentación soporte a disposición de la Secretaría y la Comisión"];
+function ev(s,c,q){const n=N[s];
+ const NO=(why,ref,extra)=>({v:"no",h:"No lo prevé",r:[],w:why,ref,x:extra});
+ if(q==="exp"){
+  if(c==="grupo"&&EXPG[s])return{v:"si",h:"Sí, pero es identificación",r:s==="itf"?["Autorización expresa del Cliente","Convenio: a) intercambiar datos y documentos para una nueva relación; b) integrar el expediente conforme a las disposiciones de las Entidades Financieras del grupo; c) mantenerlo a disposición"]:[s==="cc"?"Consentimiento del Usuario":"Consentimiento del Cliente","Convenio: intercambiar datos y documentos para abrir una nueva relación; integrar el expediente en los mismos términos y tenerlo a disposición; si una entidad sale del grupo, integra sus expedientes"],w:`Otra entidad del grupo puede integrar y conservar el expediente del ${s==="cc"?"Usuario":"Cliente"}.`,ref:`${n} ${EXPG[s]}`,x:"Esto es 2.1.2 (identificación), no intercambio PLD de 2.1.7.",xw:true};
+  if(s==="ase"&&c==="otra")return{v:"medio",h:"Sí, con la entidad financiera con la que tenga relación",r:["Autorización expresa del Cliente","Convenio con esa entidad financiera"],w:"Sólo para Asesores que no estén en el supuesto del tercer párrafo del art. 225 LMV: la entidad financiera con la que tengan relación puede integrar y conservar el expediente.",ref:"Asesores en inversiones 8ª",x:"Es identificación (2.1.2). Asesores no tiene intercambio PLD.",xw:true};
+  return NO(`${n} no prevé compartir el expediente en ese supuesto.`,"",EXPG[s]?"Sólo dentro del grupo financiero.":"");}
+ if(q==="trans"){
+  if(s==="ban"&&c==="mismo")return{v:"debe",h:"Debe hacerlo",r:["Todas las transferencias nacionales en moneda extranjera e internacionales, enviadas o recibidas","Sólo por plataformas autorizadas por la Secretaría o la que opere Banco de México","Carga al cierre del mismo día hábil; documentación a más tardar el día hábil bancario siguiente","Consentimiento del Cliente o Usuario","Acceso sólo de funcionarios expresamente autorizados"],w:"Es el único intercambio obligatorio («deberán intercambiar entre sí»).",ref:"Bancos 62ª Quáter"};
+  const r=ev(s,c,"ops");
+  if(r.v==="no"){r.w="La plataforma obligatoria de la 62ª Quáter es sólo de bancos entre sí. "+r.w;return r;}
+  r.h="Sí, como información de Operaciones";r.x="No por la plataforma obligatoria de la 62ª Quáter (sólo bancos entre sí): la transferencia es una Operación y su información se comparte por esta puerta voluntaria, con sus requisitos.";r.xw=true;if(r.v==="si")r.v="medio";return r;}
+ if(q==="lpb"){
+  if(s==="ase")return NO("Asesores en inversiones ni siquiera tiene LPB en su DCG.","");
+  if(s!=="ban")return NO(`Compartir el contenido de la LPB es exclusivo de Bancos. ${n} tiene LPB, pero su DCG no prevé compartir su contenido; sólo Bancos (62ª Quinquies).`,"Bancos 62ª Quinquies");
+  if(c==="grupo")return{v:"si",h:"Sí puede",r:["Entidades financieras del mismo grupo financiero (fr. V)","Medidas de confidencialidad en el Manual u otro documento"],w:"Es uno de los 5 destinatarios de la 62ª Quinquies.",ref:"Bancos 62ª Quinquies V"};
+  if(c==="ext")return{v:"medio",h:"Sí, sólo con ciertas extranjeras",r:["Filiales del exterior (art. 45-A fr. II LIC), EF del exterior donde tenga inversión en capital, o corresponsales extranjeros (fr. II a IV)","Oficinas de representación con relación comercial (fr. I)","Medidas de confidencialidad en el Manual u otro documento"],w:"No cualquier entidad extranjera: sólo las de la 62ª Quinquies.",ref:"Bancos 62ª Quinquies I–IV"};
+  return NO("Otro banco fuera de su grupo, u otra entidad mexicana ajena, no está entre los 5 destinatarios de la 62ª Quinquies.","Bancos 62ª Quinquies");}
+ if(q==="stat"){
+  if(s!=="ban")return NO(`Sólo Bancos intercambia estadística de reportes y circunstancias del dictamen. ${n} no lo prevé.`,"Bancos 62ª Sexies, Septies y Octies");
+  if(c==="mismo")return{v:"si",h:"Sí puede",r:["Estadística de reportes 37ª, 41ª y 42ª y circunstancias del dictamen","Por la plataforma de la 62ª fr. VI y con las fr. I a V de la 62ª","Sólo para prevenir 139 Quáter, 400 Bis CPF y 52 LIC","Conservar la documentación soporte"],w:"Intercambio estadístico entre bancos.",ref:"Bancos 62ª Septies"};
+  if(c==="grupo")return{v:"si",h:"Sí puede",r:R_GRUPO,w:"La 62ª Sexies incluye la estadística de reportes y el dictamen dentro del grupo.",ref:"Bancos 62ª Sexies"};
+  if(c==="ext")return{v:"medio",h:"Sí, sólo con ciertas extranjeras",r:["Filiales del exterior, EF del exterior donde tenga inversión en capital o corresponsales","Sólo reportes 37ª y 41ª y el dictamen de OI","Medios electrónicos y formato oficial de la Secretaría","Convenio y aviso previo a la Comisión"],w:"Antecedentes y estadística, no con cualquier extranjera.",ref:"Bancos 62ª Octies"};
+  return NO("No hay disposición para compartir estadística con otro tipo de entidad mexicana.","");}
+ /* ops */
+ if(c==="grupo"){if(s==="ban")return{v:"si",h:"Sí puede",r:R_GRUPO,w:"Cualquier información sobre Operaciones, antecedentes o actividad conocida y, sólo Bancos, estadística de reportes y del dictamen.",ref:"Bancos 62ª Sexies"};
+  if(GRUPO[s])return{v:"medio",h:"Sí, sólo información de Operaciones",r:R_GRUPO,w:(s==="fon"?"Sólo operaciones de sus Clientes.":s==="cc"?"Sólo operaciones de sus Usuarios.":s==="itf"?"Operaciones, actividades y servicios con sus Clientes.":"Operaciones con sus Clientes y Usuarios.")+" Los antecedentes o actividad conocida sólo los prevé Bancos.",ref:`${n} ${GRUPO[s]}`};
+  return NO(`${n} no prevé intercambio en grupo.`,"",NOTES[s]);}
+ if(c==="mismo"){
+  if(s==="ban")return{v:"si",h:"Sí puede",r:["Sólo para prevenir 139 Quáter, 400 Bis CPF y 52 LIC","Lo piden funcionarios autorizados, con motivo y clase de información","Respuesta en no más de 30 días naturales","Sólo la usa quien la pidió, salvo que se indique que puede compartirse","Puede compartirse sin solicitud previa, por la plataforma que establezcan","Conservar la documentación soporte"],w:"Sin convenio de confidencialidad ni aviso a la Comisión; sí plataforma y términos que convengan entre ellos (62ª VI).",ref:"Bancos 62ª"};
+  if(s==="sofipo")return{v:"medio",h:"Sí, sólo información de Operaciones",r:["Sólo para prevenir 139 Quáter y 400 Bis CPF","Solicitud mediante escrito con motivo y clase de información","Respuesta por escrito firmado, en no más de 30 días naturales","Puede compartirse sin solicitud previa","Conservar la documentación soporte"],w:"Mismo núcleo que Bancos (30 días naturales, sin solicitud previa), pero: solicitud por escrito y respuesta por escrito firmado; sólo operaciones, sin antecedentes; finalidad sólo 139 Quáter y 400 Bis (sin 52 LIC); sin estadística.",ref:"SOFIPO 64ª"};
+  if(s==="itf")return{v:"medio",h:"Sí: operaciones, actividades y servicios",r:["Para prevenir 139 Quáter, 400 Bis CPF y delitos contra sus Clientes o la ITF","Solicitud por escrito; respuesta por escrito firmado en no más de 30 días naturales","Puede compartirse sin solicitud previa","Conservar el soporte del procedimiento y de lo intercambiado"],w:"Entre dos o más ITF.",ref:"ITF arts. 77–78"};
+  return NO(`${n} no prevé intercambio con entidades de su mismo tipo.`,"",s==="cc"?"Casas de cambio sólo intercambia dentro de su grupo.":NOTES[s]);}
+ if(c==="ext"){
+  if(s==="ban")return{v:"si",h:"Sí puede",r:["62ª Ter: con EF extranjeras análogas, en formato oficial de la Secretaría","Convenio (confidencialidad y cargos) e informe previo a la Comisión","Copia del formato a la Secretaría, por conducto de la Comisión, previa o simultánea","Debe derivar de una Operación entre ellas","62ª Bis: la información de la 33ª Bis 1 sólo si deriva de una operación con USD"],w:"La 62ª Octies agrega antecedentes y estadística con filiales, inversiones y corresponsales.",ref:"Bancos 62ª Bis, Ter y Octies"};
+  if(s==="itf")return{v:"medio",h:"Sí, sólo con las que determine la Secretaría",r:["Sólo con EF extranjeras determinadas por la Secretaría","Formato oficial de la Secretaría","Convenio e informe previo a la CNBV","Copia del formato a la Secretaría, previa o simultánea","Debe derivar de una Operación entre ellas"],w:"No con cualquier extranjera análoga.",ref:"ITF art. 81"};
+  return NO(`Sólo Bancos e ITF intercambian con entidades extranjeras. ${n} no lo prevé.`,"");}
+ if(c==="otra"){
+  if(s==="itf")return{v:"si",h:"Sí puede (art. 79)",r:["Con otras Entidades Financieras, centros cambiarios, transmisores de dinero y asesores en inversiones autorizados para ello en sus leyes","Con la finalidad del art. 77","Con las reglas del intercambio entre ITF, salvo que se opongan a las de la contraparte"],w:"Es la puerta que sólo abre la ITF.",ref:"ITF art. 79"};
+  if(["cca","td","ase"].includes(s))return NO(`La DCG de ${n} no lo prevé.`,"",`El art. 79 de ITF nombra a ${n.toLowerCase()} como posibles contrapartes, pero su propia DCG no tiene regla de intercambio PLD.`);
+  return NO(`${n} no tiene una regla para intercambiar con otro tipo de entidad fuera de su grupo.`,"");}
+}
+function wiz(){const s=document.querySelector("input[name=ws]:checked").value,c=document.querySelector("input[name=wc]:checked").value,q=document.querySelector("input[name=wq]:checked").value;
+ const r=ev(s,c,q);const o=document.getElementById("w-out");
+ o.innerHTML=`<span class="eyebrow">${N[s]} → ${CP.find(x=>x.id===c).n.toLowerCase()}</span><span class="vbadge ${r.v}">${r.v==="no"?"✕ ":r.v==="debe"?"● ":r.v==="medio"?"◐ ":"✓ "}${r.h}</span><p>${r.w}</p>${r.r.length?`<ul class="req">${r.r.map(x=>`<li>${x}</li>`).join("")}</ul>`:""}${r.x?`<p class="note ${r.xw?"warn":""}">${r.x}</p>`:""}${r.ref?`<p class="ref">${r.ref}</p>`:""}`;}
+document.getElementById("asistente").addEventListener("change",wiz);
+/* caso de ejemplo al abrir: SOFIPO con otra SOFIPO */
+document.getElementById("ws-sofipo").checked=true;wiz();
+
+/* Requisitos lado a lado */
+const RC=[
+ {k:"m1",t:"Mismo tipo · Bancos",r:"62ª"},{k:"m2",t:"Mismo tipo · SOFIPO e ITF",r:"SOFIPO 64ª · ITF 78"},{k:"g",t:"Grupo financiero",r:"62ª Sexies y equivalentes"},
+ {k:"e1",t:"Extranjeras · dólares",r:"62ª Bis"},{k:"e2",t:"Extranjeras · análogas",r:"62ª Ter · ITF 81"},{k:"e3",t:"Extranjeras · filiales, inversión y corresponsales",r:"62ª Octies"},
+ {k:"tr",t:"Transferencias",r:"62ª Quáter"},{k:"l",t:"Contenido de la LPB",r:"62ª Quinquies"}];
+const Y=s=>`<span class="y">${s}</span>`, NO0='<span class="n0">No</span>', NA='<span class="n0">—</span>';
+const RR=[
+ ["Verbo",["Podrán","Podrán","Podrán","Podrán","Podrán","Podrán","<b>Deberán</b>","Podrán"]],
+ ["Qué se comparte",["Operaciones de Clientes y Usuarios y sus antecedentes","Operaciones (ITF: operaciones, actividades y servicios)","Cualquier información sobre operaciones; Bancos agrega estadística de reportes y dictamen","La información de la 33ª Bis 1 (régimen ilimitado de USD)","Clientes, Usuarios y sus operaciones (ITF: Clientes y sus Operaciones)","Antecedentes y estadística de reportes 37ª y 41ª y del dictamen de OI","Transferencias en moneda extranjera e internacionales, con identificación y documentación","Contenido de la LPB"]],
+ ["Con quién",["Dos o más Entidades del mismo tipo","Dos o más SOFIPO / dos o más ITF","Entidades del mismo grupo facultadas","Entidades financieras extranjeras","EF extranjeras análogas (ITF: sólo las que determine la Secretaría)","Filiales del exterior, EF del exterior donde invierte y corresponsales","Entre sí, por plataforma","Oficinas de representación, filiales del exterior, EF donde invierte, corresponsales y EF del grupo"]],
+ ["Cómo se pide",["Funcionarios autorizados, con motivo y clase; puede ser electrónica","<b>Por escrito</b>, con motivo y clase",NA,NA,"Formato oficial de la Secretaría","Medios electrónicos y formato oficial de la Secretaría","Plataforma autorizada por la Secretaría o la de Banco de México",NA]],
+ ["Respuesta y plazo",["<b>≤ 30 días naturales</b>","<b>Escrito firmado</b>, ≤ 30 días naturales",NA,NA,NA,NA,"Carga el <b>mismo día hábil</b>; documentos el día hábil bancario siguiente",NA]],
+ ["Convenio de confidencialidad y cargos",['<span class="n0">No (sólo plataforma y términos que convengan, 62ª VI)</span>',NO0,Y("confidencialidad y cargos"),Y("confidencialidad y cargos"),Y("confidencialidad y cargos"),Y("confidencialidad y cargos"),NA,'<span class="n0">No; medidas de confidencialidad en el Manual</span>']],
+ ["Aviso previo a la CNBV",[NO0,NO0,Y("de la suscripción del convenio"),Y("de los convenios"),Y("de la suscripción del convenio"),Y("de los convenios"),NO0,NO0]],
+ ["Copia del formato a la Secretaría",[NO0,NO0,NO0,NO0,Y("previa o simultánea"),NO0,NO0,NO0]],
+ ["Debe derivar de una operación",[NO0,NO0,NO0,Y("operación con USD entre ambas"),Y("operación entre ellas"),NO0,NA,NO0]],
+ ["Compartir sin solicitud previa",[Y("fr. V"),Y("fr. V"),NA,NA,NA,NA,NA,NA]],
+ ["Consentimiento del cliente",[NO0,NO0,NO0,NO0,NO0,NO0,Y("fr. VIII"),NO0]],
+ ["Quiénes lo tienen",["Bancos","SOFIPO · ITF","Bancos, SOFOM, CB, Fondos, SOFIPO, CC, ITF","Bancos","Bancos · ITF","Bancos","Bancos","Bancos"]]];
+let shown=new Set(RC.map(c=>c.k));
+const cf=document.getElementById("colf");
+cf.innerHTML=RC.map(c=>`<button type="button" aria-pressed="true" data-k="${c.k}">${c.t}</button>`).join("");
+function drawReq(){const idx=RC.map((c,i)=>shown.has(c.k)?i:-1).filter(i=>i>=0);
+ document.getElementById("reqt").innerHTML=`<thead><tr><th scope="col">Requisito</th>${idx.map(i=>`<th scope="col">${RC[i].t}<br><small>${RC[i].r}</small></th>`).join("")}</tr></thead><tbody>${RR.map(r=>`<tr><th scope="row">${r[0]}</th>${idx.map(i=>`<td>${r[1][i]}</td>`).join("")}</tr>`).join("")}</tbody>`;}
+cf.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const k=b.dataset.k;
+ if(shown.has(k)&&shown.size>1){shown.delete(k);b.setAttribute("aria-pressed","false");}else{shown.add(k);b.setAttribute("aria-pressed","true");}drawReq();});
+drawReq();
+
+/* Trampas */
+const TR=[
+ ["Casas de cambio no intercambia con otras casas de cambio.","Sólo tiene intercambio dentro de su grupo financiero (51ª-1). Entre entidades del mismo tipo, sólo Bancos, SOFIPO e ITF.","Casas de cambio 51ª-1"],
+ ["30 días naturales, no hábiles.","La respuesta a una solicitud de intercambio entre entidades del mismo tipo va en no más de 30 días naturales desde la solicitud.","Bancos 62ª III · SOFIPO 64ª III · ITF 78 III"],
+ ["Convenio y aviso previo, sólo en grupo y con extranjeras.","Entre entidades del mismo tipo no se exige el convenio de confidencialidad y cargos ni el aviso previo a la Comisión. Entre bancos sí hay plataforma y «términos y condiciones que estas convengan» (62ª VI).","Bancos 62ª vs. 62ª Sexies y 62ª Bis a Octies"],
+ ["El único intercambio obligatorio es el de transferencias.","Intercambiar es facultad («podrán») en todas las modalidades, salvo la 62ª Quáter de Bancos: «deberán intercambiar entre sí» las transferencias. Los requisitos de cada modalidad (convenir, avisar, conservar) sí son obligatorios.","Bancos 62ª Quáter"],
+ ["Copia del formato: previa o simultánea, no posterior.","En la 62ª Ter (y el art. 81 de ITF) la copia del formato con lo intercambiado va a la Secretaría, por conducto de la Comisión, antes o al mismo tiempo. El aviso del convenio a la Comisión es antes.","Bancos 62ª Ter III · ITF art. 81 III"],
+ ["El art. 79 abre la puerta sólo del lado de la ITF.","La ITF puede intercambiar con centros cambiarios, transmisores y asesores autorizados en sus leyes, pero las DCG de esos tres no tienen regla de intercambio PLD.","ITF art. 79"],
+ ["Compartir el expediente no es intercambio PLD.","El expediente compartido en grupo (con consentimiento y convenio) es identificación, tema 2.1.2. El intercambio PLD es 2.1.7. Lo tienen los mismos 7 del grupo.","Bancos 9ª · ITF art. 20"],
+ ["La LPB: sólo Bancos comparte su contenido.","Y sólo con 5 destinatarios: oficinas de representación, filiales del exterior, EF donde invierte, corresponsales y EF del grupo. ITF no comparte la LPB ni con extranjeras.","Bancos 62ª Quinquies"]];
+document.getElementById("traps").innerHTML=TR.map(x=>`<div class="card trap"><h3>${x[0]}</h3><p class="mini">${x[1]}</p><span class="ref">${x[2]}</span></div>`).join("");
+
+/* Práctica */
+const QZ=[
+ ["Una casa de cambio puede intercambiar información PLD con otra casa de cambio que no es de su grupo financiero.",false,"Casas de cambio sólo prevé intercambio dentro de su grupo (51ª-1).","Casas de cambio 51ª-1"],
+ ["Un banco debe responder la solicitud de intercambio de otro banco en no más de 30 días hábiles.",false,"Son 30 días naturales contados desde la solicitud.","Bancos 62ª fr. III"],
+ ["Para intercambiar información con otro banco que no es de su grupo, el banco necesita convenio y aviso previo a la CNBV.",false,"Entre entidades del mismo tipo no hay convenio ni aviso; eso se exige en grupo y con extranjeras.","Bancos 62ª vs. 62ª Sexies"],
+ ["Una SOFIPO responde la solicitud de otra SOFIPO por escrito firmado por funcionarios autorizados.",true,"La 64ª III de SOFIPO pide escrito firmado; Bancos no lo exige.","SOFIPO 64ª fr. III"],
+ ["Una SOCAP puede intercambiar información con otra SOCAP para prevenir operaciones con recursos de procedencia ilícita.",false,"La DCG de SOCAP no prevé intercambio en ninguna modalidad.","DCG SOCAP (sin disposición)"],
+ ["La ITF puede intercambiar información con centros cambiarios y transmisores de dinero autorizados para ello en sus leyes.",true,"Lo prevé el art. 79 de ITF, aunque las DCG de Centros y Transmisores no tienen regla de intercambio.","ITF art. 79"],
+ ["Los bancos deben intercambiar entre sí la información de sus transferencias internacionales.",true,"Es el único intercambio obligatorio: «deberán intercambiar entre sí».","Bancos 62ª Quáter"],
+ ["Los bancos cargan a la plataforma las transferencias del día dentro de los 3 días hábiles siguientes.",false,"Se cargan al cierre de operación de la plataforma del mismo día hábil.","Bancos 62ª Quáter fr. IV"],
+ ["Un banco puede compartir el contenido de la LPB con una entidad financiera extranjera con la que tiene operaciones de corresponsalía.",true,"Los corresponsales extranjeros son uno de los 5 destinatarios.","Bancos 62ª Quinquies fr. IV"],
+ ["Una ITF puede compartir el contenido de la LPB con las entidades de su grupo financiero.",false,"Compartir el contenido de la LPB es exclusivo de Bancos.","Bancos 62ª Quinquies"],
+ ["Una ITF puede intercambiar información con cualquier entidad financiera extranjera análoga.",false,"Sólo con las que determine la Secretaría.","ITF art. 81 fr. I"],
+ ["En la 62ª Ter, la copia del formato se envía a la Secretaría después de realizar el intercambio.",false,"Se envía de forma previa o simultánea al intercambio.","Bancos 62ª Ter fr. III"],
+ ["Para que otra entidad del grupo integre el expediente de identificación del cliente se requiere su consentimiento.",true,"Lo exige la 9ª de Bancos (y sus equivalentes). Es identificación, tema 2.1.2.","Bancos 9ª fr. I"],
+ ["Un fondo de inversión de un grupo financiero puede intercambiar con el banco del grupo información de operaciones de sus Clientes, con convenio e informe previo a la CNBV.",true,"Lo prevé la 55-1ª de Fondos.","Fondos de inversión 55-1ª"],
+ ["Un banco puede consultar la plataforma de transferencias sobre un Usuario durante los 2 días hábiles bancarios siguientes a la transferencia.",true,"Clientes: mientras dure la relación; Usuarios: 2 días hábiles bancarios.","Bancos 62ª Quáter fr. X"],
+ ["La información que un banco recibe en un intercambio puede usarla cualquier entidad.",false,"Sólo la usa la Entidad que la solicitó, salvo que se establezca que puede compartirse.","Bancos 62ª fr. IV"]];
+let qi=0,ok=0,ans=false;const qz=document.getElementById("quiz");
+function q(){if(qi>=QZ.length){qz.innerHTML=`<p class="score">${ok} de ${QZ.length} correctas</p><p class="mini">${ok>=14?"Listo para el examen en este tema.":"Repasa la matriz y los requisitos lado a lado, y vuelve a intentarlo."}</p><div class="qbtns"><button class="btn" type="button" id="qr">Repetir</button></div>`;document.getElementById("qr").onclick=()=>{qi=0;ok=0;q();};return;}
+ ans=false;const x=QZ[qi];qz.innerHTML=`<span class="eyebrow num">Afirmación ${qi+1} de ${QZ.length} · ${ok} correctas</span><p class="qtext">${x[0]}</p><div class="qbtns"><button class="btn" type="button" data-v="1">Verdadero</button><button class="btn" type="button" data-v="0">Falso</button></div><div id="qfb"></div>`;}
+qz.addEventListener("click",e=>{const b=e.target.closest("button[data-v]");if(b&&!ans){ans=true;const x=QZ[qi];const good=(b.dataset.v==="1")===x[1];if(good)ok++;
+ qz.querySelectorAll("button[data-v]").forEach(z=>z.disabled=true);
+ document.getElementById("qfb").innerHTML=`<div class="qfb"><b class="${good?"ok":"bad"}">${good?"Correcto.":"No."}</b> Es ${x[1]?"verdadero":"falso"}. ${x[2]} <span class="ref">${x[3]}</span></div><div class="qbtns" style="margin-top:10px"><button class="btn ghost" type="button" id="qn">Siguiente</button></div>`;
+ document.getElementById("qn").onclick=()=>{qi++;q();};document.getElementById("qn").focus();}});
+q();
+})();
+</script>
+</body>
+</html>
