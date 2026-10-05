@@ -1,6 +1,6 @@
 {
- "version": "8",
- "armado": "2026-10-04",
+ "version": "9",
+ "armado": "2026-10-05",
  "herramientas": [
   {
    "n": 1,
@@ -10,7 +10,7 @@
    "peso": 2,
    "abierta": true,
    "estado": "integrada",
-   "archivo_usado": "M2 · datos Página 1 · v2.json"
+   "archivo_usado": "M2 · datos Página 1 · v3.json"
   },
   {
    "n": 2,
@@ -20,7 +20,7 @@
    "peso": 3,
    "abierta": true,
    "estado": "integrada",
-   "archivo_usado": "M2 · datos Página 2 · v6.json"
+   "archivo_usado": "M2 · datos Página 2 · v7.json"
   },
   {
    "n": 3,
@@ -95,7 +95,7 @@
    "h7": 2,
    "h8": 2
   },
-  "reactivos": 668
+  "reactivos": 690
  },
  "paginas_extra": [
   {

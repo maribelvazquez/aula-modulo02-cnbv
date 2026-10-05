@@ -380,6 +380,31 @@ body.recite .tbc:not(.shown){background:var(--surface-2)}
 .ctfill td.wrong{box-shadow:inset 0 0 0 3px var(--coral)}
 .tbc.tx .mk::before{content:none}.tbc .mt{display:block;font-size:11.5px;font-weight:700;line-height:1.15;padding:2px 3px}.tbc.tx{height:auto;min-height:36px}body.recite .tbc.tx:not(.shown) .mt{display:none}body.recite .tbc.tx:not(.shown) .mk::before{content:"?";color:var(--muted)}
 @media print{.tbf,.ctbar{display:none}}
+/* ---------- regla y excepciones ---------- */
+.rxlist{display:flex;flex-direction:column;gap:16px}
+.rx{background:var(--surface);border:1px solid var(--line);border-top:6px solid var(--c);border-radius:14px;padding:14px 16px}
+.rx h4{margin:0;font-family:var(--f-display);font-size:clamp(18px,2vw,22px)}
+.rxq{margin:6px 0 0;font-size:13.5px;display:flex;flex-wrap:wrap;gap:4px 6px;align-items:center}
+.rxq .lb{font-weight:700;color:var(--muted);margin-right:2px}
+.rxg{margin:10px 0 12px;padding:8px 12px;background:var(--surface-2);border-radius:10px;font-weight:600;font-size:14.5px}
+.rxg::before{content:"Gancho · ";font-family:var(--f-display);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.rxt{display:grid;grid-template-columns:minmax(120px,170px) minmax(0,1fr) minmax(0,1.25fr);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.rxt>div,.rxt .rr>div{padding:8px 10px;border-bottom:1px solid var(--line);font-size:14px;line-height:1.35}
+.rxt .hd{font-family:var(--f-display);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--surface-2)}
+.rxt .vv{font-weight:800}
+.rxt .ee.none{color:var(--muted);font-style:italic}
+.rxx{display:flex;flex-wrap:wrap;gap:4px 6px;align-items:baseline;margin:0 0 6px}
+.rxx:last-child{margin:0}
+.rxx .ex{font-weight:700;margin-right:2px}
+.rxx .pre{font-weight:500;color:var(--muted)}
+.sjp{display:inline-flex;align-items:center;gap:4px;border:1.5px solid var(--c);border-radius:999px;padding:1px 8px;font-size:12px;font-weight:700;white-space:nowrap;background:var(--surface)}
+.sjp i{width:8px;height:8px;border-radius:50%;background:var(--c)}
+.rxo{margin:10px 0 0;padding-left:18px;font-size:13.5px;color:var(--muted)}
+.rxt .rr{cursor:default}
+body.recite .rxt .rr:not(.shown) .ra,body.recite .rxt .rr:not(.shown) .ee{filter:blur(6px);cursor:pointer;user-select:none}
+.rxt .rr{display:contents}
+@media (max-width:720px){.rxt{grid-template-columns:1fr}.rxt .hd{display:none}.rxt .vv{background:var(--surface-2);border-bottom:0;padding-bottom:2px}.rxt .ra{border-bottom:0}.rxt .ra::before{content:"Regla: ";font-weight:700;color:var(--muted)}}
+@media print{.rx{break-inside:avoid}}
 </style>
 </head>
 <body>
@@ -506,9 +531,11 @@ R.repaso = s=>head({titulo:s.titulo||"Repaso",para:s.para,intro:s.intro||"Tandas
   (s.fallas&&s.fallas.length?`${s.fallas_titulo?`<div class="lbl" style="margin:0 0 8px">${esc(s.fallas_titulo)}</div>`:""}<div class="cards rp-fallas">${s.fallas.map((f,i)=>`<div class="card ${colorDe(f.color,i)}"><div class="bar"></div><div class="cbody"><h3>${esc(f.titulo)}</h3><p>${f.texto}</p></div></div>`).join("")}</div>`:"")+
   `<div class="lbl" style="margin:22px 0 8px">${s.pool?"Elige cuántas preguntas":"Bloques"}</div><div class="modes" id="rpi-${s.id}" role="group" aria-label="Repaso"></div><div class="quiz rp-box" id="rp-${s.id}" aria-live="polite"></div>`;
 /* ---------- tablero: matriz reporte × sujeto con filtros (tipo "tablero") ---------- */
-R.tablero = s=>head(s)+`<div class="tbf" id="tbf-${s.id}"></div><div class="tbtabs" role="group" aria-label="Vista"><button class="fchip" data-tbv="${s.id}:tabla" aria-pressed="true">Tabla</button><button class="fchip" data-tbv="${s.id}:fichas" aria-pressed="false">${esc(s.fichas||"Fichas (base de reportes)")}</button><button class="linkbtn" data-tbclr="${s.id}">Quitar filtros</button></div><div id="tbo-${s.id}"></div><div class="tbcount" id="tbn-${s.id}"></div>${s.nota?`<p class="note">${s.nota}</p>`:""}`;
+R.tablero = s=>head(s)+`<div class="tbf" id="tbf-${s.id}"></div><div class="tbtabs" role="group" aria-label="Vista">${s.fichas===false?"":`<button class="fchip" data-tbv="${s.id}:tabla" aria-pressed="true">Tabla</button><button class="fchip" data-tbv="${s.id}:fichas" aria-pressed="false">${esc(s.fichas||"Fichas (base de reportes)")}</button>`}<button class="linkbtn" data-tbclr="${s.id}">Quitar filtros</button></div><div id="tbo-${s.id}"></div><div class="tbcount" id="tbn-${s.id}"></div>${s.nota?`<p class="note">${s.nota}</p>`:""}`;
 /* ---------- cuatro tablas: práctica tipo examen (tipo "cuatrotablas") ---------- */
 R.cuatrotablas = s=>head(s)+`<div class="ctbar"><button class="fchip" data-ctm="${s.id}:elige" aria-pressed="true">¿Cuál tabla es la correcta?</button><button class="fchip" data-ctm="${s.id}:llena" aria-pressed="false">Llena la tabla</button><span class="ctscore" id="cts-${s.id}"></span></div><div id="ct-${s.id}" aria-live="polite"></div>`;
+/* ---------- regla y excepciones (tipo "reglaexc") ---------- */
+R.reglaexc = s=>head(s)+`<div class="tbf" id="rxf-${s.id}"></div><div id="rxo-${s.id}" class="rxlist"></div>${s.nota?`<p class="note">${s.nota}</p>`:""}`;
 $("#secciones").innerHTML = D.secciones.map((s,i)=>`<section class="block${s.tipo==="simulador"?" sim":""}" id="${s.id}">${R[s.tipo](s,i)}</section>`).join("");
 
 /* ---------- conectores del mapa ---------- */
@@ -700,6 +727,45 @@ function ctCheck(id){
 }
 function ctScore(id){const g=CT[id]; $("#cts-"+id).textContent=g.n?`Aciertos: ${g.ok||0} de ${g.n}`:"";}
 D.secciones.filter(s=>s.tipo==="cuatrotablas").forEach(s=>{CT[s.id]={mode:"elige"}; ctNew(s.id);});
+/* ---------- regla y excepciones ---------- */
+const RX={};
+function rxInit(s){
+  RX[s.id]={grp:new Set(),var:"",exc:false};
+  const vars=uniq(s.fichas.flatMap(f=>f.vars.map(v=>v.v)));
+  $("#rxf-"+s.id).innerHTML=
+    (s.grupos&&s.grupos.length>1?`<div class="row"><span class="lbl">Tipo</span>${s.grupos.map((g,i)=>`<button class="fchip sw ${colorDe(g.color,i)}" data-rxf="${s.id}:${g.k}" aria-pressed="false"><i></i>${esc(g.t)}</button>`).join("")}</div>`:"")+
+    `<div class="row" style="gap:14px"><div class="row"><span class="lbl">Variable</span><select data-rxs="${s.id}"><option value="">Todas</option>${vars.map(v=>`<option>${esc(v)}</option>`).join("")}</select></div><button class="fchip" data-rxe="${s.id}" aria-pressed="false">Sólo donde hay excepciones</button></div>`;
+  rxDraw(s.id);
+}
+function rxDraw(id){
+  const s=tbSec(id), st=RX[id], SJ=Object.fromEntries(s.sujetos.map((j,i)=>[j.k,{...j,ci:i}]));
+  const pill=k=>{const j=SJ[k]; return j?`<span class="sjp ${colorDe(j.color,j.ci)}" title="${esc(j.t)}"><i></i>${esc(j.corto||j.k)}</span>`:esc(k);};
+  const pills=a=>a.map(pill).join("");
+  let n=0;
+  const html=s.fichas.map((f,fi)=>{
+    if(st.grp.size&&!st.grp.has(f.g)) return "";
+    const vs=f.vars.filter(v=>(!st.var||v.v===st.var)&&(!st.exc||v.exc.length));
+    if(!vs.length) return "";
+    n++;
+    const gi=s.grupos?s.grupos.findIndex(g=>g.k===f.g):0, col=s.grupos&&gi>=0?colorDe(s.grupos[gi].color,gi):"";
+    const all=s.sujetos.map(j=>j.k), no=all.filter(k=>!f.quien.includes(k));
+    const quien=f.quien.length===all.length?`<span class="lb">Lo tienen:</span> los 12`:
+      f.quien.length>=9?`<span class="lb">Lo tienen ${f.quien.length} de 12 · todos menos</span>${pills(no)}`:`<span class="lb">Lo tienen (${f.quien.length}/12):</span>${pills(f.quien)}${f.no_txt?` <span class="lb" style="margin-left:6px">· ${esc(f.no_txt)}</span>`:(no.length?` <span class="lb" style="margin-left:6px">· No:</span>${pills(no)}`:"")}`;
+    const rows=vs.map((v,vi)=>`<div class="rr" data-rxr="${id}|${fi}|${vi}"><div class="vv">${esc(v.v)}</div><div class="ra">${esc(v.regla)}</div><div class="ee${v.exc.length?"":" none"}">${v.exc.length?v.exc.map(e=>`<div class="rxx"><span class="ex"><span class="pre">${esc(e.pre||"excepto")}</span> ${esc(e.val)}</span>${pills(e.suj)}</div>`).join(""):"Sin excepciones"}</div></div>`).join("");
+    return `<article class="rx ${col}"><h4>${esc(f.t)}</h4><div class="rxq">${quien}</div>${f.gancho?`<p class="rxg">${esc(f.gancho)}</p>`:""}<div class="rxt"><div class="hd">Variable</div><div class="hd">Regla general</div><div class="hd">Excepciones (quién se sale)</div>${rows}</div>${f.ojo&&f.ojo.length&&!st.var&&!st.exc?`<ul class="rxo">${f.ojo.map(o=>`<li>${esc(o)}</li>`).join("")}</ul>`:""}</article>`;
+  }).join("");
+  $("#rxo-"+id).innerHTML=html||`<p class="note">Nada coincide con el filtro.</p>`;
+}
+D.secciones.filter(s=>s.tipo==="reglaexc").forEach(rxInit);
+document.addEventListener("change",e=>{const t=e.target.closest("[data-rxs]"); if(!t) return; RX[t.dataset.rxs].var=t.value; rxDraw(t.dataset.rxs);});
+document.addEventListener("click",e=>{
+  const f=e.target.closest("[data-rxf]");
+  if(f){const [id,g]=f.dataset.rxf.split(":"), set=RX[id].grp; set.has(g)?set.delete(g):set.add(g); f.setAttribute("aria-pressed",set.has(g)); rxDraw(id); return;}
+  const x=e.target.closest("[data-rxe]");
+  if(x){const id=x.dataset.rxe; RX[id].exc=!RX[id].exc; x.setAttribute("aria-pressed",RX[id].exc); rxDraw(id); return;}
+  const r=e.target.closest("[data-rxr]");
+  if(r&&document.body.classList.contains("recite")) r.classList.toggle("shown");
+});
 
 /* ---------- repaso (tandas al azar o secuencia fija) ---------- */
 // Con "pool": tandas al azar de 10/20/30 (configurable en "tandas") que no repiten hasta agotar el banco de repaso;
