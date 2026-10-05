@@ -1,4 +1,4 @@
-# Aula del Repaso · Módulo 2 · v9
+# Aula del Repaso · Módulo 2 · v11
 
 Aula de estudio de 360Educa (GMC360). Armada el 05/10/2026 con la plantilla del mapa interactivo (modo aula).
 Un portal (`index.html`), una carpeta por herramienta y el simulacro mixto en `m2-simulacro/`
@@ -8,7 +8,7 @@ Un portal (`index.html`), una carpeta por herramienta y el simulacro mixto en `m
 
 | | Carpeta | Temas | Datos | Estado |
 |---|---|---|---|---|
-| H1 | `m2-h1-objetivo-kyc/` | 2.1.1–2.1.2 · Objetivo y política de identificación y conocimiento | `M2 · datos Página 1 · v3.json` · 92 reactivos | integrada |
+| H1 | `m2-h1-objetivo-kyc/` | 2.1.1–2.1.2 · Objetivo y política de identificación y conocimiento | `M2 · datos Página 1 · v5.json` · 92 reactivos | integrada |
 | H2 | `m2-h2-reportes-dolares-sistemas/` | 2.1.3–2.1.5 · Reportes, dólares en efectivo y sistemas automatizados | `M2 · datos Página 2 · v7.json` · 72 reactivos | integrada |
 | H3 | `m2-h3-otras-obligaciones-lpb/` | 2.1.6–2.1.8 · Otras obligaciones, intercambio de información y LPB | `M2 · datos Página 3 · v2.json` · 84 reactivos | integrada |
 | H4 | `m2-h4-ccc-oficial/` | 2.1.9–2.1.10 · Comité de Comunicación y Control y oficial de cumplimiento | `M2 · datos Página 4 · v1.json` · 70 reactivos | integrada |
