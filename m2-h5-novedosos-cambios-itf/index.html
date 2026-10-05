@@ -628,7 +628,7 @@ function tbDraw(id){
       if(rows) body+=`<tr class="grp ${colorDe(g.color,gi)}"><th colspan="${cols.length+1}">${esc(g.t)}${g.pregunta?`<span>${esc(g.pregunta)}</span>`:""}</th></tr>`+rows;
     });
     $("#tbo-"+id).innerHTML=`<div class="tbwrap"><table class="tbm"><thead><tr><th class="rp" scope="col">${esc(s.col_titulo||"Reporte")}</th>${cols.map(j=>`<th class="sj ${colorDe(j.color,j.ci)}" scope="col" title="${esc(j.t)}">${esc(j.corto||j.k)}</th>`).join("")}</tr></thead><tbody>${body}</tbody></table></div>`;
-    $("#tbn-"+id).textContent=val?`${hits} casillas cumplen el filtro en ${shown} ${s.renglones||"reportes"}.`:`✓ = su DCG lo prevé · punto = no lo prevé · ? = texto dudoso. Toca una casilla para ver monto, plazo y disposición.`;
+    $("#tbn-"+id).textContent=val?`${hits} casillas cumplen el filtro en ${shown} ${s.renglones||"reportes"}.`:`✓ = su DCG lo prevé · punto = no lo prevé · ? = pendiente de confirmar en el DOF. Toca una casilla para ver monto, plazo y disposición.`;
   } else {
     const list=[];
     s.reportes.forEach(r=>{ if(st.grp.size&&!st.grp.has(r.g)) return; cols.forEach(j=>{const c=tbCell(s,r.k,j.k); if(c.aplica&&tbMatch(st,c)) list.push({r,j,c});}); });
@@ -641,7 +641,7 @@ function tbOpen(id,rk,jk){
   $("#dHead").className="dhead "+colorDe(s.grupos[gi].color,gi);
   $("#dTitle").textContent=r.t;
   const fila=(k,v)=>v?`<li><b>${k}:</b> ${esc(v)}</li>`:"";
-  $("#dBody").innerHTML=`<div class="lbl">${esc(j.t)}${c.ref?` · ${esc(c.ref)}`:""}</div><div class="hook">${c.aplica?"Sí: su DCG lo prevé":"Su DCG no lo prevé"}${c.seguro===false?" · texto dudoso":""}</div><ul>${fila("Qué",c.que)}${fila("Desde",c.desde)}${fila("Cuándo",c.cuando)}${fila("Frecuencia",c.frec)}${fila("A quién",c.a_quien)}${fila("Ojo",c.nota)}</ul>${r.regla?`<p style="margin-top:12px"><b>La regla del renglón:</b> ${esc(r.regla)}</p>`:""}`;
+  $("#dBody").innerHTML=`<div class="lbl">${esc(j.t)}${c.ref?` · ${esc(c.ref)}`:""}</div><div class="hook">${c.aplica?"Sí: su DCG lo prevé":"Su DCG no lo prevé"}${c.seguro===false?" · pendiente de confirmar en el DOF":""}</div><ul>${fila("Qué",c.que)}${fila("Desde",c.desde)}${fila("Cuándo",c.cuando)}${fila("Frecuencia",c.frec)}${fila("A quién",c.a_quien)}${fila("Ojo",c.nota)}</ul>${r.regla?`<p style="margin-top:12px"><b>La regla del renglón:</b> ${esc(r.regla)}</p>`:""}`;
   lastFocus=document.activeElement; $("#scrim").hidden=false; $("#drawer").hidden=false; $("#dClose").focus();
 }
 D.secciones.filter(s=>s.tipo==="tablero").forEach(tbInit);
