@@ -190,9 +190,9 @@ body.recite .shown .nm,body.recite .shown .hookt,body.recite .shown .desc{filter
 
 /* cifras */
 .nums{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}
-.numt{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.numt{min-width:0;overflow-wrap:anywhere;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
 .numt .v{font-family:var(--f-display);font-weight:700;font-size:42px;line-height:1;font-variant-numeric:tabular-nums}
-.numt .v small{font-size:16px;font-weight:600;margin-left:4px;color:var(--muted)}
+.numt .v small{display:inline-block;font-size:16px;font-weight:600;margin-left:4px;color:var(--muted)}
 .numt .d{font-weight:600;font-size:14px;margin-top:6px;line-height:1.25}
 .numt .r{display:inline-block;font-family:var(--f-display);font-size:11px;font-weight:700;margin-top:8px;background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:2px 6px;color:var(--muted)}
 
@@ -314,7 +314,7 @@ footer b{color:var(--ink)}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 
-/* ---------- tablero (matriz reporte × sujeto con filtros) y cuatro tablas ---------- */
+/* ---------- filtros y chips (comunes) ---------- */
 .tbf{display:flex;flex-direction:column;gap:10px;margin:0 0 14px}
 .tbf .row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .tbf .row>.lbl{min-width:96px}
@@ -322,64 +322,99 @@ footer b{color:var(--ink)}
 .fchip{border:2px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 11px;font-weight:700;font-size:13px;cursor:pointer;color:var(--ink)}
 .fchip[aria-pressed="true"]{background:var(--accion);border-color:var(--accion);color:var(--accion-ink)}
 .fchip.sw{display:inline-flex;align-items:center;gap:6px}.fchip.sw i{width:10px;height:10px;border-radius:50%;background:var(--c);display:inline-block}
-.tbtabs{display:flex;gap:6px;margin:4px 0 12px}
-.tbwrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface);-webkit-overflow-scrolling:touch}
-table.tbm{border-collapse:separate;border-spacing:0;width:100%;min-width:760px;font-size:14px}
-.tbm th,.tbm td{border-bottom:1px solid var(--line);padding:6px 4px;text-align:center;vertical-align:middle}
-.tbm thead th{position:sticky;top:0;background:var(--surface);z-index:2;font-family:var(--f-display);font-size:11.5px;letter-spacing:.02em;line-height:1.15;padding:8px 3px;border-bottom:3px solid var(--cl,var(--line))}
-.tbm thead th.sj{border-bottom-color:var(--c)}
-.tbm th.rp{text-align:left;position:sticky;left:0;background:var(--surface);z-index:1;min-width:190px;max-width:240px;font-weight:600;font-size:13.5px;padding-left:12px;border-right:1px solid var(--line)}
-.tbm thead th.rp{z-index:3}
-.tbm tr.grp th{background:var(--c);color:var(--ci);text-align:left;font-family:var(--f-display);font-size:13px;letter-spacing:.04em;padding:7px 12px;position:sticky;left:0}
-.tbm tr.grp th span{font-family:var(--f-body);font-weight:500;letter-spacing:0;opacity:.9;margin-left:6px}
-.tbm .rg{display:block;font-weight:500;font-size:12px;color:var(--muted);margin-top:2px;line-height:1.3}
-.tbc{width:100%;min-width:40px;height:36px;border:0;background:transparent;cursor:pointer;border-radius:8px;font-weight:800;font-size:18px;color:var(--negro)}
-.tbc.si{background:var(--principal-halo)}
-.tbc.si .mk::before{content:"✓"}
-.tbc.no .mk::before{content:"·";color:var(--line)}
-.tbc.dud .mk::after{content:"?";font-size:11px;vertical-align:super;color:var(--muted)}
-.tbc:hover,.tbc:focus-visible{outline:2px solid var(--accion);outline-offset:-2px}
-.tbm td.dim .tbc{opacity:.18}
-.tbm td.hit .tbc{background:var(--principal);color:var(--principal-ink)}
-.tbm .colsel{background:rgba(166,99,204,.07)}
-body.recite .tbc.si:not(.shown) .mk::before,body.recite .tbc.no:not(.shown) .mk::before{content:"?";color:var(--muted)}
-body.recite .tbc:not(.shown){background:var(--surface-2)}
-.tbcount{font-size:13px;color:var(--muted);margin:8px 2px 0}
-.tbfichas{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:12px}
-.tbficha{background:var(--surface);border:1px solid var(--line);border-top:6px solid var(--c);border-radius:12px;padding:12px 14px;font-size:14.5px}
-.tbficha h4{margin:0 0 2px;font-family:var(--f-display);font-size:16px}
-.tbficha .who{font-weight:700;font-size:13px;color:var(--muted);margin-bottom:6px}
-.tbficha dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:3px 10px}
-.tbficha dt{font-family:var(--f-display);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-top:2px}
-.tbficha dd{margin:0}
-.tbficha .nt{margin-top:6px;font-size:13px;color:var(--muted)}
-.tbreglas{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px;margin:0 0 16px}
-.tbregla{background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--c);border-radius:10px;padding:9px 12px;font-size:14px}
-.tbregla b{display:block;font-family:var(--f-display);font-size:14px;margin-bottom:2px}
-.ctbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 12px}
-.ctscore{margin-left:auto;font-weight:700;font-variant-numeric:tabular-nums}
-.ctq{font-family:var(--f-display);font-weight:700;font-size:clamp(18px,2.2vw,24px);margin:4px 0 12px}
-.ctgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:14px}
-.cttab{background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:10px;cursor:pointer;text-align:left;font:inherit;color:var(--ink);overflow-x:auto}
-.cttab:hover{border-color:var(--accion)}
-.cttab .tl{font-family:var(--f-display);font-weight:800;font-size:15px;margin:0 0 6px 4px}
-.cttab table{border-collapse:collapse;width:100%;font-size:13px}
-.cttab th,.cttab td{border:1px solid var(--line);padding:6px 4px;text-align:center}
-.cttab th{font-family:var(--f-display);font-size:11px;background:var(--surface-2)}
-.cttab th.r{text-align:left;font-family:var(--f-body);font-weight:600;font-size:12.5px}
-.cttab td.on{background:var(--principal-halo);font-weight:800}
-.cttab td.bad{outline:3px solid var(--coral);outline-offset:-3px}
-.cttab.ok{border:3px solid var(--principal-linea);box-shadow:inset 0 6px 0 var(--principal)}
-.cttab.mine:not(.ok){border:3px solid var(--negro)}
-.cttab[disabled]{cursor:default}
-.ctfb{margin-top:14px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 16px}
-.ctfb ul{margin:6px 0 0;padding-left:18px}.ctfb li{margin:6px 0}
-.ctfill td button{width:100%;min-height:34px;border:0;background:transparent;cursor:pointer;font-weight:800;font-size:16px}
-.ctfill td.on button{background:var(--principal-halo)}
-.ctfill td.right{box-shadow:inset 0 0 0 3px var(--principal-linea)}
-.ctfill td.wrong{box-shadow:inset 0 0 0 3px var(--coral)}
-.tbc.tx .mk::before{content:none}.tbc .mt{display:block;font-size:11.5px;font-weight:700;line-height:1.15;padding:2px 3px}.tbc.tx{height:auto;min-height:36px}body.recite .tbc.tx:not(.shown) .mt{display:none}body.recite .tbc.tx:not(.shown) .mk::before{content:"?";color:var(--muted)}
-@media print{.tbf,.ctbar{display:none}}
+@media print{.tbf{display:none}}
+/* ---------- tabla mínima (tipo "tablamin", v24) ---------- */
+.tmigual{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin:0 0 12px;padding:10px 12px;background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--principal-linea);border-radius:12px}
+.tmigual .lbl{width:100%;margin:0 0 2px}
+.tmigual .ig{background:var(--surface-2);border-radius:999px;padding:4px 11px;font-weight:600;font-size:14px;line-height:1.3}
+.tmwrap{border:1px solid var(--line);border-radius:14px;background:var(--surface);overflow:hidden}
+table.tm{border-collapse:collapse;width:100%;table-layout:fixed;font-size:14.5px}
+.tm th,.tm td{border-bottom:1px solid var(--line);padding:0;vertical-align:top;text-align:left}
+.tm tr:last-child>th,.tm tr:last-child>td{border-bottom:0}
+.tm thead th{padding:10px 8px 8px;border-bottom:4px solid var(--cl,var(--line));font-family:var(--f-display);font-size:14px;line-height:1.2;overflow-wrap:anywhere}
+.tm thead th.cor{border-bottom-color:var(--line);font-family:var(--f-body);font-weight:600;font-size:12px;color:var(--muted);width:24%}
+.tm td+td,.tm th.rhd+td{border-left:1px solid var(--line)}
+.tmsj{display:flex;flex-wrap:wrap;gap:3px;margin-top:6px;font-family:var(--f-body)}
+.tmsj .sjp{font-size:11px;padding:0 6px;white-space:normal;max-width:100%;min-width:0;overflow-wrap:anywhere;line-height:1.2;text-align:left}
+.tmsj .sjp i{flex-shrink:0}
+.tmfuera{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;width:100%;margin:10px 0 0;padding:10px 12px;border:1.5px dashed var(--line);border-radius:12px;background:var(--surface);font:inherit;color:var(--ink);text-align:left;cursor:pointer}
+.tmfuera:hover,.tmfuera:focus-visible{outline:2px solid var(--accion);outline-offset:-2px}
+.tmfuera .lbl{margin:0;width:100%}
+.tmfuera .tmsj{margin:0}
+.tmfuera .sjp{--c:var(--muted)}
+.tmfuera .mas{font-size:13px;font-weight:700;color:var(--accion)}
+.tmzone.fz{border-style:dashed;border-top:2px dashed var(--line)}
+.tm th.rhd{padding:9px 10px;font-weight:700;font-size:14px;background:var(--surface-2);line-height:1.3}
+.tm tr.rt{display:none}
+.tm tr.rt th{padding:7px 8px 3px;font-weight:700;font-size:13px;background:var(--surface-2);border-bottom:0}
+.tm td.c0{background:var(--principal-halo)}
+.tmc{display:block;width:100%;min-height:42px;border:0;background:transparent;text-align:left;padding:9px 8px;font:inherit;font-weight:600;color:var(--ink);cursor:pointer;line-height:1.3;overflow-wrap:break-word;hyphens:auto}
+.tmc.vacio{color:var(--muted);font-weight:500}
+.tmc.has .v::after{content:" ›";color:var(--accion);font-weight:800}
+.tmc.dud .v::after{content:" ?";color:var(--coral);font-weight:800}
+.tmc:hover,.tmc:focus-visible{outline:2px solid var(--accion);outline-offset:-2px}
+body.recite .tmmain .tmc:not(.shown) .v{visibility:hidden}
+body.recite .tmmain .tmc:not(.shown)::before{content:"?";color:var(--muted)}
+.tmleyenda{font-size:13px;color:var(--muted);margin:8px 2px 0}
+@media (max-width:600px){
+  table.tm{font-size:13px}
+  .tm thead th{padding:8px 5px 6px;font-size:12px}
+  .tm thead th.cor,.tm th.rhd{display:none}
+  .tm tr.rt{display:table-row}
+  .tmc{padding:6px 5px;min-height:34px}
+  .tmsj .sjp{font-size:10px;padding:0 4px}
+  .tmsj{gap:2px}
+}
+/* prácticas de la tabla mínima */
+.tmprac{margin-top:18px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.tmbar{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin:6px 0 12px}
+.tmbar .fchip[disabled]{opacity:.4;cursor:not-allowed}
+.tmscore{margin-left:auto;font-weight:700;font-variant-numeric:tabular-nums;font-size:14px}
+.tmq{font-family:var(--f-display);font-weight:700;font-size:clamp(17px,2.1vw,22px);margin:4px 0 10px;line-height:1.25}
+.tmhint{font-size:13.5px;color:var(--muted);margin:-4px 0 10px}
+.tmtray{display:flex;flex-wrap:wrap;gap:6px;min-height:40px;padding:8px;border:2px dashed var(--line);border-radius:12px;margin:0 0 12px}
+.tmtray:empty::before{content:"Ya acomodaste todo. Califica.";color:var(--muted);font-size:13.5px;padding:4px}
+.tmchip{border:2px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 11px;font:inherit;font-weight:700;font-size:13.5px;cursor:pointer;color:var(--ink);line-height:1.25;text-align:left;max-width:100%;overflow-wrap:anywhere}
+.tmchip small{display:block;font-weight:500;font-size:11.5px;color:var(--muted)}
+.tmchip[aria-pressed="true"]{background:var(--accion);border-color:var(--accion);color:var(--accion-ink)}
+.tmchip[aria-pressed="true"] small{color:inherit}
+.tmchip.ok{border-color:var(--principal-linea);background:var(--principal-halo)}
+.tmchip.mal{border-color:var(--coral)}
+.tmchip .fx{display:block;font-size:11.5px;font-weight:600;color:var(--negro)}
+.tmzones{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:10px}
+.tmzone{border:2px solid var(--line);border-top:6px solid var(--cl,var(--line));border-radius:12px;padding:8px 10px;min-height:96px;background:var(--surface);cursor:pointer;text-align:left;font:inherit;color:var(--ink);display:flex;flex-direction:column;gap:6px}
+.tmzone.drop{border-color:var(--accion);background:rgba(166,99,204,.06)}
+.tmzone .zt{font-family:var(--f-display);font-weight:800;font-size:14px}
+.tmzone .zp{font-size:12.5px;color:var(--muted);line-height:1.3}
+.tmzone .zc{display:flex;flex-wrap:wrap;gap:5px}
+.tmgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:12px}
+.tmopt{background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:8px;cursor:pointer;text-align:left;font:inherit;color:var(--ink);min-width:0}
+.tmopt:hover{border-color:var(--accion)}
+.tmopt[disabled]{cursor:default}
+.tmopt .tl{font-family:var(--f-display);font-weight:800;font-size:15px;margin:2px 0 6px 4px}
+.tmopt.ok{border:3px solid var(--principal-linea);box-shadow:inset 0 6px 0 var(--principal)}
+.tmopt.mine:not(.ok){border:3px solid var(--negro)}
+table.tm.mini{font-size:12.5px}
+.tm.mini thead th{font-size:12px;padding:6px 5px 5px}
+.tm.mini th.rhd{font-size:12.5px;padding:6px 7px}
+.tm.mini td{padding:6px 5px;font-weight:600;overflow-wrap:break-word;hyphens:auto;line-height:1.25}
+.tm.mini .bad{outline:3px solid var(--coral);outline-offset:-3px}
+.tm.mini .sjp.bad{outline-offset:0}
+.tmt .tmc.oc .v{visibility:hidden}
+.tmt .tmc.oc::before{content:"?";color:var(--muted);font-weight:800}
+.tmt .tmc.oc{background:var(--surface-2)}
+.tmt .tmc.sabe{box-shadow:inset 0 0 0 3px var(--principal-linea)}
+.tmt .tmc.nosabe{box-shadow:inset 0 0 0 3px var(--coral)}
+.tmse{display:flex;gap:4px;padding:0 6px 6px}
+.tmse button{flex:1;border:2px solid var(--line);background:var(--surface);border-radius:8px;font-weight:800;cursor:pointer;padding:2px 0;font-size:14px}
+.tmrel{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:10px 12px}
+.tmrel .colr{display:flex;flex-direction:column;gap:6px}
+.tmrel .tmchip{border-radius:10px;width:100%}
+.tmrel .num{display:inline-block;min-width:22px;height:22px;border-radius:50%;background:var(--surface-2);text-align:center;font-weight:800;font-size:12.5px;line-height:22px;margin-right:6px}
+.tmrel .tmchip[aria-pressed="true"] .num{background:#fff;color:var(--negro)}
+.tmfb{margin-top:14px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 16px}
+.tmfb ul{margin:6px 0 0;padding-left:18px}.tmfb li{margin:6px 0}
+@media print{.tmprac{display:none}.tm{break-inside:avoid}}
 /* ---------- regla y excepciones ---------- */
 .rxlist{display:flex;flex-direction:column;gap:16px}
 .rx{background:var(--surface);border:1px solid var(--line);border-top:6px solid var(--c);border-radius:14px;padding:14px 16px}
@@ -530,10 +565,287 @@ R.simulador = s=>head({titulo:s.titulo||"Modo examen",para:s.para,intro:s.intro|
 R.repaso = s=>head({titulo:s.titulo||"Repaso",para:s.para,intro:s.intro||"Tandas al azar de un banco de repaso. Lee la pregunta y las cuatro opciones, decide tu respuesta y luego revélala."})+
   (s.fallas&&s.fallas.length?`${s.fallas_titulo?`<div class="lbl" style="margin:0 0 8px">${esc(s.fallas_titulo)}</div>`:""}<div class="cards rp-fallas">${s.fallas.map((f,i)=>`<div class="card ${colorDe(f.color,i)}"><div class="bar"></div><div class="cbody"><h3>${esc(f.titulo)}</h3><p>${f.texto}</p></div></div>`).join("")}</div>`:"")+
   `<div class="lbl" style="margin:22px 0 8px">${s.pool?"Elige cuántas preguntas":"Bloques"}</div><div class="modes" id="rpi-${s.id}" role="group" aria-label="Repaso"></div><div class="quiz rp-box" id="rp-${s.id}" aria-live="polite"></div>`;
-/* ---------- tablero: matriz reporte × sujeto con filtros (tipo "tablero") ---------- */
-R.tablero = s=>head(s)+`<div class="tbf" id="tbf-${s.id}"></div><div class="tbtabs" role="group" aria-label="Vista">${s.fichas===false?"":`<button class="fchip" data-tbv="${s.id}:tabla" aria-pressed="true">Tabla</button><button class="fchip" data-tbv="${s.id}:fichas" aria-pressed="false">${esc(s.fichas||"Fichas (base de reportes)")}</button>`}<button class="linkbtn" data-tbclr="${s.id}">Quitar filtros</button></div><div id="tbo-${s.id}"></div><div class="tbcount" id="tbn-${s.id}"></div>${s.nota?`<p class="note">${s.nota}</p>`:""}`;
-/* ---------- cuatro tablas: práctica tipo examen (tipo "cuatrotablas") ---------- */
-R.cuatrotablas = s=>head(s)+`<div class="ctbar"><button class="fchip" data-ctm="${s.id}:elige" aria-pressed="true">¿Cuál tabla es la correcta?</button><button class="fchip" data-ctm="${s.id}:llena" aria-pressed="false">Llena la tabla</button><span class="ctscore" id="cts-${s.id}"></span></div><div id="ct-${s.id}" aria-live="polite"></div>`;
+/* ---------- auxiliares comunes ---------- */
+const tbSec=id=>D.secciones.find(x=>x.id===id);
+const uniq=a=>[...new Set(a.filter(Boolean))];
+const rnd=n=>Math.floor(Math.random()*n);
+const mixA=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;};
+/* ---------- tabla mínima (tipo "tablamin", v24) ---------- */
+// Columnas = grupos que se comportan igual (2 a 5); renglones = sólo lo que cambia (máx. 8); casilla ≤ 40 caracteres.
+// Prácticas: «¿En qué columna va?», «Tapa y recita», «¿Cuál tabla es la correcta?», «Relaciona» y, si hay "umbrales", «¿Qué obligación nace?».
+const TMS={};
+const NOM_STD={BAN:"Bancos",SOFOM:"SOFOM",CB:"Casas de bolsa",ASE:"Asesores en inversiones",FON:"Fondos de inversión",SOCAP:"SOCAP",SOFIPO:"SOFIPO",UC:"Uniones de crédito",CC:"Casas de cambio",CCA:"Centros cambiarios",TD:"Transmisores de dinero",ITF:"ITF"};
+const TM_MODOS=[["col","¿En qué columna va?"],["tapa","Tapa y recita"],["cual","¿Cuál tabla es la correcta?"],["obl","¿Qué obligación nace?"],["rel","Relaciona"]];
+const LETRAS="ABCDEFGH";
+const tmVal=(r,ck)=>{const v=(r.celdas||{})[ck]; return v==null?"":String(v);};
+const tmVacio=v=>!String(v).trim()||/^[—–-]+$/.test(String(v).trim());
+const tmSeguro=(r,ck)=>r.seguro!==false&&!(r.seguro&&typeof r.seguro==="object"&&r.seguro[ck]===false);
+const tmNom=(s,k)=>(s.nombres&&s.nombres[k])||NOM_STD[k]||k;
+const tmRef=(r,ck)=>typeof r.ref==="string"?r.ref:(r.ref&&r.ref[ck])||"";
+const tmMiem=(s,c)=>(c.sujetos&&c.sujetos.length)?c.sujetos.slice():(s.chips||[]).filter(x=>x.col===c.k).map(x=>x.t);
+const tmConSuj=s=>s.columnas.some(c=>tmMiem(s,c).length);
+const tmEsSuj=s=>s.columnas.some(c=>(c.sujetos||[]).length);
+// "fuera": sujetos (o chips con col = fuera.k) que no van en ninguna columna. Se muestran debajo de la tabla y son una zona más en «¿En qué columna va?».
+const tmFuera=s=>{const f=s.fuera; if(!f||typeof f!=="object") return null; const k=f.k||"fuera"; const m=(f.sujetos&&f.sujetos.length)?f.sujetos.slice():(s.chips||[]).filter(x=>x.col===k).map(x=>x.t); return m.length?{k,t:f.t||"Fuera de la tabla",det:f.det||"",ref:f.ref||"",m}:null;};
+function tmOpenFuera(id){const s=tbSec(id), F=tmFuera(s); if(!F) return;
+  $("#dHead").className="dhead"; $("#dTitle").textContent=F.t;
+  $("#dBody").innerHTML=`<div class="lbl">No va en ninguna columna${F.ref?` · ${esc(F.ref)}`:""}</div><p style="margin:0 0 10px"><b>${tmEsSuj(s)?"Quiénes":"Qué entra"}:</b> ${F.m.map(k=>esc(tmNom(s,k))).join(", ")}</p>${F.det?`<p style="margin:0">${F.det}</p>`:""}`;
+  lastFocus=document.activeElement; $("#scrim").hidden=false; $("#drawer").hidden=false; $("#dClose").focus();}
+const tmPill=(s,k,ci,extra)=>`<span class="sjp ${colorDe(s.columnas[ci].color,ci)}${extra?" "+extra:""}" title="${esc(tmNom(s,k))}"><i></i>${esc(k)}</span>`;
+function tmTabla(s,o){
+  o=o||{};
+  const cols=o.cols||s.columnas.map((c,ci)=>({c,ci,sj:tmMiem(s,c)}));
+  const rows=o.rows||s.renglones.map((r,ri)=>({r,ri}));
+  const N=cols.length;
+  const th=cols.map(({c,ci,sj,badk})=>`<th scope="col" class="${colorDe(c.color,ci)}">${o.mini&&sj.length?"":esc(c.t)}${sj.length?`<div class="tmsj">${sj.map(k=>tmPill(s,k,ci,k===badk?"bad":"")).join("")}</div>`:""}</th>`).join("");
+  const body=rows.map(({r,ri})=>`<tr class="rt"><th colspan="${N}" scope="colgroup">${esc(r.t)}</th></tr><tr><th class="rhd" scope="row">${esc(r.t)}</th>${cols.map(({c,ci})=>`<td class="${!o.mini&&ci===0?"c0":""}${o.bad&&o.bad(ri,ci)?" bad":""}">${o.cell(r,ri,c,ci)}</td>`).join("")}</tr>`).join("");
+  return `<table class="tm${o.mini?" mini":""}${o.cls?" "+o.cls:""}"><thead><tr><th class="cor" scope="col">${esc(s.col_titulo||"Lo que cambia")}</th>${th}</tr></thead><tbody>${body}</tbody></table>`;
+}
+const tmCelda=s=>(r,ri,c,ci)=>{const v=tmVal(r,c.k), d=r.det&&r.det[c.k], u=!tmSeguro(r,c.k);
+  return `<button class="tmc${tmVacio(v)?" vacio":""}${d?" has":""}${u?" dud":""}" data-tmc="${s.id}|${ri}|${ci}" aria-label="${esc(r.t)} · ${esc(c.t)}: ${esc(v)}"><span class="v">${esc(v)}</span></button>`;};
+R.tablamin = s=>{
+  const hayDet=s.renglones.some(r=>r.det&&Object.keys(r.det).length), hayDud=s.renglones.some(r=>s.columnas.some(c=>!tmSeguro(r,c.k)));
+  return head(s)+
+  (s.igual&&s.igual.length?`<div class="tmigual"><div class="lbl">${esc(s.igual_titulo||"Igual para todos")}</div>${s.igual.map(x=>`<span class="ig">${x}</span>`).join("")}</div>`:"")+
+  `<div class="tmwrap">${tmTabla(s,{cls:"tmmain",cell:tmCelda(s)})}</div>`+
+  `<p class="tmleyenda">Toca una casilla para ver ${hayDet?"el detalle y ":""}su fundamento.${hayDet?" › = tiene detalle.":""}${hayDud?" ? = pendiente de confirmar en el DOF.":""}</p>`+
+  (tmFuera(s)?(F=>`<button class="tmfuera" data-tmfu="${s.id}"><span class="lbl">${esc(F.t)}</span><span class="tmsj">${F.m.map(k=>`<span class="sjp" title="${esc(tmNom(s,k))}"><i></i>${esc(k)}</span>`).join("")}</span>${F.det?`<span class="mas">Por qué ›</span>`:""}</button>`)(tmFuera(s)):"")+
+  (s.nota?`<p class="note">${s.nota}</p>`:"")+
+  `<div class="tmprac" id="tmp-${s.id}"><div class="lbl">Practica con esta tabla</div><div class="tmbar" role="group" aria-label="Práctica">${TM_MODOS.filter(([m])=>m!=="obl"||(s.umbrales||[]).length).map(([m,t])=>`<button class="fchip" data-tmm="${s.id}:${m}" aria-pressed="false">${t}</button>`).join("")}<span class="tmscore" id="tms-${s.id}"></span></div><div id="tmb-${s.id}" aria-live="polite"></div></div>`;
+};
+function tmOpen(id,ri,ci){
+  const s=tbSec(id), r=s.renglones[ri], c=s.columnas[ci], v=tmVal(r,c.k), d=r.det&&r.det[c.k], rf=tmRef(r,c.k), u=!tmSeguro(r,c.k);
+  $("#dHead").className="dhead "+colorDe(c.color,ci);
+  $("#dTitle").textContent=r.t;
+  $("#dBody").innerHTML=`<div class="lbl">${esc(c.t)}${rf?` · ${esc(rf)}`:""}</div><div class="hook">${esc(v)}${u?" · pendiente de confirmar en el DOF":""}</div>${tmMiem(s,c).length?`<p style="margin:0 0 10px"><b>${tmEsSuj(s)?"Quiénes":"Qué entra"}:</b> ${tmMiem(s,c).map(k=>esc(tmNom(s,k))).join(", ")}</p>`:""}${d?`<p style="margin:0">${d}</p>`:""}`;
+  lastFocus=document.activeElement; $("#scrim").hidden=false; $("#drawer").hidden=false; $("#dClose").focus();
+}
+/* 1 · ¿En qué columna va? */
+function tmItemsCol(s){
+  if(tmConSuj(s)){const F=tmFuera(s), N=s.columnas.length; return s.columnas.flatMap((c,ci)=>tmMiem(s,c).map(k=>({t:tmNom(s,k),sub:tmNom(s,k)!==k?k:"",ci}))).concat(F?F.m.map(k=>({t:tmNom(s,k),sub:tmNom(s,k)!==k?k:"",ci:N})):[]);}
+  const out=[], seen=new Set();
+  s.renglones.forEach(r=>s.columnas.forEach((c,ci)=>{
+    const v=tmVal(r,c.k); if(tmVacio(v)||!tmSeguro(r,c.k)||seen.has(v)) return;
+    if(s.renglones.some(r2=>s.columnas.some((c2,cj)=>(cj!==ci||r2!==r)&&tmVal(r2,c2.k)===v))) return;
+    seen.add(v); out.push({t:v,sub:r.t,ci});
+  }));
+  return out;
+}
+const reEsc=x=>x.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+function tmZona(s,c,ci){
+  if(ci>=s.columnas.length){const F=tmFuera(s); return {t:F?F.t:"Fuera",p:"No va en ninguna columna de la tabla"};}
+  if(!tmConSuj(s)) return {t:c.t,p:c.pista||""};
+  const dice=x=>tmMiem(s,c).some(k=>new RegExp("(^|[^A-Za-zÁÉÍÓÚÑáéíóúñ])"+reEsc(k)+"($|[^A-Za-zÁÉÍÓÚÑáéíóúñ])").test(x)||(tmNom(s,k)!==k&&x.toLowerCase().includes(tmNom(s,k).toLowerCase())));
+  const revela=/\d/.test(c.t)||dice(c.t);
+  // la pista automática no usa casillas que nombran a sus propios sujetos
+  const p=c.pista||s.renglones.filter(r=>tmSeguro(r,c.k)&&!tmVacio(tmVal(r,c.k))&&!dice(tmVal(r,c.k))).slice(0,3).map(r=>`${r.t}: ${tmVal(r,c.k)}`).join(" · ");
+  return {t:revela?`Columna ${LETRAS[ci]}`:c.t,p};
+}
+function tmColNuevo(id){
+  const s=tbSec(id), g=TMS[id], it=tmItemsCol(s);
+  const items=tmConSuj(s)?mixA(it):mixA(it).slice(0,8);
+  g.col={items,pos:items.map(()=>null),sel:null,done:false};
+  tmColDraw(id);
+}
+function tmColDraw(id){
+  const s=tbSec(id), g=TMS[id], st=g.col;
+  const chip=i=>{const it=st.items[i], bien=st.pos[i]===it.ci;
+    return `<button class="tmchip${st.done?(bien?" ok":" mal"):""}" draggable="${st.done?"false":"true"}" data-tmch="${id}|${i}" aria-pressed="${st.sel===i}">${esc(it.t)}${it.sub?`<small>${esc(it.sub)}</small>`:""}${st.done&&!bien?`<span class="fx">Va en: ${esc(tmZona(s,s.columnas[it.ci]||null,it.ci).t)}</span>`:""}</button>`;};
+  const idx=st.items.map((_,i)=>i);
+  const zonas=s.columnas.map((c,ci)=>{const z=tmZona(s,c,ci); return `<div class="tmzone ${colorDe(c.color,ci)}" data-tmz="${id}|${ci}"><button class="zt linkbtn" style="text-decoration:none;text-align:left;font-size:14px" data-tmz="${id}|${ci}">${esc(z.t)}</button>${z.p?`<span class="zp">${esc(z.p)}</span>`:""}<div class="zc">${idx.filter(i=>st.pos[i]===ci).map(chip).join("")}</div></div>`;}).join("")+(tmFuera(s)&&tmConSuj(s)?(N=>{const z=tmZona(s,null,N); return `<div class="tmzone fz" data-tmz="${id}|${N}"><button class="zt linkbtn" style="text-decoration:none;text-align:left;font-size:14px" data-tmz="${id}|${N}">${esc(z.t)}</button><span class="zp">${esc(z.p)}</span><div class="zc">${idx.filter(i=>st.pos[i]===N).map(chip).join("")}</div></div>`;})(s.columnas.length):"");
+  const conSuj=tmEsSuj(s);
+  $("#tmb-"+id).innerHTML=`<div class="tmq">${esc(s.columna_pregunta||(conSuj?"¿En qué columna va cada sujeto?":"¿En qué columna va cada uno?"))}</div><p class="tmhint">Toca un chip y luego su columna. En computadora también puedes arrastrarlo. Para regresarlo, tócalo y luego toca el recuadro punteado.</p><div class="tmtray" data-tmz="${id}|-1">${idx.filter(i=>st.pos[i]===null).map(chip).join("")}</div><div class="tmzones">${zonas}</div><div class="qactions" style="margin-top:12px">${st.done?"":`<button class="btn" data-tmcal="${id}">Calificar</button>`}<button class="btn ghost" data-tmotra="${id}">${st.done?"Otra ronda":"Revolver"}</button></div><div id="tmf-${id}">${st.fb||""}</div>`;
+}
+function tmColPon(id,ci){const st=TMS[id].col; if(st.done||st.sel===null) return; st.pos[st.sel]=ci<0?null:ci; st.sel=null; tmColDraw(id);}
+function tmColCal(id){
+  const s=tbSec(id), g=TMS[id], st=g.col; if(st.done) return; st.done=true; st.sel=null;
+  const mal=st.items.filter((it,i)=>st.pos[i]!==it.ci), ok=st.items.length-mal.length;
+  const sc=g.score.col||(g.score.col={ok:0,n:0}); sc.ok+=ok; sc.n+=st.items.length;
+  st.fb=`<div class="tmfb fb">${mal.length?`<span class="no">${ok} de ${st.items.length}</span> Los que van en otra columna están marcados con «Va en».`:`<span class="ok">Todo bien</span> ${st.items.length} de ${st.items.length}.`}</div>`;
+  tmColDraw(id); tmScore(id);
+}
+/* 2 · Tapa y recita */
+function tmTapaNuevo(id){TMS[id].tapa={open:new Set(),marks:{}}; tmTapaDraw(id);}
+function tmTapaDraw(id){
+  const s=tbSec(id), st=TMS[id].tapa;
+  const cell=(r,ri,c,ci)=>{const key=ri+"_"+ci, v=tmVal(r,c.k), u=!tmSeguro(r,c.k), ab=u||st.open.has(key), mk=st.marks[key];
+    return `<button class="tmc${ab?"":" oc"}${mk===true?" sabe":mk===false?" nosabe":""}${u?" dud":""}${tmVacio(v)?" vacio":""}" data-tmt="${id}|${ri}|${ci}" aria-label="${ab?esc(r.t+" · "+c.t+": "+v):"Casilla tapada: "+esc(r.t+" · "+c.t)}"><span class="v">${esc(v)}</span></button>${ab&&!u&&mk===undefined?`<div class="tmse"><button data-tmse="${id}|${key}|1" aria-label="La sabía" title="La sabía">✓</button><button data-tmse="${id}|${key}|0" aria-label="No la sabía" title="No la sabía">✗</button></div>`:""}`;};
+  $("#tmb-"+id).innerHTML=`<div class="tmq">Di en voz alta qué va en cada casilla y destápala.</div><p class="tmhint">Al destapar, marca ✓ si la sabías o ✗ si no. ${s.igual&&s.igual.length?"La franja «igual para todos» también cuenta: recítala primero.":""}</p><div class="tmwrap tmt">${tmTabla(s,{cell})}</div><div class="qactions" style="margin-top:12px">${tmTapaMal(s,st)?`<button class="btn" data-tmrep="${id}">Repasar las ✗ (${tmTapaMal(s,st)})</button>`:""}<button class="btn${tmTapaMal(s,st)?" ghost":""}" data-tmtodo="${id}">Destapar todo</button><button class="btn ghost" data-tmtapar="${id}">Tapar otra vez</button></div>`;
+  tmScore(id);
+}
+// Las ✗ vuelven al final de la ronda: cuando ya no quedan casillas tapadas, «Repasar las ✗» las tapa otra vez.
+function tmTapaMal(s,st){ if(st.open.size<tmTapaTotal(s)) return 0; return Object.values(st.marks).filter(x=>x===false).length; }
+function tmTapaRep(id){const st=TMS[id].tapa; Object.keys(st.marks).forEach(k=>{if(st.marks[k]===false){st.open.delete(k); delete st.marks[k];}}); tmTapaDraw(id);}
+function tmTapaTotal(s){let n=0; s.renglones.forEach(r=>s.columnas.forEach(c=>{if(tmSeguro(r,c.k)) n++;})); return n;}
+/* 3 · ¿Cuál tabla es la correcta? */
+function tmMutaciones(s){
+  const M=[], conT=k=>k&&(!s.trampas||!s.trampas.length||s.trampas.includes(k))?3:1;
+  s.renglones.forEach((r,ri)=>{
+    if(r.seguro===false) return;
+    const cs=s.columnas.map((c,ci)=>ci).filter(ci=>tmSeguro(r,s.columnas[ci].k));
+    for(let a=0;a<cs.length;a++) for(let b=a+1;b<cs.length;b++){
+      if(tmVal(r,s.columnas[cs[a]].k)!==tmVal(r,s.columnas[cs[b]].k)) M.push({t:"swap",ri,a:cs[a],b:cs[b],w:conT(r.trampa)});
+    }
+  });
+  s.columnas.forEach((c,ci)=>{const sj=tmMiem(s,c); if(sj.length<2) return;
+    s.columnas.forEach((c2,cj)=>{ if(cj===ci||!tmMiem(s,c2).length) return; sj.forEach(k=>M.push({t:"move",k,from:ci,to:cj,w:conT((c.trampa_mover||{})[k])})); });});
+  return M;
+}
+function tmCualNuevo(id){
+  const s=tbSec(id), g=TMS[id], pool=tmMutaciones(s), pick=[];
+  const draw=f=>{const c=pool.filter(f); if(!c.length) return null; let x=Math.random()*c.reduce((a,m)=>a+m.w,0); for(const m of c){x-=m.w; if(x<=0) return m;} return c[c.length-1];};
+  const add=m=>{if(!m) return; pool.splice(pool.indexOf(m),1); pick.push(m);};
+  add(draw(m=>m.t==="swap")); add(draw(m=>m.t==="move"));
+  while(pick.length<3&&pool.length){
+    const m=draw(m=>!(m.t==="swap"&&pick.some(p=>p.t==="swap"&&p.ri===m.ri)))||draw(()=>true); add(m);
+  }
+  const nShow=Math.min(4,s.renglones.length);
+  const need=uniq(pick.filter(m=>m.t==="swap").map(m=>String(m.ri))).map(Number);
+  const resto=mixA(s.renglones.map((r,ri)=>ri).filter(ri=>!need.includes(ri))).sort((a,b)=>(s.renglones[a].seguro===false)-(s.renglones[b].seguro===false));
+  const rows=need.concat(resto.slice(0,Math.max(0,nShow-need.length))).sort((a,b)=>a-b);
+  const base=()=>({cols:s.columnas.map((c,ci)=>({c,ci,sj:tmMiem(s,c)})),cells:Object.fromEntries(rows.map(ri=>[ri,s.columnas.map(c=>tmVal(s.renglones[ri],c.k))])),bad:new Set()});
+  const opts=[{...base(),ok:true}];
+  pick.forEach(m=>{const o=base(); o.mut=m;
+    if(m.t==="swap"){const row=o.cells[m.ri]; [row[m.a],row[m.b]]=[row[m.b],row[m.a]]; o.bad.add(m.ri+"_"+m.a); o.bad.add(m.ri+"_"+m.b);}
+    else {o.cols[m.from].sj=o.cols[m.from].sj.filter(k=>k!==m.k); o.cols[m.to].sj.push(m.k); o.cols[m.to].badk=m.k;}
+    opts.push(o);});
+  g.cual={rows,opts:mixA(opts),done:false,mine:null};
+  tmCualDraw(id);
+}
+function tmMutTxt(s,m){
+  if(m.t==="swap"){const r=s.renglones[m.ri], A=s.columnas[m.a], B=s.columnas[m.b], ra=tmRef(r,A.k), rb=tmRef(r,B.k);
+    return `<li><b>${esc(r.t)}:</b> ${esc(A.t)} → «${esc(tmVal(r,A.k))}»${ra?` <span class="art">${esc(ra)}</span>`:""}; ${esc(B.t)} → «${esc(tmVal(r,B.k))}»${rb&&rb!==ra?` <span class="art">${esc(rb)}</span>`:""}. La tabla los tenía al revés.</li>`;}
+  return `<li><b>${esc(tmNom(s,m.k))}</b> va en «${esc(s.columnas[m.from].t)}», no en «${esc(s.columnas[m.to].t)}».</li>`;
+}
+function tmCualDraw(id){
+  const s=tbSec(id), st=TMS[id].cual;
+  const html=st.opts.map((o,i)=>{
+    const cls=st.done?(o.ok?" ok":"")+(st.mine===i?" mine":""):"";
+    const t=tmTabla(s,{mini:true,cols:o.cols.map(x=>st.done?x:{...x,badk:undefined}),rows:st.rows.map(ri=>({r:s.renglones[ri],ri})),bad:st.done?(ri,ci)=>o.bad.has(ri+"_"+ci):null,cell:(r,ri,c,ci)=>esc(o.cells[ri][ci])+(tmSeguro(r,c.k)?"":" ?")});
+    return `<div class="tmopt${cls}" role="button" tabindex="${st.done?-1:0}" aria-disabled="${st.done}" data-tmo="${id}|${i}"><div class="tl">Tabla ${LETRAS[i]}</div>${t}</div>`;
+  }).join("");
+  $("#tmb-"+id).innerHTML=`<div class="tmq">${esc(s.elegir||"¿Cuál tabla es la correcta?")}</div>${st.rows.length<s.renglones.length?`<p class="tmhint">Cada tabla muestra ${st.rows.length} de los ${s.renglones.length} renglones.</p>`:""}<div class="tmgrid">${html}</div><div id="tmf-${id}">${st.fb||""}</div>`;
+}
+function tmCualPick(id,i){
+  const s=tbSec(id), g=TMS[id], st=g.cual; if(st.done) return; st.done=true; st.mine=i;
+  const o=st.opts[i], sc=g.score.cual||(g.score.cual={ok:0,n:0}); sc.n++; if(o.ok) sc.ok++;
+  const correcta=LETRAS[st.opts.findIndex(x=>x.ok)];
+  st.fb=`<div class="tmfb fb">${o.ok?'<span class="ok">Correcto</span> Las otras tres cambiaban esto:':`<span class="no">Incorrecto</span> La correcta es la <b>tabla ${correcta}</b>. Lo que fallaba en la tuya:`}<ul>${(o.ok?st.opts.filter(x=>!x.ok).map(x=>x.mut):[o.mut]).map(m=>tmMutTxt(s,m)).join("")}</ul><div class="qactions"><button class="btn" data-tmotra="${id}">Otra</button></div></div>`;
+  tmCualDraw(id); tmScore(id);
+}
+/* 5 · ¿Qué obligación nace? (sólo con "umbrales") */
+// umbral: {t, id?: número, av?: número | "siempre", op_id?: ">" | ">=", op_av?: ">" | ">=", ref?, det?, montos?: [..], seguro?}
+const OBL_STD={nada:"No nace ninguna obligación",id:"Identificar",idav:"Identificar y presentar Aviso",av:"Presentar Aviso",siempre:"Presentar Aviso siempre, sin importar el monto"};
+const tmNum=n=>Number(n).toLocaleString("es-MX");
+const tmCmp=(m,T,op)=>op===">"?m>T:m>=T;
+const tmOpTxt=op=>op===">"?"más de":"desde";
+function tmOblRes(u,m){
+  if(u.av==="siempre") return "siempre";
+  const idN=typeof u.id==="number"&&tmCmp(m,u.id,u.op_id), avN=typeof u.av==="number"&&tmCmp(m,u.av,u.op_av);
+  if(avN) return typeof u.id==="number"?"idav":"av";
+  return idN?"id":"nada";
+}
+function tmOblMontos(s,u){
+  if(Array.isArray(u.montos)&&u.montos.length) return u.montos;
+  let T=[u.id,u.av].filter(x=>typeof x==="number");
+  if(!T.length) T=uniq((s.umbrales||[]).flatMap(x=>[x.id,x.av]).filter(x=>typeof x==="number"));
+  return uniq(T.flatMap(x=>{const d=Math.max(1,Math.round(x*0.02)); return [x-d,x,x+d];}).filter(x=>x>0).map(String)).map(Number);
+}
+function tmOblNuevo(id){
+  const s=tbSec(id), g=TMS[id], U=(s.umbrales||[]).filter(u=>u.seguro!==false), u=U[rnd(U.length)], ms=tmOblMontos(s,u), m=ms[rnd(ms.length)];
+  const L={...OBL_STD,...(s.obligaciones||{})}, res=tmOblRes(u,m);
+  const ops=typeof u.id==="number"?["nada","id","idav","siempre"]:["nada","id","av","siempre"];
+  g.obl={u,m,res,ops,L,pick:null};
+  tmOblDraw(id);
+}
+function tmOblDraw(id){
+  const s=tbSec(id), st=TMS[id].obl, u=st.u, un=s.umbral_unidad?" "+s.umbral_unidad:"";
+  const regla=u.av==="siempre"?`${typeof u.id==="number"?`identifica ${tmOpTxt(u.op_id)} ${tmNum(u.id)}${un}; `:""}presenta Aviso siempre, sin umbral`:
+    [typeof u.id==="number"?`identifica ${tmOpTxt(u.op_id)} ${tmNum(u.id)}${un}`:"", typeof u.av==="number"?`avisa ${tmOpTxt(u.op_av)} ${tmNum(u.av)}${un}`:""].filter(Boolean).join(" y ");
+  const why=st.pick===null?"":`<div class="tmfb fb">${st.pick===st.res?'<span class="ok">Correcto</span>':`<span class="no">Incorrecto</span> Era «${esc(st.L[st.res])}».`}<p style="margin:8px 0 0;font-weight:400"><b>${esc(u.t)}:</b> ${esc(regla)}. El monto es ${tmNum(st.m)}${esc(un)}${u.av!=="siempre"&&(u.op_id===">"&&st.m===u.id||u.op_av===">"&&st.m===u.av)?": igual al umbral, y la regla pide «más de», así que todavía no rebasa":""}.</p>${u.det?`<p style="margin:6px 0 0;font-weight:400">${u.det}</p>`:""}${u.ref?`<span class="ref">${esc(u.ref)}</span>`:""}<div class="qactions"><button class="btn" data-tmotra="${id}">Otro caso</button></div></div>`;
+  $("#tmb-"+id).innerHTML=`<div class="tmq">${esc(s.obligacion_pregunta||"¿Qué obligación nace?")}</div><p style="font-size:17px;margin:0 0 12px"><b>${esc(u.t)}</b> · operación por <b>${tmNum(st.m)}${esc(un)}</b></p><div class="opts" style="display:flex;flex-direction:column;gap:8px">${st.ops.map((k,i)=>`<button class="tmchip${st.pick===null?"":(k===st.res?" ok":k===st.pick?" mal":"")}" style="border-radius:12px;padding:10px 14px" data-tmob="${id}|${k}"${st.pick===null?"":" disabled"}><b>${"ABCD"[i]}</b> · ${esc(st.L[k])}</button>`).join("")}</div>${why}`;
+}
+function tmOblPick(id,k){const g=TMS[id], st=g.obl; if(st.pick!==null) return; st.pick=k; const sc=g.score.obl||(g.score.obl={ok:0,n:0}); sc.n++; if(k===st.res) sc.ok++; tmOblDraw(id); tmScore(id);}
+/* 4 · Relaciona */
+function tmPares(s){
+  if(Array.isArray(s.relaciona)&&s.relaciona.length) return s.relaciona.map(p=>({a:p.a,b:p.b}));
+  const cuenta={};
+  s.renglones.forEach(r=>s.columnas.forEach(c=>{const v=tmVal(r,c.k); cuenta[v]=(cuenta[v]||0)+1;}));
+  const out=[];
+  s.renglones.forEach(r=>s.columnas.forEach(c=>{const v=tmVal(r,c.k); if(!tmVacio(v)&&tmSeguro(r,c.k)&&cuenta[v]===1) out.push({a:v,b:`${c.t} · ${r.t}`});}));
+  return out;
+}
+function tmRelNuevo(id){
+  const s=tbSec(id), all=tmPares(s), P=(Array.isArray(s.relaciona)&&s.relaciona.length)?mixA(all):mixA(all).slice(0,Math.min(5,all.length));
+  TMS[id].rel={P,R:mixA(P.map((_,i)=>i)),asg:{},sel:null,done:false};
+  tmRelDraw(id);
+}
+function tmRelDraw(id){
+  const s=tbSec(id), st=TMS[id].rel, usados=new Set(Object.values(st.asg));
+  const izq=st.P.map((p,i)=>`<button class="tmchip${!st.done&&usados.has(i)?" usado":""}" data-tmra="${id}|${i}" aria-pressed="${st.sel===i}"${usados.has(i)&&!st.done?' style="opacity:.6"':""}><span class="num">${i+1}</span>${esc(p.a)}</button>`).join("");
+  const der=st.R.map((pi,j)=>{const a=st.asg[j], bien=a===pi;
+    return `<button class="tmchip${st.done?(bien?" ok":" mal"):""}" data-tmrb="${id}|${j}"><span class="num">${a!=null?a+1:"·"}</span>${esc(st.P[pi].b)}${st.done&&!bien?`<span class="fx">Va con: ${pi+1} · ${esc(st.P[pi].a)}</span>`:""}</button>`;}).join("");
+  $("#tmb-"+id).innerHTML=`<div class="tmq">${esc(s.relaciona_pregunta||"Une cada dato con lo que le corresponde.")}</div><p class="tmhint">Toca un dato de la izquierda y luego su pareja a la derecha. Para deshacer una pareja, toca la de la derecha.</p><div class="tmrel"><div class="colr"><div class="lbl">${esc(s.relaciona_a||"Dato")}</div>${izq}</div><div class="colr"><div class="lbl">${esc(s.relaciona_b||"Va con")}</div>${der}</div></div><div class="qactions" style="margin-top:12px">${st.done?"":`<button class="btn" data-tmcal="${id}">Calificar</button>`}<button class="btn ghost" data-tmotra="${id}">${st.done?"Otra ronda":"Revolver"}</button></div><div id="tmf-${id}">${st.fb||""}</div>`;
+}
+function tmRelCal(id){
+  const g=TMS[id], st=g.rel; if(st.done) return; st.done=true; st.sel=null;
+  const ok=st.R.filter((pi,j)=>st.asg[j]===pi).length, n=st.P.length, sc=g.score.rel||(g.score.rel={ok:0,n:0}); sc.ok+=ok; sc.n+=n;
+  st.fb=`<div class="tmfb fb">${ok===n?`<span class="ok">Todo bien</span> ${n} de ${n}.`:`<span class="no">${ok} de ${n}</span> Las parejas que fallaron dicen con qué van.`}</div>`;
+  tmRelDraw(id); tmScore(id);
+}
+/* control */
+function tmScore(id){
+  const s=tbSec(id), g=TMS[id], el=$("#tms-"+id);
+  if(g.modo==="tapa"){const st=g.tapa, si=Object.values(st.marks).filter(x=>x).length, no=Object.values(st.marks).filter(x=>x===false).length; el.textContent=`Destapadas ${st.open.size} de ${tmTapaTotal(s)} · Sabías ${si} · No ${no}`; return;}
+  const sc=g.score[g.modo]; el.textContent=sc&&sc.n?`Aciertos: ${sc.ok} de ${sc.n}`:"";
+}
+function tmNuevo(id){({col:tmColNuevo,tapa:tmTapaNuevo,cual:tmCualNuevo,obl:tmOblNuevo,rel:tmRelNuevo})[TMS[id].modo](id); tmScore(id);}
+function tmModo(id,m){TMS[id].modo=m; document.querySelectorAll(`[data-tmm^="${id}:"]`).forEach(b=>b.setAttribute("aria-pressed",b.dataset.tmm===id+":"+m)); tmNuevo(id);}
+function tmInit(s){
+  const g=TMS[s.id]={modo:null,score:{}};
+  g.viable={col:tmItemsCol(s).length>=3,tapa:true,cual:tmMutaciones(s).length>=3,obl:(s.umbrales||[]).some(u=>u.seguro!==false),rel:tmPares(s).length>=4};
+  document.querySelectorAll(`[data-tmm^="${s.id}:"]`).forEach(b=>{const m=b.dataset.tmm.split(":")[1]; if(!g.viable[m]){b.disabled=true; b.title="Esta tabla no da para esta práctica";}});
+  tmModo(s.id,TM_MODOS.map(x=>x[0]).find(m=>g.viable[m]));
+}
+document.addEventListener("click",e=>{
+  const m=e.target.closest("[data-tmm]"); if(m){ if(!m.disabled){const [id,mo]=m.dataset.tmm.split(":"); tmModo(id,mo);} return; }
+  const c=e.target.closest("[data-tmc]");
+  if(c){ if(document.body.classList.contains("recite")&&!c.classList.contains("shown")){c.classList.add("shown");return;} const [id,ri,ci]=c.dataset.tmc.split("|"); tmOpen(id,+ri,+ci); return; }
+  const fu=e.target.closest("[data-tmfu]"); if(fu){tmOpenFuera(fu.dataset.tmfu); return;}
+  const ch=e.target.closest("[data-tmch]");
+  if(ch){const [id,i]=ch.dataset.tmch.split("|"), st=TMS[id].col; if(st.done) return; st.sel=st.sel===+i?null:+i; tmColDraw(id); return;}
+  const z=e.target.closest("[data-tmz]");
+  if(z){const [id,ci]=z.dataset.tmz.split("|"); tmColPon(id,+ci); return;}
+  const cal=e.target.closest("[data-tmcal]");
+  if(cal){const id=cal.dataset.tmcal; TMS[id].modo==="col"?tmColCal(id):tmRelCal(id); return;}
+  const ot=e.target.closest("[data-tmotra]");
+  if(ot){tmNuevo(ot.dataset.tmotra); return;}
+  const tt=e.target.closest("[data-tmt]");
+  if(tt){const [id,ri,ci]=tt.dataset.tmt.split("|"), st=TMS[id].tapa, key=ri+"_"+ci; if(!st.open.has(key)&&tt.classList.contains("oc")){st.open.add(key); tmTapaDraw(id);} else tmOpen(id,+ri,+ci); return;}
+  const se=e.target.closest("[data-tmse]");
+  if(se){const [id,key,v]=se.dataset.tmse.split("|"); TMS[id].tapa.marks[key]=v==="1"; tmTapaDraw(id); return;}
+  const td=e.target.closest("[data-tmtodo]");
+  if(td){const id=td.dataset.tmtodo, s=tbSec(id), st=TMS[id].tapa; s.renglones.forEach((r,ri)=>s.columnas.forEach((c,ci)=>{if(tmSeguro(r,c.k)) st.open.add(ri+"_"+ci);})); tmTapaDraw(id); return;}
+  const rp=e.target.closest("[data-tmrep]");
+  if(rp){tmTapaRep(rp.dataset.tmrep); return;}
+  const ob=e.target.closest("[data-tmob]");
+  if(ob){const [id,k]=ob.dataset.tmob.split("|"); tmOblPick(id,k); return;}
+  const tp=e.target.closest("[data-tmtapar]");
+  if(tp){tmTapaNuevo(tp.dataset.tmtapar); return;}
+  const op=e.target.closest("[data-tmo]");
+  if(op){const [id,i]=op.dataset.tmo.split("|"); tmCualPick(id,+i); return;}
+  const ra=e.target.closest("[data-tmra]");
+  if(ra){const [id,i]=ra.dataset.tmra.split("|"), st=TMS[id].rel; if(st.done) return; st.sel=st.sel===+i?null:+i; tmRelDraw(id); return;}
+  const rb=e.target.closest("[data-tmrb]");
+  if(rb){const [id,j]=rb.dataset.tmrb.split("|"), st=TMS[id].rel; if(st.done) return;
+    if(st.sel!==null){Object.keys(st.asg).forEach(k=>{if(st.asg[k]===st.sel) delete st.asg[k];}); st.asg[j]=st.sel; st.sel=null;} else delete st.asg[j];
+    tmRelDraw(id); return;}
+});
+document.addEventListener("keydown",e=>{const op=e.target.closest&&e.target.closest("[data-tmo]"); if(op&&(e.key==="Enter"||e.key===" ")){e.preventDefault(); op.click();}});
+document.addEventListener("dragstart",e=>{const ch=e.target.closest&&e.target.closest("[data-tmch]"); if(!ch) return; const [id,i]=ch.dataset.tmch.split("|"); TMS[id].col.sel=+i; e.dataTransfer.setData("text/plain",ch.dataset.tmch);});
+document.addEventListener("dragover",e=>{const z=e.target.closest&&e.target.closest(".tmzone,.tmtray"); if(z){e.preventDefault(); z.classList.add("drop");}});
+document.addEventListener("dragleave",e=>{const z=e.target.closest&&e.target.closest(".tmzone,.tmtray"); if(z) z.classList.remove("drop");});
+document.addEventListener("drop",e=>{const z=e.target.closest&&e.target.closest("[data-tmz]"); if(!z) return; e.preventDefault(); const [id,ci]=z.dataset.tmz.split("|"); tmColPon(id,+ci);});
 /* ---------- regla y excepciones (tipo "reglaexc") ---------- */
 R.reglaexc = s=>head(s)+`<div class="tbf" id="rxf-${s.id}"></div><div id="rxo-${s.id}" class="rxlist"></div>${s.nota?`<p class="note">${s.nota}</p>`:""}`;
 $("#secciones").innerHTML = D.secciones.map((s,i)=>`<section class="block${s.tipo==="simulador"?" sim":""}" id="${s.id}">${R[s.tipo](s,i)}</section>`).join("");
@@ -595,138 +907,8 @@ document.addEventListener("click",e=>{
 });
 
 
-/* ---------- tablero y cuatro tablas ---------- */
-const TB={}, CT={};
-const tbSec=id=>D.secciones.find(x=>x.id===id);
-const tbCell=(s,r,j)=>(s._ix||(s._ix=Object.fromEntries(s.celdas.map(c=>[c.rep+"|"+c.suj,c]))))[r+"|"+j]||{rep:r,suj:j,aplica:false,seguro:false};
-const uniq=a=>[...new Set(a.filter(Boolean))];
-function tbInit(s){
-  const st=TB[s.id]={suj:new Set(),grp:new Set(),frec:"",monto:"",plazo:"",vista:"tabla"};
-  const on=s.celdas.filter(c=>c.aplica);
-  const sel=(k,lab,vals)=>!vals.length?"":`<div class="row"><span class="lbl">${lab}</span><select data-tbs="${s.id}:${k}"><option value="">Todos</option>${vals.map(v=>`<option>${esc(v)}</option>`).join("")}</select></div>`;
-  $("#tbf-"+s.id).innerHTML=
-    `<div class="row"><span class="lbl">Sujeto</span>${s.sujetos.map((j,i)=>`<button class="fchip sw ${colorDe(j.color,i)}" data-tbf="${s.id}:suj:${j.k}" aria-pressed="false" title="${esc(j.t)}"><i></i>${esc(j.corto||j.k)}</button>`).join("")}</div>`+
-    `<div class="row"><span class="lbl">Tipo</span>${s.grupos.map((g,i)=>`<button class="fchip sw ${colorDe(g.color,i)}" data-tbf="${s.id}:grp:${g.k}" aria-pressed="false"><i></i>${esc(g.t)}</button>`).join("")}</div>`+
-    `<div class="row" style="gap:14px">${sel("frec","Frecuencia",uniq(on.map(c=>c.frec_tag)))}${sel("monto","Monto",uniq(on.map(c=>c.monto_tag)))}${sel("plazo","Plazo",uniq(on.map(c=>c.plazo_tag)))}</div>`;
-  tbDraw(s.id);
-}
-function tbMatch(st,c){return (!st.frec||c.frec_tag===st.frec)&&(!st.monto||c.monto_tag===st.monto)&&(!st.plazo||c.plazo_tag===st.plazo);}
-function tbDraw(id){
-  const s=tbSec(id), st=TB[id], val=st.frec||st.monto||st.plazo;
-  const cols=s.sujetos.map((j,i)=>({...j,ci:i})).filter(j=>!st.suj.size||st.suj.has(j.k));
-  let hits=0, shown=0;
-  if(st.vista==="tabla"){
-    let body="";
-    s.grupos.forEach((g,gi)=>{
-      if(st.grp.size&&!st.grp.has(g.k)) return;
-      const rows=s.reportes.filter(r=>r.g===g.k).map(r=>{
-        const cells=cols.map(j=>{const c=tbCell(s,r.k,j.k), m=c.aplica&&val&&tbMatch(st,c); if(m)hits++; return {c,j,m};});
-        if(val&&!cells.some(x=>x.m)) return "";
-        shown++;
-        return `<tr><th class="rp" scope="row">${esc(r.t)}${r.regla?`<span class="rg">${esc(r.regla)}</span>`:""}</th>${cells.map(({c,j,m})=>`<td class="${val?(m?"hit":"dim"):""}"><button class="tbc ${c.aplica?"si":"no"}${c.aplica&&c.marca?" tx":""}${c.seguro===false?" dud":""}" data-tbc="${id}|${r.k}|${j.k}" aria-label="${esc(r.t)} · ${esc(j.t)}: ${c.aplica?(c.marca?esc(c.marca):"sí"):"no"}"><span class="mk">${c.aplica&&c.marca?`<span class="mt">${esc(c.marca)}</span>`:""}</span></button></td>`).join("")}</tr>`;
-      }).join("");
-      if(rows) body+=`<tr class="grp ${colorDe(g.color,gi)}"><th colspan="${cols.length+1}">${esc(g.t)}${g.pregunta?`<span>${esc(g.pregunta)}</span>`:""}</th></tr>`+rows;
-    });
-    $("#tbo-"+id).innerHTML=`<div class="tbwrap"><table class="tbm"><thead><tr><th class="rp" scope="col">${esc(s.col_titulo||"Reporte")}</th>${cols.map(j=>`<th class="sj ${colorDe(j.color,j.ci)}" scope="col" title="${esc(j.t)}">${esc(j.corto||j.k)}</th>`).join("")}</tr></thead><tbody>${body}</tbody></table></div>`;
-    $("#tbn-"+id).textContent=val?`${hits} casillas cumplen el filtro en ${shown} ${s.renglones||"reportes"}.`:`✓ = su DCG lo prevé · punto = no lo prevé · ? = pendiente de confirmar en el DOF. Toca una casilla para ver monto, plazo y disposición.`;
-  } else {
-    const list=[];
-    s.reportes.forEach(r=>{ if(st.grp.size&&!st.grp.has(r.g)) return; cols.forEach(j=>{const c=tbCell(s,r.k,j.k); if(c.aplica&&tbMatch(st,c)) list.push({r,j,c});}); });
-    $("#tbo-"+id).innerHTML=`<div class="tbfichas">${list.map(({r,j,c})=>`<div class="tbficha ${colorDe(j.color,j.ci)}"><h4>${esc(r.t)}</h4><div class="who">${esc(j.t)} · ${esc(c.ref||"")}</div><dl>${c.que?`<dt>Qué</dt><dd>${esc(c.que)}</dd>`:""}${c.desde?`<dt>Desde</dt><dd>${esc(c.desde)}</dd>`:""}${c.cuando?`<dt>Cuándo</dt><dd>${esc(c.cuando)}</dd>`:""}${c.frec?`<dt>Frecuencia</dt><dd>${esc(c.frec)}</dd>`:""}${c.a_quien?`<dt>A quién</dt><dd>${esc(c.a_quien)}</dd>`:""}</dl>${c.nota?`<div class="nt">${esc(c.nota)}</div>`:""}</div>`).join("")}</div>`;
-    $("#tbn-"+id).textContent=`${list.length} fichas.`;
-  }
-}
-function tbOpen(id,rk,jk){
-  const s=tbSec(id), r=s.reportes.find(x=>x.k===rk), j=s.sujetos.find(x=>x.k===jk), c=tbCell(s,rk,jk), gi=s.grupos.findIndex(g=>g.k===r.g);
-  $("#dHead").className="dhead "+colorDe(s.grupos[gi].color,gi);
-  $("#dTitle").textContent=r.t;
-  const fila=(k,v)=>v?`<li><b>${k}:</b> ${esc(v)}</li>`:"";
-  $("#dBody").innerHTML=`<div class="lbl">${esc(j.t)}${c.ref?` · ${esc(c.ref)}`:""}</div><div class="hook">${c.aplica?"Sí: su DCG lo prevé":"Su DCG no lo prevé"}${c.seguro===false?" · pendiente de confirmar en el DOF":""}</div><ul>${fila("Qué",c.que)}${fila("Desde",c.desde)}${fila("Cuándo",c.cuando)}${fila("Frecuencia",c.frec)}${fila("A quién",c.a_quien)}${fila("Ojo",c.nota)}</ul>${r.regla?`<p style="margin-top:12px"><b>La regla del renglón:</b> ${esc(r.regla)}</p>`:""}`;
-  lastFocus=document.activeElement; $("#scrim").hidden=false; $("#drawer").hidden=false; $("#dClose").focus();
-}
-D.secciones.filter(s=>s.tipo==="tablero").forEach(tbInit);
-document.addEventListener("change",e=>{const t=e.target.closest("[data-tbs]"); if(!t) return; const [id,k]=t.dataset.tbs.split(":"); TB[id][k]=t.value; tbDraw(id);});
-document.addEventListener("click",e=>{
-  const f=e.target.closest("[data-tbf]");
-  if(f){const [id,k,v]=f.dataset.tbf.split(":"), set=TB[id][k]; set.has(v)?set.delete(v):set.add(v); f.setAttribute("aria-pressed",set.has(v)); tbDraw(id); return;}
-  const v=e.target.closest("[data-tbv]");
-  if(v){const [id,w]=v.dataset.tbv.split(":"); TB[id].vista=w; document.querySelectorAll(`[data-tbv^="${id}:"]`).forEach(b=>b.setAttribute("aria-pressed",b===v)); tbDraw(id); return;}
-  const cl=e.target.closest("[data-tbclr]");
-  if(cl){const id=cl.dataset.tbclr, st=TB[id]; st.suj.clear(); st.grp.clear(); st.frec=st.monto=st.plazo=""; document.querySelectorAll(`[data-tbf^="${id}:"]`).forEach(b=>b.setAttribute("aria-pressed","false")); document.querySelectorAll(`[data-tbs^="${id}:"]`).forEach(x=>x.value=""); tbDraw(id); return;}
-  const c=e.target.closest("[data-tbc]");
-  if(c){ if(document.body.classList.contains("recite")&&!c.classList.contains("shown")){c.classList.add("shown");return;} const [id,rk,jk]=c.dataset.tbc.split("|"); tbOpen(id,rk,jk); return; }
-  const m=e.target.closest("[data-ctm]");
-  if(m){const [id,mode]=m.dataset.ctm.split(":"); document.querySelectorAll(`[data-ctm^="${id}:"]`).forEach(b=>b.setAttribute("aria-pressed",b===m)); CT[id].mode=mode; ctNew(id); return;}
-  const pk=e.target.closest("[data-ctp]");
-  if(pk){const [id,i]=pk.dataset.ctp.split(":"); ctPick(id,+i); return;}
-  const tg=e.target.closest("[data-ctt]");
-  if(tg){const [id,r,c]=tg.dataset.ctt.split(":"), g=CT[id]; if(g.done) return; g.mine[r][c]=!g.mine[r][c]; tg.parentElement.classList.toggle("on",g.mine[r][c]); tg.textContent=g.mine[r][c]?"✓":""; return;}
-  const ck=e.target.closest("[data-ctchk]");
-  if(ck){ctCheck(ck.dataset.ctchk); return;}
-  const nx=e.target.closest("[data-ctnew]");
-  if(nx){ctNew(nx.dataset.ctnew); return;}
-});
-const rnd=n=>Math.floor(Math.random()*n);
-const mixA=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;};
-function ctNew(id){
-  const s=tbSec(id), src=tbSec(s.fuente), g=CT[id], nR=s.filas||4, nC=s.columnas||4;
-  const reps=src.reportes.filter(r=>!(s.excluir||[]).includes(r.k));
-  const allOn=r=>src.sujetos.every(j=>tbCell(src,r.k,j.k).aplica);
-  let R0,C0,M;
-  for(let t=0;t<400;t++){
-    const cs=mixA(src.sujetos).slice(0,nC), rs=mixA(reps).slice(0,nR);
-    if(rs.filter(allOn).length>1) continue;
-    if(rs.some(r=>cs.some(j=>tbCell(src,r.k,j.k).seguro===false))) continue;
-    const m=rs.map(r=>cs.map(j=>!!tbCell(src,r.k,j.k).aplica));
-    const pats=new Set(m.map(x=>x.join()));
-    if(pats.size<Math.min(3,nR)) continue;
-    if(m.filter(x=>!x.some(Boolean)).length>1) continue;
-    R0=rs;C0=cs;M=m;break;
-  }
-  if(!M){R0=reps.slice(0,nR);C0=src.sujetos.slice(0,nC);M=R0.map(r=>C0.map(j=>!!tbCell(src,r.k,j.k).aplica));}
-  Object.assign(g,{src,rows:R0,cols:C0,M,done:false});
-  if(g.mode==="llena"){g.mine=M.map(x=>x.map(()=>false)); return ctDrawFill(id);}
-  const key=m=>m.map(x=>x.map(Number).join("")).join("|"), seen=new Set([key(M)]), opts=[M];
-  let guard=0;
-  while(opts.length<4&&guard++<500){
-    const d=M.map(x=>x.slice()), k=1+rnd(2);
-    for(let q=0;q<k;q++){const r=rnd(nR),c=rnd(nC); d[r][c]=!d[r][c];}
-    const kk=key(d); if(!seen.has(kk)){seen.add(kk);opts.push(d);}
-  }
-  g.opts=mixA(opts.map((m,i)=>({m,ok:i===0})));
-  ctDrawPick(id);
-}
-const ctHead=g=>`<tr><th></th>${g.cols.map(j=>`<th title="${esc(j.t)}">${esc(j.corto||j.k)}</th>`).join("")}</tr>`;
-function ctDrawPick(id){
-  const g=CT[id];
-  $("#ct-"+id).innerHTML=`<div class="ctq">${esc(tbSec(id).elegir||"¿Cuál tabla dice correctamente qué reporte presenta cada sujeto?")}</div><div class="ctgrid">${g.opts.map((o,i)=>`<button class="cttab" data-ctp="${id}:${i}"><div class="tl">Tabla ${"ABCD"[i]}</div><table>${ctHead(g)}${g.rows.map((r,ri)=>`<tr><th class="r">${esc(r.corto||r.t)}</th>${g.cols.map((j,ci)=>`<td class="${o.m[ri][ci]?"on":""}" data-rc="${ri}:${ci}">${o.m[ri][ci]?"✓":""}</td>`).join("")}</tr>`).join("")}</table></button>`).join("")}</div><div id="ctfb-${id}"></div>`;
-  ctScore(id);
-}
-function ctWhy(g,ri,ci){const r=g.rows[ri], j=g.cols[ci], c=tbCell(g.src,r.k,j.k); return `<li><b>${esc(j.t)} · ${esc(r.t)}:</b> ${c.aplica?`<b>sí</b>${c.desde&&c.desde!=="sin monto"?` — ${esc(c.desde)}`:""}${c.cuando?`; ${esc(c.cuando)}`:""}`:"<b>no</b> — su DCG no lo prevé"}${c.ref?` <span class="art">${esc(c.ref)}</span>`:""}</li>`;}
-function ctPick(id,i){
-  const g=CT[id]; if(g.done) return; g.done=true; const o=g.opts[i]; g.n=(g.n||0)+1; if(o.ok) g.ok=(g.ok||0)+1;
-  const tabs=document.querySelectorAll(`#ct-${id} .cttab`);
-  g.opts.forEach((x,k)=>{const t=tabs[k]; t.disabled=true; if(x.ok) t.classList.add("ok"); if(k===i) t.classList.add("mine");
-    t.querySelectorAll("td[data-rc]").forEach(td=>{const [r,c]=td.dataset.rc.split(":").map(Number); if(x.m[r][c]!==g.M[r][c]) td.classList.add("bad");});});
-  const diff=[]; g.M.forEach((row,r)=>row.forEach((v,c)=>{ if(g.opts.some(x=>x.m[r][c]!==v)) diff.push([r,c]); }));
-  const mineDiff=diff.filter(([r,c])=>o.m[r][c]!==g.M[r][c]);
-  $("#ctfb-"+id).innerHTML=`<div class="ctfb fb">${o.ok?'<span class="ok">Correcto</span>':`<span class="no">Incorrecto</span> La correcta es la <b>tabla ${"ABCD"[g.opts.findIndex(x=>x.ok)]}</b>.`}<div class="lbl" style="margin-top:10px">${o.ok?"Las casillas que cambiaban en las otras":"Lo que fallaba en tu tabla"}</div><ul>${(o.ok?diff:mineDiff).map(([r,c])=>ctWhy(g,r,c)).join("")}</ul><div class="qactions"><button class="btn" data-ctnew="${id}">Otra</button></div></div>`;
-  ctScore(id);
-}
-function ctDrawFill(id){
-  const g=CT[id];
-  $("#ct-"+id).innerHTML=`<div class="ctq">${esc(tbSec(id).llenar||"Marca qué reporte presenta cada sujeto y califica.")}</div><div class="cttab ctfill" style="cursor:default;max-width:640px"><table>${ctHead(g)}${g.rows.map((r,ri)=>`<tr><th class="r">${esc(r.corto||r.t)}</th>${g.cols.map((j,ci)=>`<td><button data-ctt="${id}:${ri}:${ci}" aria-label="${esc(r.t)} · ${esc(j.t)}"></button></td>`).join("")}</tr>`).join("")}</table></div><div class="qactions" style="margin-top:12px"><button class="btn" data-ctchk="${id}">Calificar</button><button class="btn ghost" data-ctnew="${id}">Otra tabla</button></div><div id="ctfb-${id}"></div>`;
-  ctScore(id);
-}
-function ctCheck(id){
-  const g=CT[id]; if(g.done) return; g.done=true; const bad=[];
-  document.querySelectorAll(`#ct-${id} [data-ctt]`).forEach(b=>{const [,r,c]=b.dataset.ctt.split(":").map(Number), td=b.parentElement, ok=g.mine[r][c]===g.M[r][c]; td.classList.add(ok?"right":"wrong"); if(!ok){bad.push([r,c]); b.textContent=g.M[r][c]?"✓":"·";}});
-  g.n=(g.n||0)+1; if(!bad.length) g.ok=(g.ok||0)+1;
-  $("#ctfb-"+id).innerHTML=`<div class="ctfb fb">${bad.length?`<span class="no">${bad.length} casilla${bad.length>1?"s":""} mal</span><ul>${bad.map(([r,c])=>ctWhy(g,r,c)).join("")}</ul>`:'<span class="ok">Todo correcto</span>'}<div class="qactions"><button class="btn" data-ctnew="${id}">Otra</button></div></div>`;
-  ctScore(id);
-}
-function ctScore(id){const g=CT[id]; $("#cts-"+id).textContent=g.n?`Aciertos: ${g.ok||0} de ${g.n}`:"";}
-D.secciones.filter(s=>s.tipo==="cuatrotablas").forEach(s=>{CT[s.id]={mode:"elige"}; ctNew(s.id);});
+/* ---------- tabla mínima: arranque de las prácticas ---------- */
+D.secciones.filter(s=>s.tipo==="tablamin").forEach(tmInit);
 /* ---------- regla y excepciones ---------- */
 const RX={};
 function rxInit(s){

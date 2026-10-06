@@ -1,5 +1,5 @@
 {
- "version": "12",
+ "version": "14",
  "armado": "2026-10-05",
  "herramientas": [
   {
@@ -10,7 +10,7 @@
    "peso": 2,
    "abierta": true,
    "estado": "integrada",
-   "archivo_usado": "M2 · datos Página 1 · v8.json"
+   "archivo_usado": "M2 · datos Página 1 · v10.json"
   },
   {
    "n": 2,
@@ -20,7 +20,7 @@
    "peso": 3,
    "abierta": true,
    "estado": "integrada",
-   "archivo_usado": "M2 · datos Página 2 · v7.json"
+   "archivo_usado": "M2 · datos Página 2 · v9.json"
   },
   {
    "n": 3,
@@ -30,7 +30,7 @@
    "peso": 3,
    "abierta": true,
    "estado": "integrada",
-   "archivo_usado": "M2 · datos Página 3 · v2.json"
+   "archivo_usado": "M2 · datos Página 3 · v3.json"
   },
   {
    "n": 4,
@@ -40,7 +40,7 @@
    "peso": 2,
    "abierta": true,
    "estado": "integrada",
-   "archivo_usado": "M2 · datos Página 4 · v1.json"
+   "archivo_usado": "M2 · datos Página 4 · v2.json"
   },
   {
    "n": 5,
@@ -50,7 +50,7 @@
    "peso": 4,
    "abierta": true,
    "estado": "integrada",
-   "archivo_usado": "M2 · datos Página 5 · v2.json"
+   "archivo_usado": "M2 · datos Página 5 · v3.json"
   },
   {
    "n": 6,
@@ -60,7 +60,7 @@
    "peso": 3,
    "abierta": true,
    "estado": "integrada",
-   "archivo_usado": "M2 · datos Página 6 · v2.json"
+   "archivo_usado": "M2 · datos Página 6 · v4.json"
   },
   {
    "n": 7,
@@ -70,7 +70,7 @@
    "peso": 2,
    "abierta": true,
    "estado": "integrada",
-   "archivo_usado": "M2 · datos Página 8 · v3.json"
+   "archivo_usado": "M2 · datos Página 8 · v4.json"
   },
   {
    "n": 8,
@@ -80,7 +80,7 @@
    "peso": 2,
    "abierta": true,
    "estado": "integrada",
-   "archivo_usado": "M2 · datos Página 7 · v2.json"
+   "archivo_usado": "M2 · datos Página 7 · v3.json"
   }
  ],
  "simulacro": {
