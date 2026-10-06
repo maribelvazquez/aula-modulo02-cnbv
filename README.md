@@ -1,4 +1,4 @@
-# Aula del Repaso · Módulo 2 · v14
+# Aula del Repaso · Módulo 2 · v15
 
 Aula de estudio de 360Educa (GMC360). Armada el 05/10/2026 con la plantilla del mapa interactivo (modo aula).
 Un portal (`index.html`), una carpeta por herramienta y el simulacro mixto en `m2-simulacro/`
@@ -13,7 +13,7 @@ Un portal (`index.html`), una carpeta por herramienta y el simulacro mixto en `m
 | H3 | `m2-h3-otras-obligaciones-lpb/` | 2.1.6–2.1.8 · Otras obligaciones, intercambio de información y LPB | `M2 · datos Página 3 · v3.json` · 84 reactivos | integrada |
 | H4 | `m2-h4-ccc-oficial/` | 2.1.9–2.1.10 · Comité de Comunicación y Control y oficial de cumplimiento | `M2 · datos Página 4 · v2.json` · 70 reactivos | integrada |
 | H5 | `m2-h5-novedosos-cambios-itf/` | 2.1.11–2.1.14 · Modelos novedosos, centros cambiarios, transmisores e ITF | `M2 · datos Página 5 · v3.json` · 92 reactivos | integrada |
-| H6 | `m2-h6-sanciones-pr-plazos/` | 2.1.15–2.1.17 · Sanciones, propietario real y plazos | `M2 · datos Página 6 · v4.json` · 94 reactivos | integrada |
+| H6 | `m2-h6-sanciones-pr-plazos/` | 2.1.15–2.1.17 · Sanciones, propietario real y plazos | `M2 · datos Página 6 · v5.json` · 94 reactivos | integrada |
 | H7 | `m2-h7-tipologias/` | 2.1 · Tipologías UIF y de organismos internacionales | `M2 · datos Página 8 · v4.json` · 111 reactivos | integrada |
 | H8 | `m2-h8-lfpiorpi/` | 2.2.1–2.2.2 · LFPIORPI: actividades vulnerables y uso de efectivo | `M2 · datos Página 7 · v3.json` · 75 reactivos | integrada |
 

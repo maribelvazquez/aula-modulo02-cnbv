@@ -1,5 +1,5 @@
 {
- "version": "14",
+ "version": "15",
  "armado": "2026-10-05",
  "herramientas": [
   {
@@ -60,7 +60,7 @@
    "peso": 3,
    "abierta": true,
    "estado": "integrada",
-   "archivo_usado": "M2 · datos Página 6 · v4.json"
+   "archivo_usado": "M2 · datos Página 6 · v5.json"
   },
   {
    "n": 7,
