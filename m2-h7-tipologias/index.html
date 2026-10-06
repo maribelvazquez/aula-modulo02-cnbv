@@ -350,6 +350,8 @@ table.tm{border-collapse:collapse;width:100%;table-layout:fixed;font-size:14.5px
 .tm td.c0{background:var(--principal-halo)}
 .tmc{display:block;width:100%;min-height:42px;border:0;background:transparent;text-align:left;padding:9px 8px;font:inherit;font-weight:600;color:var(--ink);cursor:pointer;line-height:1.3;overflow-wrap:break-word;hyphens:auto}
 .tmc.vacio{color:var(--muted);font-weight:500}
+.tmu{text-align:center;background:var(--surface-2)}.tmu .tmc{text-align:center}.tmuq{display:block;font-size:.72rem;font-weight:500;color:var(--muted);margin-top:2px}
+body.recite .tmmain .tmc:not(.shown) .tmuq{visibility:hidden}
 .tmc.has .v::after{content:" ›";color:var(--accion);font-weight:800}
 .tmc.dud .v::after{content:" ?";color:var(--coral);font-weight:800}
 .tmc:hover,.tmc:focus-visible{outline:2px solid var(--accion);outline-offset:-2px}
@@ -598,8 +600,18 @@ function tmTabla(s,o){
   const rows=o.rows||s.renglones.map((r,ri)=>({r,ri}));
   const N=cols.length;
   const th=cols.map(({c,ci,sj,badk})=>`<th scope="col" class="${colorDe(c.color,ci)}">${o.mini&&sj.length?"":esc(c.t)}${sj.length?`<div class="tmsj">${sj.map(k=>tmPill(s,k,ci,k===badk?"bad":"")).join("")}</div>`:""}</th>`).join("");
-  const body=rows.map(({r,ri})=>`<tr class="rt"><th colspan="${N}" scope="colgroup">${esc(r.t)}</th></tr><tr><th class="rhd" scope="row">${esc(r.t)}</th>${cols.map(({c,ci})=>`<td class="${!o.mini&&ci===0?"c0":""}${o.bad&&o.bad(ri,ci)?" bad":""}">${o.cell(r,ri,c,ci)}</td>`).join("")}</tr>`).join("");
+  const body=rows.map(({r,ri})=>`<tr class="rt"><th colspan="${N}" scope="colgroup">${esc(r.t)}</th></tr><tr><th class="rhd" scope="row">${esc(r.t)}</th>${o.unir&&tmUnido(s,r)?`<td class="tmu" colspan="${N}">${tmCeldaUnida(s,r,ri)}</td>`:cols.map(({c,ci})=>`<td class="${!o.mini&&ci===0?"c0":""}${o.bad&&o.bad(ri,ci)?" bad":""}">${o.cell(r,ri,c,ci)}</td>`).join("")}</tr>`).join("");
   return `<table class="tm${o.mini?" mini":""}${o.cls?" "+o.cls:""}"><thead><tr><th class="cor" scope="col">${esc(s.col_titulo||"Lo que cambia")}</th>${th}</tr></thead><tbody>${body}</tbody></table>`;
+}
+// "igual_en_tabla": claves de renglón con la misma casilla en todas las columnas; en la tabla principal se unen en una sola (las prácticas no cambian).
+const tmUnido=(s,r)=>(s.igual_en_tabla||[]).includes(r.k)&&s.columnas.length>1&&s.columnas.every(c=>String(tmVal(r,c.k))===String(tmVal(r,s.columnas[0].k))&&tmSeguro(r,c.k));
+const tmCeldaUnida=(s,r,ri)=>{const v=tmVal(r,s.columnas[0].k), d=s.columnas.some(c=>r.det&&r.det[c.k]);
+  return `<button class="tmc${d?" has":""}" data-tmcu="${s.id}|${ri}" aria-label="${esc(r.t)} · igual en las ${s.columnas.length} columnas: ${esc(v)}"><span class="v">${esc(v)}</span><small class="tmuq">Igual en las ${s.columnas.length} columnas</small></button>`;};
+function tmOpenUnida(id,ri){
+  const s=tbSec(id), r=s.renglones[ri], v=tmVal(r,s.columnas[0].k);
+  $("#dHead").className="dhead"; $("#dTitle").textContent=r.t;
+  $("#dBody").innerHTML=`<div class="lbl">Igual en las ${s.columnas.length} columnas</div><div class="hook">${esc(v)}</div>`+s.columnas.map((c,ci)=>{const d=r.det&&r.det[c.k], rf=tmRef(r,c.k); return (d||rf)?`<p style="margin:0 0 10px"><b>${esc(c.t)}${rf?` · ${esc(rf)}`:""}:</b> ${d||""}</p>`:"";}).join("");
+  lastFocus=document.activeElement; $("#scrim").hidden=false; $("#drawer").hidden=false; $("#dClose").focus();
 }
 const tmCelda=s=>(r,ri,c,ci)=>{const v=tmVal(r,c.k), d=r.det&&r.det[c.k], u=!tmSeguro(r,c.k);
   return `<button class="tmc${tmVacio(v)?" vacio":""}${d?" has":""}${u?" dud":""}" data-tmc="${s.id}|${ri}|${ci}" aria-label="${esc(r.t)} · ${esc(c.t)}: ${esc(v)}"><span class="v">${esc(v)}</span></button>`;};
@@ -607,7 +619,7 @@ R.tablamin = s=>{
   const hayDet=s.renglones.some(r=>r.det&&Object.keys(r.det).length), hayDud=s.renglones.some(r=>s.columnas.some(c=>!tmSeguro(r,c.k)));
   return head(s)+
   (s.igual&&s.igual.length?`<div class="tmigual"><div class="lbl">${esc(s.igual_titulo||"Igual para todos")}</div>${s.igual.map(x=>`<span class="ig">${x}</span>`).join("")}</div>`:"")+
-  `<div class="tmwrap">${tmTabla(s,{cls:"tmmain",cell:tmCelda(s)})}</div>`+
+  `<div class="tmwrap">${tmTabla(s,{cls:"tmmain",cell:tmCelda(s),unir:true})}</div>`+
   `<p class="tmleyenda">Toca una casilla para ver ${hayDet?"el detalle y ":""}su fundamento.${hayDet?" › = tiene detalle.":""}${hayDud?" ? = pendiente de confirmar en el DOF.":""}</p>`+
   (tmFuera(s)?(F=>`<button class="tmfuera" data-tmfu="${s.id}"><span class="lbl">${esc(F.t)}</span><span class="tmsj">${F.m.map(k=>`<span class="sjp" title="${esc(tmNom(s,k))}"><i></i>${esc(k)}</span>`).join("")}</span>${F.det?`<span class="mas">Por qué ›</span>`:""}</button>`)(tmFuera(s)):"")+
   (s.nota?`<p class="note">${s.nota}</p>`:"")+
@@ -811,6 +823,8 @@ document.addEventListener("click",e=>{
   const m=e.target.closest("[data-tmm]"); if(m){ if(!m.disabled){const [id,mo]=m.dataset.tmm.split(":"); tmModo(id,mo);} return; }
   const c=e.target.closest("[data-tmc]");
   if(c){ if(document.body.classList.contains("recite")&&!c.classList.contains("shown")){c.classList.add("shown");return;} const [id,ri,ci]=c.dataset.tmc.split("|"); tmOpen(id,+ri,+ci); return; }
+  const cu=e.target.closest("[data-tmcu]");
+  if(cu){ if(document.body.classList.contains("recite")&&!cu.classList.contains("shown")){cu.classList.add("shown");return;} const [id,ri]=cu.dataset.tmcu.split("|"); tmOpenUnida(id,+ri); return; }
   const fu=e.target.closest("[data-tmfu]"); if(fu){tmOpenFuera(fu.dataset.tmfu); return;}
   const ch=e.target.closest("[data-tmch]");
   if(ch){const [id,i]=ch.dataset.tmch.split("|"), st=TMS[id].col; if(st.done) return; st.sel=st.sel===+i?null:+i; tmColDraw(id); return;}

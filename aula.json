@@ -1,6 +1,6 @@
 {
- "version": "15",
- "armado": "2026-10-05",
+ "version": "16",
+ "armado": "2026-10-06",
  "herramientas": [
   {
    "n": 1,
@@ -40,7 +40,7 @@
    "peso": 2,
    "abierta": true,
    "estado": "integrada",
-   "archivo_usado": "M2 · datos Página 4 · v2.json"
+   "archivo_usado": "M2 · datos Página 4 · v3.json"
   },
   {
    "n": 5,
@@ -50,7 +50,7 @@
    "peso": 4,
    "abierta": true,
    "estado": "integrada",
-   "archivo_usado": "M2 · datos Página 5 · v3.json"
+   "archivo_usado": "M2 · datos Página 5 · v4.json"
   },
   {
    "n": 6,
@@ -60,7 +60,7 @@
    "peso": 3,
    "abierta": true,
    "estado": "integrada",
-   "archivo_usado": "M2 · datos Página 6 · v5.json"
+   "archivo_usado": "M2 · datos Página 6 · v6.json"
   },
   {
    "n": 7,
@@ -80,7 +80,7 @@
    "peso": 2,
    "abierta": true,
    "estado": "integrada",
-   "archivo_usado": "M2 · datos Página 7 · v3.json"
+   "archivo_usado": "M2 · datos Página 7 · v5.json"
   }
  ],
  "simulacro": {
@@ -107,6 +107,11 @@
    "carpeta": "m2-h6-explorador-plazos",
    "archivo_usado": "M2 · Explorador 2.1.17 · v1.html",
    "h": 6
+  },
+  {
+   "carpeta": "m2-h8-taller-umbrales",
+   "archivo_usado": "M2 · Taller de umbrales 2.2.1 · v3.html",
+   "h": 8
   }
  ]
 }

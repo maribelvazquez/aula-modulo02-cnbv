@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Taller de umbrales 2.2.1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: una columna ancha. Arriba la escalera de umbrales (visual), luego el mapa de puntos, luego práctica → prueba → repaso de errores. Guía 360Educa, ruta Sector financiero. */
+:root{
+  --bg:#faf5ec; --surface:#ffffff; --surface-2:#f3ede1; --line:#e4dccd;
+  --fg:#1b1b1e; --muted:#5b5f62; --carbon:#393e41;
+  --verde:#64c27b; --verde-claro:#87d895; --verde-tint:#e3f4e6;
+  --morado:#a663cc; --morado-tint:#f1e6f8; --coral:#ff8361; --coral-tint:#ffe9e2; --amarillo:#faa916;
+  --on-color:#1b1b1e; --on-dark:#ffffff;
+  --f-display:"Montserrat","Helvetica Neue",Arial,sans-serif;
+  --f-body:"Inter",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#17181a; --surface:#212326; --surface-2:#2a2c30; --line:#393c41;
+  --fg:#f2eee6; --muted:#b4b0a8; --carbon:#d6d2ca;
+  --verde:#6fcb86; --verde-claro:#87d895; --verde-tint:#1f3a28;
+  --morado:#b884d6; --morado-tint:#33253d; --coral:#ff9373; --coral-tint:#3d2620; --amarillo:#f7b23b;
+  --on-color:#1b1b1e; --on-dark:#ffffff; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#17181a; --surface:#212326; --surface-2:#2a2c30; --line:#393c41;
+  --fg:#f2eee6; --muted:#b4b0a8; --carbon:#d6d2ca;
+  --verde:#6fcb86; --verde-claro:#87d895; --verde-tint:#1f3a28;
+  --morado:#b884d6; --morado-tint:#33253d; --coral:#ff9373; --coral-tint:#3d2620; --amarillo:#f7b23b;
+  --on-color:#1b1b1e; --on-dark:#ffffff; color-scheme:dark }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.55;margin:0}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:18px;padding-block:20px 64px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:clamp(28px,5vw,42px);font-weight:800;letter-spacing:-.01em}
+h2{font-size:clamp(21px,3vw,26px);font-weight:800}
+h3{font-size:16px;font-weight:700}
+p{margin:0}
+.eyebrow{font-family:var(--f-display);font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.hl{background:var(--verde);color:var(--on-color);padding:0 .18em;border-radius:4px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.lede{max-width:68ch;color:var(--carbon);font-size:16px}
+.membrete{height:3px;background:var(--verde-claro);border:0;margin:14px 0 0}
+header.top{display:grid;gap:12px;padding-block:8px 14px}
+nav.idx{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);display:flex;gap:6px;overflow-x:auto;padding-block:8px;margin-bottom:6px;align-items:center}
+nav.idx a{flex:0 0 auto;font-size:13px;font-weight:600;color:var(--fg);text-decoration:none;padding:6px 11px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+nav.idx a:hover{border-color:var(--morado)}
+nav.idx a.err{border-color:var(--coral)}
+nav.idx a.err b{color:var(--coral)}
+section{padding-block:28px 6px;display:grid;gap:14px;scroll-margin-top:60px}
+.sub{color:var(--muted);max-width:72ch}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.num{font-variant-numeric:tabular-nums}
+.ref{font-size:12px;color:var(--muted);font-weight:600}
+.mini{font-size:13px}
+.note{font-size:13.5px;background:var(--surface-2);border-radius:8px;padding:10px 12px;max-width:80ch}
+.note.warn{background:var(--coral-tint)}
+/* conmutador UMA / pesos */
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;background:var(--surface);padding:3px;gap:2px}
+.seg button{font:inherit;font-size:13px;font-weight:700;border:0;background:transparent;color:var(--fg);padding:6px 12px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--carbon);color:var(--bg)}
+.seg button:focus-visible{outline:2px solid var(--morado);outline-offset:2px}
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+/* Regla de oro */
+.gold{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+@media (max-width:640px){.gold{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.gstep{border-radius:var(--r);padding:12px;background:var(--verde-tint);display:grid;gap:2px;border:1px solid var(--line)}
+.gstep .x{font-family:var(--f-display);font-weight:800;font-size:13px;color:var(--muted)}
+.gstep .u{font-family:var(--f-display);font-weight:800;font-size:22px}
+.gstep .p{font-weight:700}
+.gstep .img{font-size:12.5px;color:var(--muted)}
+/* Escalera */
+.ladder{display:grid;gap:6px}
+.step{display:grid;grid-template-columns:minmax(0,var(--w)) minmax(0,1fr);gap:0;align-items:stretch;border-radius:8px;overflow:hidden;border:1px solid var(--line);background:var(--surface)}
+.step .bar{background:var(--surface-2);display:grid;align-content:center;padding:8px 12px;gap:0;border-right:1px solid var(--line)}
+.step.f1605 .bar{background:var(--verde)}
+.step.f1605 .bar, .step.f1605 .bar .pp{color:var(--on-color)}
+.step .u{font-family:var(--f-display);font-weight:800;font-size:19px;white-space:nowrap}
+.step .pp{font-size:12.5px;font-weight:600;color:var(--muted);white-space:nowrap}
+.step .body{padding:8px 12px;display:grid;gap:6px;align-content:center;min-width:0}
+.step .img{font-size:13px;color:var(--carbon)}
+.step .img b{font-weight:700}
+.tags{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px;border:1.5px solid var(--carbon);background:var(--surface);display:inline-flex;gap:4px;align-items:center}
+.tag.av{background:var(--carbon);color:var(--bg)}
+.tag.dl{border-style:dashed}
+.tag.ef{border-color:var(--coral);color:var(--fg)}
+.badge{font-family:var(--f-display);font-size:11px;font-weight:800;letter-spacing:.05em;padding:1px 6px;border-radius:5px;background:var(--on-color);color:var(--verde);justify-self:start}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:13px;color:var(--muted);align-items:center}
+@media (max-width:560px){.step{grid-template-columns:1fr}.step .bar{border-right:0;border-bottom:1px solid var(--line);grid-auto-flow:column;justify-content:start;gap:10px;align-items:baseline}}
+/* Mapa de puntos */
+.chartwrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+svg.dots{display:block;min-width:920px;width:100%;height:auto}
+svg.dots text{fill:var(--fg);font-family:var(--f-body);font-size:12px}
+svg.dots .lab{font-weight:600}
+svg.dots .tick{fill:var(--muted);font-size:11px}
+svg.dots .grid{stroke:var(--line);stroke-width:1}
+svg.dots .grid.k{stroke:var(--verde);stroke-width:1.5;stroke-dasharray:4 3}
+svg.dots .seg2{stroke:var(--carbon);stroke-width:3;stroke-linecap:round}
+svg.dots .dot-id{fill:var(--surface);stroke:var(--carbon);stroke-width:2.5}
+svg.dots .dot-av{fill:var(--carbon)}
+svg.dots .dot-av.g{fill:var(--verde);stroke:var(--carbon);stroke-width:1.5}
+svg.dots .rowbg{fill:var(--surface-2)}
+/* Práctica */
+.quiz{display:grid;gap:12px}
+.qhead{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.qtext{font-size:18px;font-weight:600;max-width:70ch}
+.money{font-family:var(--f-display);font-weight:800;font-size:clamp(26px,5vw,36px);font-variant-numeric:tabular-nums}
+.money small{font-family:var(--f-body);font-size:14px;font-weight:600;color:var(--muted);margin-left:8px}
+.opts{display:grid;gap:8px}
+.opt{font:inherit;text-align:left;font-weight:600;padding:11px 14px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer;display:flex;gap:10px;align-items:baseline}
+.opt b{font-family:var(--f-display)}
+.opt:hover:not([disabled]){border-color:var(--morado)}
+.opt:focus-visible{outline:2px solid var(--morado);outline-offset:2px}
+.opt.ok{border-color:var(--verde);background:var(--verde-tint)}
+.opt.bad{border-color:var(--coral);background:var(--coral-tint)}
+.opt[disabled]{cursor:default}
+.fb{font-size:14.5px;border-radius:8px;padding:12px 14px;background:var(--surface-2);display:grid;gap:6px}
+.fb .ok{color:var(--verde);font-weight:800} .fb .bad{color:var(--coral);font-weight:800}
+.scale{position:relative;height:46px;margin-top:4px}
+.scale .line{position:absolute;left:0;right:0;top:20px;height:6px;border-radius:3px;background:var(--surface)}
+.scale .zone{position:absolute;top:20px;height:6px}
+.scale .mk{position:absolute;top:8px;width:2px;height:30px;background:var(--carbon)}
+.scale .mk span{position:absolute;top:30px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:700;white-space:nowrap;color:var(--muted)}
+.scale .me{position:absolute;top:10px;width:14px;height:26px;margin-left:-7px;border-radius:4px;background:var(--morado)}
+.btn{font:inherit;font-weight:700;padding:9px 18px;border-radius:8px;border:0;cursor:pointer;background:var(--morado);color:var(--on-dark)}
+.btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line)}
+.btn:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+.score{font-family:var(--f-display);font-weight:800}
+.pbar{height:6px;border-radius:3px;background:var(--surface-2);overflow:hidden}
+.pbar i{display:block;height:100%;background:var(--morado)}
+.errlist{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.errlist li{border-left:4px solid var(--coral);background:var(--surface);border-radius:6px;padding:10px 12px;display:grid;gap:4px}
+.big{font-family:var(--f-display);font-weight:800;font-size:40px;line-height:1}
+footer{margin-top:40px;font-size:12.5px;color:var(--muted);display:grid;gap:6px;max-width:80ch}
+@media (prefers-reduced-motion:no-preference){.opt,.btn,nav.idx a{transition:background .15s,border-color .15s}}
+</style>
+
+
+</head>
+<body>
+<nav aria-label="Aula" style="display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;padding:9px 16px;background:#1b1b1e;color:#fff;font:600 13px/1.3 Inter,Arial,sans-serif"><b style="font-family:Montserrat,Arial,sans-serif;letter-spacing:.04em">Módulo 2</b><a style="color:#fff" href="../m2-h8-lfpiorpi/index.html#t221-tipo">← Volver a H8 · 2.2.1</a><a style="color:#fff" href="../index.html">Portal del Aula</a><a style="color:#fff" href="../m2-simulacro/index.html">Simulacro mixto</a></nav>
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">360Educa · Módulo 2 · 2.2.1 Actividades vulnerables · art. 17 LFPIORPI</div>
+  <h1>Taller de <span class="hl">umbrales</span> del art. 17</h1>
+  <p class="lede">Los umbrales en UMA no se ven. Aquí cada uno tiene su precio en pesos y algo real con qué compararlo. Primero <b>míralos</b> (escalera y mapa), luego <b>practica</b> con casos, haz la <b>prueba</b> y <b>repasa tus errores</b>.</p>
+  <p class="note"><b>Criterio de identificación:</b> donde la ley sólo fija el monto del Aviso (III, IV, V, V Bis, X a, XVI y los incisos de notario y corredor con monto), usamos la tabla de umbrales de la SHCP: <b>se identifica siempre, desde 0</b>. El texto de la ley dice que los montos inferiores «no darán lugar a obligación alguna» (art. 17, penúltimo párrafo).</p>
+  <p class="note"><b>UMA 2026: $117.31 diarios</b> (INEGI, DOF 9-ene-2026; rige desde el 1-feb-2026). El examen pregunta en <b>UMA</b>, y los pesos cambian cada febrero: úsalos para dimensionar, pero contesta en UMA. Las imágenes («un auto usado») son referencias aproximadas, no precios oficiales.</p>
+  <hr class="membrete">
+</header>
+
+<nav class="idx" aria-label="Secciones">
+  <a href="#oro">La regla del 1 605</a><a href="#escalera">La escalera</a><a href="#mapa">Mapa de puntos</a><a href="#practica">Práctica</a><a href="#prueba">Prueba de 20</a><a href="#errores" id="navErr">Mis errores <b id="navErrN"></b></a>
+</nav>
+
+<section id="oro">
+  <h2>La regla del 1 605: cinco escalones de ≈ $188 mil</h2>
+  <p class="sub">Casi todo lo grande del art. 17 (y el efectivo del art. 32) sale de multiplicar <b>1 605 UMA</b>. En pesos se lee así: <b>190 · 375 · 565 · 755 · 940 mil</b>. El último escalón es «casi un millón».</p>
+  <div class="gold" id="gold"></div>
+  <p class="note">Truco del orden: el umbral de identificación suele ser <b>la mitad</b> del de Aviso (325→645 · 805→1 605 · 2 410→4 815 · 3 210→6 420 · 1 605→3 210). Excepciones: tarjetas de crédito (805→1 285) y prepagadas o monederos (645 = 645).</p>
+</section>
+
+<section id="escalera">
+  <h2>La escalera: cada número, su precio y quién lo usa</h2>
+  <p class="sub">De abajo hacia arriba, como suben los montos. El largo de la barra crece con el monto. Los escalones verdes son la tabla del 1 605.</p>
+  <div class="tools"><span class="mini" style="font-weight:600">Ver montos en:</span><div class="seg" role="group" aria-label="Unidad"><button type="button" data-unit="ambos" aria-pressed="true">UMA y pesos</button><button type="button" data-unit="uma" aria-pressed="false">Sólo UMA (como en el examen)</button></div></div>
+  <div class="legend"><span class="tag">○ VI</span> identifica desde aquí <span class="tag av">● VI</span> avisa desde aquí <span class="tag dl">◇ XIV d</span> delimita la actividad <span class="tag ef">$ art. 32</span> límite de efectivo</div>
+  <div class="ladder" id="ladder"></div>
+</section>
+
+<section id="mapa">
+  <h2>Mapa de puntos: identifica ○ → avisa ●</h2>
+  <p class="sub">Cada renglón es una actividad. El círculo blanco es desde dónde <b>identifica</b>; el negro, desde dónde <b>avisa</b> (la XVI tiene dos negros). Ordenadas por umbral de Aviso, de menor a mayor (arriba, las de «siempre», en 0): así se ve la escalera. Las líneas verdes punteadas son 1 605 × 1 a 5. Escala logarítmica.</p>
+  <div class="tools"><span class="mini" style="font-weight:600">Ordenar por:</span><div class="seg" role="group" aria-label="Orden"><button type="button" data-ord="monto" aria-pressed="true">Monto</button><button type="button" data-ord="fr" aria-pressed="false">Fracción (orden de la ley)</button></div></div>
+  <div class="chartwrap"><svg class="dots" id="dots" role="img" aria-label="Umbrales de identificación y aviso por fracción del art. 17"></svg></div>
+  <p class="mini sub">La XVI tiene <b>dos puntos de Aviso</b> (e identifica desde 0): a) operación de cada cliente desde 210 UMA; b) comisión por el servicio desde 4 UMA. Basta uno de los dos. <b>Desde 0</b>: donde la ley sólo fija el Aviso, el círculo blanco está en 0 (criterio de la SHCP: se identifica siempre). Las que avisan <b>siempre</b> o no tienen monto (XI, corredor XII B b–d) también arrancan en 0; la línea punteada cruza toda la escala. XII C (servidores con fe pública) no enumera actos y XII D sigue al apartado A de los notarios.</p>
+</section>
+
+<section id="practica">
+  <h2>Práctica: ¿qué obligación nace?</h2>
+  <p class="sub">Casos con precio real. Decide antes de ver la respuesta. Cada error se guarda para tu repaso.</p>
+  <div class="tools">
+    <div class="seg" role="group" aria-label="Unidad en la práctica"><button type="button" data-punit="ambos" aria-pressed="true">Pesos y UMA</button><button type="button" data-punit="uma" aria-pressed="false">Sólo UMA</button></div>
+    <div class="seg" role="group" aria-label="Qué practicar"><button type="button" data-pmode="obl" aria-pressed="true">¿Qué obligación nace?</button><button type="button" data-pmode="num" aria-pressed="false">Número ↔ fracción</button></div>
+  </div>
+  <div class="card quiz" id="pq" aria-live="polite"></div>
+</section>
+
+<section id="prueba">
+  <h2>Prueba de 20</h2>
+  <p class="sub">Doce casos y ocho de número ↔ fracción, mezclados. Al final ves tu resultado y lo que fallaste pasa a «Mis errores».</p>
+  <div class="card quiz" id="tq" aria-live="polite"></div>
+</section>
+
+<section id="errores">
+  <h2>Repasa tus errores</h2>
+  <p class="sub">Lo que fallaste en la práctica o en la prueba. Practícalo otra vez: cada acierto lo saca de la lista.</p>
+  <div class="card quiz" id="eq" aria-live="polite"></div>
+</section>
+
+<footer>
+  <span>Fuente: art. 17 de la Ley Federal para la Prevención e Identificación de Operaciones con Recursos de Procedencia Ilícita (reforma DOF 16-jul-2025), cifras tomadas de «M2 · datos Página 7 · v3» y recotejadas contra el compilado de la UIF. UMA 2026: INEGI, DOF 9-ene-2026.</span>
+  <span>Identificación en fracciones sin umbral propio: criterio de la tabla de umbrales de la SHCP (decisión del 6-oct-2026). Acumulación de 6 meses: sólo se suman las operaciones que, cada una, alcanzan el umbral de identificación; si esa suma supera el umbral de Aviso, <b>podrá</b> considerarse sujeta a Aviso (art. 17, penúltimo párrafo). Material didáctico; no sustituye la publicación oficial.</span>
+</footer>
+</div>
+
+<script>
+(function(){
+const U=117.31;
+const fmt=n=>Number(n).toLocaleString("es-MX");
+const pesos=u=>"$"+Math.round(u*U).toLocaleString("es-MX");
+const milp=u=>{const p=u*U;return p>=1e6?"$"+(p/1e6).toFixed(2)+" millones":p>=10000?"≈ $"+Math.round(p/1000)+" mil":"$"+Math.round(p).toLocaleString("es-MX");};
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+let unit="ambos";
+
+/* Actividades con monto (orden de la ley). id: identifica desde; av: avisa desde; opid ">" = «superior a» */
+const F=[
+ {k:"I",n:"Juegos con apuesta, concursos y sorteos",id:325,av:645,ref:"Art. 17, fr. I",c:["Un casino con permiso de Gobernación paga a un cliente un premio de {m}","Un cliente compra fichas para jugar por {m} en una sala de sorteos"]},
+ {k:"II a",n:"Tarjetas de crédito o de servicios no bancarias (gasto mensual)",id:805,av:1285,ref:"Art. 17, fr. II, a)",c:["Una tienda departamental emite su propia tarjeta de crédito; un cliente acumula en el mes un gasto de {m}"]},
+ {k:"II b",n:"Tarjetas prepagadas no bancarias",id:645,av:645,ref:"Art. 17, fr. II, b)",c:["Una empresa de vales no bancaria abona {m} a una tarjeta prepagada en una sola operación"]},
+ {k:"II c",n:"Monederos electrónicos no bancarios",id:645,av:645,ref:"Art. 17, fr. II, c)",c:["Una empresa no bancaria carga {m} a un monedero electrónico en una sola operación"]},
+ {k:"III",id:0,n:"Cheques de viajero no bancarios",av:645,ref:"Art. 17, fr. III",c:["Una agencia no financiera vende cheques de viajero por {m}"]},
+ {k:"IV",id:0,n:"Préstamos y créditos no financieros",av:1605,ref:"Art. 17, fr. IV",c:["Una empresa que presta dinero de forma habitual, sin ser entidad financiera, otorga un préstamo de {m}"]},
+ {k:"V",id:0,n:"Inmuebles: construcción, desarrollo e intermediación",av:8025,ref:"Art. 17, fr. V",c:["Una inmobiliaria vende un departamento en {m}"]},
+ {k:"V Bis",id:0,n:"Recursos para un desarrollo inmobiliario",av:8025,ref:"Art. 17, fr. V Bis",c:["Una desarrolladora recibe {m} de un inversionista para construir departamentos en venta"]},
+ {k:"VI",n:"Metales, piedras preciosas, joyas y relojes",id:805,av:1605,ref:"Art. 17, fr. VI",c:["Una joyería vende un reloj en {m}","Una joyería vende un anillo de diamantes en {m}"]},
+ {k:"VII",n:"Obras de arte",id:2410,av:4815,ref:"Art. 17, fr. VII",c:["Una galería vende una pintura en {m}"]},
+ {k:"VIII",n:"Vehículos",id:3210,av:6420,ref:"Art. 17, fr. VIII",c:["Una agencia vende una camioneta en {m}","Una agencia vende un auto en {m}"]},
+ {k:"IX",n:"Blindaje",id:2410,av:4815,ref:"Art. 17, fr. IX",c:["Un taller blinda una camioneta por {m}"]},
+ {k:"X a",id:0,n:"Traslado o custodia de dinero o valores",av:3210,ref:"Art. 17, fr. X, a)",c:["Una empresa de traslado de valores transporta {m} de una tienda al banco"]},
+ {k:"XII A a",id:0,n:"Notario · transmisión de inmuebles",av:8000,ref:"Art. 17, fr. XII, A, a)",c:["Ante notario se firma la compraventa de una casa; el más alto entre precio, valor catastral y valor comercial es {m}"]},
+ {k:"XII A d",id:0,n:"Notario · fideicomiso traslativo o de garantía",av:4000,ref:"Art. 17, fr. XII, A, d)",c:["Ante notario se constituye un fideicomiso de garantía a favor de un acreedor que no es del sistema financiero, por {m}"]},
+ {k:"XII B a",id:0,n:"Corredor · avalúos",av:8025,ref:"Art. 17, fr. XII, B, a)",c:["Un corredor público hace el avalúo de un terreno valuado en {m}"]},
+ {k:"XIII",n:"Donativos a asociaciones sin fines de lucro",id:1605,av:3210,ref:"Art. 17, fr. XIII",c:["Una asociación civil recibe un donativo de {m}"]},
+ {k:"XV",n:"Arrendamiento de inmuebles (mensual)",id:1605,opid:">",av:3210,mes:true,ref:"Art. 17, fr. XV",c:["Se renta una nave industrial en {m} al mes","Se renta una casa en {m} al mes"]},
+ {k:"XVI",id:0,n:"Activos virtuales (operación o comisión)",av:210,av2:4,ref:"Art. 17, fr. XVI, a) y b)",c:["Un cliente compra criptomonedas por {m} en una plataforma no financiera"]}];
+/* Avisan siempre (para casos con monto que no importa) */
+const S=[
+ {k:"XII A b",n:"Notario · poder irrevocable",ref:"Art. 17, fr. XII, A, b)",c:["Ante notario se otorga un poder irrevocable para vender un inmueble de {m}"]},
+ {k:"XII A c",n:"Notario · constitución de sociedades",ref:"Art. 17, fr. XII, A, c)",c:["Ante notario se constituye una sociedad mercantil con capital de {m}"]},
+ {k:"XII A e",n:"Notario · mutuo con acreedor no financiero",ref:"Art. 17, fr. XII, A, e)",c:["Ante notario dos particulares firman un préstamo de {m}"]},
+ {k:"XIV a",n:"Comercio exterior · vehículos",ref:"Art. 17, fr. XIV, a)",c:["Un agente aduanal despacha la importación de un automóvil de {m}"]}];
+
+const OBL={nada:"No nace ninguna obligación",id:"Identificar",idav:"Identificar y presentar Aviso",siempre:"Identificar y presentar Aviso siempre, sin importar el monto"};
+function res(f,m){ if(f.siempre) return "siempre";
+  const av=m>=f.av; if(av) return "idav";
+  const id=f.id!=null&&(f.opid===">"?m>f.id:m>=f.id); return id?"id":"nada"; }
+function regla(f){ if(f.siempre) return "presenta Aviso siempre, sin umbral";
+  return (f.id===0?`identifica siempre, desde 0 (criterio SHCP: la ley sólo fija el Aviso), y `:f.id!=null?`identifica ${f.opid===">"?"con más de":"desde"} ${fmt(f.id)} UMA (${milp(f.id)}) y `:`no tiene umbral propio de identificación; `)+`avisa desde ${fmt(f.av)} UMA (${milp(f.av)})`+(f.av2?`; también avisa si la comisión que cobra es de ${fmt(f.av2)} UMA o más (${milp(f.av2)})`:""); }
+
+/* ---------- Regla del 1 605 ---------- */
+const IMG={0:"cualquier monto: identifica siempre",4:"una comida para dos",210:"un celular de gama alta",325:"un viaje de fin de semana",485:"un anillo de compromiso sencillo",645:"una moto nueva de ciudad",805:"un reloj de lujo de entrada",1285:"un auto usado viejo",1605:"un auto usado compacto",2410:"un auto nuevo sencillo",3210:"un auto nuevo compacto",4000:"una camioneta mediana",4815:"una camioneta nueva",6420:"una camioneta de lujo",8000:"lo mismo que 8 025 menos una cena (25 UMA ≈ $2,933)",8025:"casi un millón: un departamento chico"};
+document.getElementById("gold").innerHTML=[1,2,3,4,5].map(x=>{const u=1605*x;return `<div class="gstep"><span class="x">1 605 × ${x}</span><span class="u num">${fmt(u)}</span><span class="p num">${milp(u)}</span><span class="img">${IMG[u]}</span></div>`;}).join("");
+
+/* ---------- Escalera ---------- */
+const STEPS=[
+ {u:0,t:[["id","III"],["id","IV"],["id","V"],["id","V Bis"],["id","X a"],["id","XI"],["id","XII A a"],["id","XII A d"],["id","XII B a"],["id","XVI"],["av","X b) sin monto"],["av","XII A b, c, e"],["av","XII B b–d"],["av","XIV comercio exterior"]]},
+ {u:4,t:[["av","XVI b) comisión"]]},
+ {u:210,t:[["av","XVI a) cripto, por operación"]]},
+ {u:325,t:[["id","I juegos"]]},
+ {u:485,t:[["dl","XIV d) joyas en aduana, por pieza"]]},
+ {u:645,t:[["av","I juegos"],["id","II b) prepagadas"],["av","II b) prepagadas"],["id","II c) monederos"],["av","II c) monederos"],["av","III cheques de viajero"]]},
+ {u:805,t:[["id","II a) tarjetas de crédito"],["id","VI joyas y relojes"]]},
+ {u:1285,t:[["av","II a) tarjetas de crédito"]]},
+ {u:1605,x:1,t:[["av","IV préstamos"],["av","VI joyas y relojes"],["id","XIII donativos"],["id","XV renta (más de)"]]},
+ {u:2410,t:[["id","VII arte"],["id","IX blindaje"]]},
+ {u:3210,x:2,t:[["id","VIII vehículos"],["av","X a) traslado de valores"],["av","XIII donativos"],["av","XV renta mensual"],["ef","art. 32 II–VII (VII: mensual)"]]},
+ {u:4000,t:[["av","XII A d) notario, fideicomisos"]]},
+ {u:4815,x:3,t:[["av","VII arte"],["av","IX blindaje"],["dl","XIV e) arte en aduana, por pieza"]]},
+ {u:6420,x:4,t:[["av","VIII vehículos"]]},
+ {u:8000,t:[["av","XII A a) notario, inmuebles"]]},
+ {u:8025,x:5,t:[["av","V inmuebles"],["av","V Bis desarrollo inmobiliario"],["dl","XII B a) avalúo de corredor"],["ef","art. 32 I inmuebles"],["ef","art. 33 fedatario: forma de pago"]]}];
+const SYM={id:"○",av:"●",dl:"◇",ef:"$"};
+function drawLadder(){
+  const mx=Math.log10(8025), mn=Math.log10(3);
+  document.getElementById("ladder").innerHTML=STEPS.map(s=>{
+    const w=s.u===0?96:Math.round(110+ (Math.log10(s.u)-mn)/(mx-mn)*190);
+    return `<div class="step${s.x?" f1605":""}" style="--w:${w}px"><div class="bar">${s.x?`<span class="badge">× ${s.x}</span>`:""}<span class="u num">${fmt(s.u)}<span style="font-size:12px;font-weight:700"> UMA</span></span>${unit==="ambos"?`<span class="pp num">${pesos(s.u)}</span>`:""}</div>
+    <div class="body">${unit==="ambos"?`<span class="img">Del tamaño de <b>${IMG[s.u]}</b></span>`:""}<div class="tags">${s.t.map(([k,l])=>`<span class="tag ${k==="av"?"av":k==="dl"?"dl":k==="ef"?"ef":""}">${SYM[k]} ${l}</span>`).join("")}</div></div></div>`;}).join("");
+}
+
+/* ---------- Mapa de puntos (SVG) ---------- */
+let ord="monto";
+const SR=[
+ {k:"X b",n:"Traslado sin monto determinable",ref:"Art. 17, fr. X, b)"},
+ {k:"XII A b",n:"Notario · poder irrevocable",ref:"Art. 17, fr. XII, A, b)"},
+ {k:"XII A c",n:"Notario · constitución de sociedades",ref:"Art. 17, fr. XII, A, c)"},
+ {k:"XII A e",n:"Notario · mutuo con acreedor no financiero",ref:"Art. 17, fr. XII, A, e)"},
+ {k:"XIV",n:"Comercio exterior (agentes aduanales)",ref:"Art. 17, fr. XIV",nota:"en joyas y arte, desde su valor individual (485 y 4,815 UMA)"},
+ {k:"XI",n:"Servicios profesionales independientes",ref:"Art. 17, fr. XI",etq:"sin monto · avisa al operar en nombre del cliente"},
+ {k:"XII B b–d",n:"Corredor · sociedades, fideicomisos y mutuo",ref:"Art. 17, fr. XII, B",etq:"sin monto · Aviso en términos del inciso"}].map(x=>({...x,cero:true}));
+const ORD=["I","II a","II b","II c","III","IV","V","V Bis","VI","VII","VIII","IX","X a","X b","XI","XII A a","XII A b","XII A c","XII A d","XII A e","XII B a","XII B b–d","XIII","XIV","XV","XVI"];
+function drawDots(){
+  const all=F.concat(SR);
+  const rows=ord==="monto"?SR.concat(F.slice().sort((a,b)=>a.av-b.av||((a.id||0)-(b.id||0)))):all.slice().sort((a,b)=>ORD.indexOf(a.k)-ORD.indexOf(b.k));
+  const W=1000,L=250,R=24,top=34,rh=26,H=top+rows.length*rh+30, Z=84;
+  const x0=Math.log10(3),x1=Math.log10(9500);
+  const X=u=>u===0?L+22:L+Z+(Math.log10(u)-x0)/(x1-x0)*(W-L-Z-R);
+  let s=`<rect x="0" y="0" width="${W}" height="${H}" fill="var(--surface)"/>`;
+  const ticks=[4,210,325,645,805,1285,1605,2410,3210,4815,6420,8025];
+  const key=[1605,3210,4815,6420,8025];
+  rows.forEach((f,i)=>{if(i%2===0) s+=`<rect class="rowbg" x="0" y="${top+i*rh}" width="${W}" height="${rh}"/>`;});
+  ticks.forEach(t=>{s+=`<line class="grid${key.includes(t)?" k":""}" x1="${X(t)}" x2="${X(t)}" y1="${top-6}" y2="${top+rows.length*rh}"/>`;});
+  s+=`<line class="grid" x1="${X(0)}" x2="${X(0)}" y1="${top-6}" y2="${top+rows.length*rh}"/>`;
+  const bx=L+Z-26; s+=`<text class="tick" x="${bx}" y="${top-12}" text-anchor="middle">//</text><text class="tick" x="${X(0)}" y="${top-12}" text-anchor="middle" style="font-weight:700">0</text>`;
+  [4,210,645,1605,3210,4815,8025].forEach(t=>{s+=`<text class="tick" x="${X(t)}" y="${top-12}" text-anchor="middle">${fmt(t)}</text>`;
+    if(unit==="ambos"&&t!==4815) s+=`<text class="tick" x="${X(t)}" y="${top+rows.length*rh+18}" text-anchor="middle">${milp(t).replace("≈ ","")}</text>`;});
+  if(unit==="ambos") s+=`<text class="tick" x="${X(0)}" y="${top+rows.length*rh+18}" text-anchor="middle">$0</text>`;
+  rows.forEach((f,i)=>{const y=top+i*rh+rh/2;
+    s+=`<text class="lab" x="10" y="${y+4}">${f.k}</text><text x="70" y="${y+4}">${f.n.length>29?f.n.slice(0,28)+"…":f.n}</text>`;
+    if(f.cero){
+      s+=`<line class="seg2" x1="${X(0)}" x2="${W-R}" y1="${y}" y2="${y}" style="stroke-dasharray:1 6;stroke-width:2;opacity:.55"/>`;
+      s+=`<circle class="dot-id" cx="${X(0)}" cy="${y}" r="7"><title>${f.k}: ${f.etq?"identifica siempre; "+f.etq:"identifica y avisa siempre, sin monto mínimo"}${f.nota?" ("+f.nota+")":""}</title></circle><circle class="dot-av" cx="${X(0)}" cy="${y}" r="4.5"/>`;
+      s+=`<text class="tick" x="${X(0)+14}" y="${y-8}">${f.etq||"siempre"}${f.nota?" · "+f.nota:""}</text>`;
+      return; }
+    if(f.id!=null){ if(f.id!==f.av) s+=`<line class="seg2" x1="${X(f.id)}" x2="${X(f.av)}" y1="${y}" y2="${y}"/>`;
+      s+=`<circle class="dot-id" cx="${X(f.id)}" cy="${y}" r="7"><title>${f.k}: ${f.id===0?"identifica siempre, desde 0 (criterio SHCP)":"identifica "+(f.opid===">"?"con más de ":"desde ")+fmt(f.id)+" UMA"}</title></circle>`;}
+    s+=`<circle class="dot-av${key.includes(f.av)?" g":""}" cx="${X(f.av)}" cy="${y}" r="${f.id===f.av?4.5:7}"><title>${f.k}: avisa desde ${fmt(f.av)} UMA</title></circle>`;
+    if(f.av2){s+=`<line class="seg2" x1="${X(f.av2)}" x2="${X(f.av)}" y1="${y}" y2="${y}" style="stroke-dasharray:2 5;stroke-width:2"/><circle class="dot-av" cx="${X(f.av2)}" cy="${y}" r="7"><title>${f.k} b): avisa si la comisión es de ${fmt(f.av2)} UMA o más</title></circle><text class="tick" x="${X(f.av2)+11}" y="${y-8}">b) comisión</text><text class="tick" x="${X(f.av)+11}" y="${y-8}">a) operación</text>`;}});
+  const svg=document.getElementById("dots"); svg.setAttribute("viewBox",`0 0 ${W} ${H}`); svg.innerHTML=s;
+}
+
+/* ---------- Generadores de preguntas ---------- */
+function montoPara(f){ // UMA enteras: abajo, en el umbral o arriba
+  if(f.siempre) return pick([150,900,2500,7000,12000]);
+  const T=[f.id,f.av].filter(v=>v!=null&&v>0);
+  const opts=[];
+  T.forEach(t=>{opts.push(t);opts.push(Math.round(t*(0.86+Math.random()*0.1)));opts.push(Math.round(t*(1.04+Math.random()*0.25)));});
+  return pick(opts);
+}
+function qObl(f){
+  f=f||pick(Math.random()<0.18?S.map(x=>({...x,siempre:true})):F);
+  const m=montoPara(f), r=res(f,m), txt=pick(f.c).replace("{m}","{M}");
+  return {tipo:"obl",f,m,r,txt,key:"o|"+f.k+"|"+m};
+}
+const AVS=[210,645,1285,1605,3210,4000,4815,6420,8000,8025];
+const IDS=[325,645,805,1605,2410,3210];
+function qNum(){
+  const t=pick(["av","id","fr"]);
+  if(t==="av"&&Math.random()<0.12){return {tipo:"num",q:`¿Desde cuántas UMA de <b>comisión</b> por el servicio presenta Aviso la plataforma de <b>activos virtuales (XVI b)</b>?`,o:shuf(["4 UMA","210 UMA","25 UMA","40 UMA"]),a:"4 UMA",x:"XVI b): Aviso cuando la contraprestación por el servicio es de 4 UMA o más (≈ $469), cualquiera que sea su denominación. Por la operación del cliente, desde 210 UMA (inciso a).",ref:"Art. 17, fr. XVI, b)",key:"a|XVI b"};}
+  if(t==="av"){const f=pick(F);const near=AVS.filter(v=>v!==f.av).sort((a,b)=>Math.abs(Math.log(a/f.av))-Math.abs(Math.log(b/f.av))).slice(0,3);
+    const trampa=f.av===8025?8000:f.av===8000?8025:null; let d=near; if(trampa&&!d.includes(trampa)) d=[trampa,...near.slice(0,2)];
+    return {tipo:"num",q:`¿Desde cuántas UMA presenta Aviso: <b>${f.k} · ${f.n}</b>?`,o:shuf([f.av,...d].map(v=>fmt(v)+" UMA")),a:fmt(f.av)+" UMA",x:`${f.k}: ${regla(f)}.`,ref:f.ref,key:"a|"+f.k};}
+  if(t==="id"){const con=F.filter(f=>f.id>0&&f.id!==f.av);const f=pick(con);const d=IDS.filter(v=>v!==f.id).sort((a,b)=>Math.abs(Math.log(a/f.id))-Math.abs(Math.log(b/f.id))).slice(0,3);
+    const a=(f.opid===">"?"Más de ":"")+fmt(f.id)+" UMA";
+    return {tipo:"num",q:`¿Desde cuánto obliga a <b>identificar</b>: <b>${f.k} · ${f.n}</b>?`,o:shuf([a,...d.map(v=>fmt(v)+" UMA")]),a,x:`${f.k}: ${regla(f)}.`,ref:f.ref,key:"i|"+f.k};}
+  // número → fracción (la correcta es la única de las 4 con ese umbral de Aviso)
+  const f=pick(F.filter(x=>F.filter(y=>y.av===x.av).length===1||true));
+  const otros=shuf(F.filter(y=>y.av!==f.av)).slice(0,3);
+  return {tipo:"num",q:`¿Cuál de estas actividades presenta Aviso desde <b>${fmt(f.av)} UMA</b>${unit==="ambos"?` (${milp(f.av)})`:""}?`,o:shuf([f,...otros].map(y=>y.k+" · "+y.n)),a:f.k+" · "+f.n,x:`${f.k}: ${regla(f)}. ${otros.map(y=>`${y.k} avisa desde ${fmt(y.av)}`).join("; ")}.`,ref:f.ref,key:"f|"+f.k+"|"+f.av};
+}
+
+/* ---------- Errores (memoria + navegador) ---------- */
+let ERR=[];
+try{ERR=JSON.parse(localStorage.getItem("m2-umbrales-errores")||"[]")||[];}catch(e){ERR=[];}
+function saveErr(){try{localStorage.setItem("m2-umbrales-errores",JSON.stringify(ERR));}catch(e){} document.getElementById("navErrN").textContent=ERR.length?"· "+ERR.length:""; document.getElementById("navErr").classList.toggle("err",ERR.length>0);}
+function addErr(q){ if(!ERR.some(e=>e.key===q.key)) ERR.push(slim(q)); saveErr(); }
+function delErr(q){ ERR=ERR.filter(e=>e.key!==q.key); saveErr(); }
+function slim(q){ return q.tipo==="obl"?{tipo:"obl",k:q.f.k,siempre:!!q.f.siempre,m:q.m,txt:q.txt,key:q.key}:{tipo:"num",q:q.q,o:q.o,a:q.a,x:q.x,ref:q.ref,key:q.key}; }
+function revive(e){ if(e.tipo!=="obl") return {...e,o:shuf(e.o)}; const f=e.siempre?{...S.find(s=>s.k===e.k),siempre:true}:F.find(x=>x.k===e.k); return {tipo:"obl",f,m:e.m,r:res(f,e.m),txt:e.txt,key:e.key}; }
+
+/* ---------- Pintar una pregunta ---------- */
+function scaleHTML(f,m){ if(f.siempre) return "";
+  const lo=Math.min(m,f.id||f.av)*0.7, hi=Math.max(m,f.av)*1.25, P=v=>((Math.log(v)-Math.log(lo))/(Math.log(hi)-Math.log(lo))*100).toFixed(2);
+  let z=""; if(f.id>0&&f.id!==f.av) z+=`<div class="zone" style="left:${P(f.id)}%;width:${P(f.av)-P(f.id)}%;background:var(--verde-claro)"></div>`;
+  if(f.id===0) z+=`<div class="zone" style="left:0;width:${P(f.av)}%;background:var(--verde-claro)"></div>`;
+  z+=`<div class="zone" style="left:${P(f.av)}%;right:0;background:var(--carbon)"></div>`;
+  let mk=(f.id>0&&f.id!==f.av?`<div class="mk" style="left:${P(f.id)}%"><span>${f.opid===">"?"> ":"○ "}${fmt(f.id)}</span></div>`:"")+`<div class="mk" style="left:${P(f.av)}%"><span>● ${fmt(f.av)}</span></div>`;
+  return `<div class="scale" aria-hidden="true"><div class="line"></div>${z}${mk}<div class="me" style="left:${P(m)}%" title="El caso"></div></div><p class="mini" style="color:var(--muted)">Barra morada = el caso · verde claro = sólo identifica · negro = identifica y avisa</p>`;
+}
+function render(el,q,head,onDone){
+  let body;
+  if(q.tipo==="obl"){
+    const mon=unit==="ambos"?`<div class="money">${pesos(q.m)}${q.f.mes?" al mes":""}<small>= ${fmt(q.m)} UMA</small></div>`:`<div class="money">${fmt(q.m)} UMA${q.f.mes?" al mes":""}</div>`;
+    const t=q.txt.replace("{M}",unit==="ambos"?pesos(q.m):fmt(q.m)+" UMA");
+    q.o=["nada","id","idav","siempre"];
+    body=`<p class="qtext">${t}. ¿Qué obligación nace por el art. 17?</p>${mon}<div class="opts">${q.o.map((k,i)=>`<button class="opt" type="button" data-i="${i}"><b>${"ABCD"[i]}</b>${OBL[k]}</button>`).join("")}</div>`;
+  } else {
+    body=`<p class="qtext">${q.q}</p><div class="opts">${q.o.map((o,i)=>`<button class="opt" type="button" data-i="${i}"><b>${"ABCD"[i]}</b>${o}</button>`).join("")}</div>`;
+  }
+  el.innerHTML=head+body+`<div id="${el.id}-fb"></div>`;
+  el.querySelectorAll(".opt").forEach(b=>b.addEventListener("click",()=>{
+    const i=+b.dataset.i, ok=q.tipo==="obl"?q.o[i]===q.r:q.o[i]===q.a;
+    el.querySelectorAll(".opt").forEach((x,j)=>{x.disabled=true;const right=q.tipo==="obl"?q.o[j]===q.r:q.o[j]===q.a; if(right)x.classList.add("ok"); else if(j===i)x.classList.add("bad");});
+    let exp;
+    if(q.tipo==="obl"){const f=q.f;
+      const igual=!f.siempre&&f.opid===">"&&q.m===f.id?" Es igual a 1 605 y la ley dice «superior a»: todavía no obliga a identificar.":"";
+      exp=`<p><b>${f.k} · ${f.n}:</b> ${regla(f)}. El caso: ${fmt(q.m)} UMA${unit==="ambos"?` (${pesos(q.m)})`:""} → <b>${OBL[q.r]}</b>.${igual}</p>${scaleHTML(f,q.m)}<span class="ref">${f.ref}</span>`;}
+    else exp=`<p>${q.x}</p><span class="ref">${q.ref}</span>`;
+    document.getElementById(el.id+"-fb").innerHTML=`<div class="fb"><span class="${ok?"ok":"bad"}">${ok?"Correcto.":"No. Era: "+(q.tipo==="obl"?OBL[q.r]:q.a)+"."}</span>${exp}<div class="btns" id="${el.id}-nx"></div></div>`;
+    onDone(ok,q);
+  }));
+}
+
+/* ---------- Práctica libre ---------- */
+let pmode="obl", pok=0, pn=0;
+const pq=document.getElementById("pq");
+function practice(){
+  const q=pmode==="obl"?qObl():qNum();
+  render(pq,q,`<div class="qhead"><span class="eyebrow num">Práctica · ${pok} de ${pn} correctas</span></div>`,(ok,q)=>{pn++;if(ok)pok++;else addErr(q);
+    document.getElementById("pq-nx").innerHTML=`<button class="btn" type="button" id="pqn">Otro caso</button>`;document.getElementById("pqn").onclick=practice;document.getElementById("pqn").focus({preventScroll:true});});
+}
+
+/* ---------- Prueba de 20 ---------- */
+const tq=document.getElementById("tq"); let T=null;
+function testIntro(){tq.innerHTML=`<p>20 preguntas: 12 de «¿qué obligación nace?» (las del art. 17 con monto y algunas de «siempre») y 8 de número ↔ fracción.</p><div class="btns"><button class="btn" type="button" id="tgo">Empezar la prueba</button></div>`;document.getElementById("tgo").onclick=testStart;}
+function testStart(){ const used=new Set(); const qs=[];
+  const pool=shuf(F); for(let i=0;i<10;i++) qs.push(qObl(pool[i%pool.length]));
+  shuf(S).slice(0,2).forEach(s=>qs.push(qObl({...s,siempre:true})));
+  while(qs.length<20){const q=qNum(); if(!used.has(q.key)){used.add(q.key);qs.push(q);}}
+  T={qs:shuf(qs),i:0,ok:0,bad:[]}; testNext(); }
+function testNext(){ if(T.i>=T.qs.length) return testEnd(); const q=T.qs[T.i];
+  render(tq,q,`<div class="qhead"><span class="eyebrow num">Pregunta ${T.i+1} de 20 · ${T.ok} correctas</span></div><div class="pbar"><i style="width:${T.i/20*100}%"></i></div>`,(ok)=>{if(ok)T.ok++;else{T.bad.push(q);addErr(q);}
+    document.getElementById("tq-nx").innerHTML=`<button class="btn" type="button" id="tqn">${T.i+1<20?"Siguiente":"Ver resultado"}</button>`;const b=document.getElementById("tqn");b.onclick=()=>{T.i++;testNext();};b.focus({preventScroll:true});}); }
+function testEnd(){ const pct=Math.round(T.ok/20*100);
+  tq.innerHTML=`<div class="big num">${T.ok}/20</div><p class="score">${pct>=85?"Muy bien: estos umbrales ya están.":pct>=65?"Vas bien. Repasa tus errores y vuelve a hacer la prueba.":"Vuelve a la escalera y al mapa de puntos; luego repasa tus errores."}</p>${T.bad.length?`<p class="mini">Fallaste ${T.bad.length}. Ya están en «Mis errores».</p>`:""}<div class="btns"><button class="btn" type="button" id="tagain">Otra prueba</button>${T.bad.length?`<a class="btn ghost" href="#errores" style="text-decoration:none">Repasar mis errores</a>`:""}</div>`;
+  document.getElementById("tagain").onclick=testStart; drawErr(); }
+
+/* ---------- Repaso de errores ---------- */
+const eq=document.getElementById("eq"); let E=null;
+function drawErr(){ if(E) return;
+  if(!ERR.length){eq.innerHTML=`<p>No tienes errores guardados. Haz la práctica o la prueba: lo que falles aparecerá aquí.</p>`;return;}
+  eq.innerHTML=`<p><b class="num">${ERR.length}</b> pendientes.</p><ul class="errlist">${ERR.map(e=>{const q=revive(e);return `<li>${q.tipo==="obl"?`<span><b>${q.f.k} · ${q.f.n}</b> con ${fmt(q.m)} UMA${unit==="ambos"?` (${pesos(q.m)})`:""}</span><span class="mini">Respuesta: <b>${OBL[q.r]}</b> · ${regla(q.f)}.</span>`:`<span>${q.q}</span><span class="mini">Respuesta: <b>${q.a}</b></span>`}</li>`;}).join("")}</ul><div class="btns"><button class="btn" type="button" id="ego">Practicar sólo mis errores</button><button class="btn ghost" type="button" id="eclr">Borrar la lista</button></div><p class="mini" id="eclrq" hidden>¿Borrar todos? <button class="btn ghost" type="button" id="eclry">Sí, borrar</button></p>`;
+  document.getElementById("ego").onclick=errStart;
+  document.getElementById("eclr").onclick=()=>{document.getElementById("eclrq").hidden=false;};
+  document.getElementById("eclry").onclick=()=>{ERR=[];saveErr();drawErr();};
+}
+function errStart(){ E={qs:shuf(ERR.map(revive)),i:0,ok:0}; errNext(); }
+function errNext(){ if(E.i>=E.qs.length){const n=E.qs.length,ok=E.ok;E=null;eq.innerHTML=`<p class="score">${ok} de ${n} ya los sabes.</p><div class="btns"><button class="btn" type="button" id="eback">Ver lo que queda</button></div>`;document.getElementById("eback").onclick=drawErr;return;}
+  const q=E.qs[E.i];
+  render(eq,q,`<div class="qhead"><span class="eyebrow num">Repaso ${E.i+1} de ${E.qs.length} · quedan ${ERR.length}</span></div>`,(ok)=>{if(ok){E.ok++;delErr(q);}
+    document.getElementById("eq-nx").innerHTML=`<button class="btn" type="button" id="eqn">${E.i+1<E.qs.length?"Siguiente":"Terminar"}</button>`;const b=document.getElementById("eqn");b.onclick=()=>{E.i++;errNext();};b.focus({preventScroll:true});}); }
+
+/* ---------- Conmutadores ---------- */
+function setUnit(u){unit=u;document.querySelectorAll("[data-unit],[data-punit]").forEach(b=>b.setAttribute("aria-pressed",String((b.dataset.unit||b.dataset.punit)===u)));drawLadder();drawDots();if(!E)drawErr();}
+document.querySelectorAll("[data-unit]").forEach(b=>b.onclick=()=>setUnit(b.dataset.unit));
+document.querySelectorAll("[data-punit]").forEach(b=>b.onclick=()=>{setUnit(b.dataset.punit);practice();});
+document.querySelectorAll("[data-pmode]").forEach(b=>b.onclick=()=>{pmode=b.dataset.pmode;document.querySelectorAll("[data-pmode]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));practice();});
+document.querySelectorAll("[data-ord]").forEach(b=>b.onclick=()=>{ord=b.dataset.ord;document.querySelectorAll("[data-ord]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));drawDots();});
+
+drawLadder();drawDots();practice();testIntro();saveErr();drawErr();
+})();
+</script>
+</body>
+</html>
