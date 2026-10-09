@@ -137,6 +137,12 @@ svg.dots .rowbg{fill:var(--surface-2)}
 .big{font-family:var(--f-display);font-weight:800;font-size:40px;line-height:1}
 footer{margin-top:40px;font-size:12.5px;color:var(--muted);display:grid;gap:6px;max-width:80ch}
 @media (prefers-reduced-motion:no-preference){.opt,.btn,nav.idx a{transition:background .15s,border-color .15s}}
+#printOut{display:none}
+@media print{body{background:#fff!important;color:#1b1b1e}body>*{display:none!important}body>#printOut{display:block!important;font-family:var(--f-body);font-size:12.5px;line-height:1.45}
+#printOut .ph{font-family:var(--f-display);font-size:13px;border-bottom:2px solid var(--verde);padding-bottom:6px;margin-bottom:10px}
+#printOut h2{font-size:22px;margin:6px 0}#printOut h3{font-size:15px;margin:14px 0 6px}#printOut ol{padding-left:20px;margin:0}
+#printOut li{break-inside:avoid;margin:0 0 10px}#printOut .ref{display:block;font-size:11px;color:#5b5f62}#printOut s{color:#9a3b22}
+*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 </style>
 
 
@@ -396,9 +402,19 @@ function render(el,q,head,onDone){
       exp=`<p><b>${f.k} · ${f.n}:</b> ${regla(f)}. El caso: ${fmt(q.m)} UMA${unit==="ambos"?` (${pesos(q.m)})`:""} → <b>${OBL[q.r]}</b>.${igual}</p>${scaleHTML(f,q.m)}<span class="ref">${f.ref}</span>`;}
     else exp=`<p>${q.x}</p><span class="ref">${q.ref}</span>`;
     document.getElementById(el.id+"-fb").innerHTML=`<div class="fb"><span class="${ok?"ok":"bad"}">${ok?"Correcto.":"No. Era: "+(q.tipo==="obl"?OBL[q.r]:q.a)+"."}</span>${exp}<div class="btns" id="${el.id}-nx"></div></div>`;
-    onDone(ok,q);
+    q.mine=q.tipo==="obl"?OBL[q.o[i]]:q.o[i];onDone(ok,q);
   }));
 }
+
+/* ---------- Imprimir resultado y lista de repaso ---------- */
+function itemHTML(q){ const el=q.mine?`Elegiste: <s>${q.mine}</s><br>`:"";
+  if(q.tipo==="obl"){const f=q.f,t=q.txt.replace("{M}",unit==="ambos"?pesos(q.m):fmt(q.m)+" UMA");
+    return `<li><b>${f.k} · ${f.n}</b><br>${t}${f.mes?" al mes":""} (${fmt(q.m)} UMA).<br>${el}<b>→ ${OBL[q.r]}.</b> ${f.k}: ${regla(f)}.<span class="ref">${f.ref}</span></li>`;}
+  return `<li>${q.q}<br>${el}<b>→ ${q.a}.</b> ${q.x}<span class="ref">${q.ref}</span></li>`; }
+function doPrint(titulo,resumen,qs){ let el=document.getElementById("printOut"); if(!el){el=document.createElement("div");el.id="printOut";document.body.appendChild(el);}
+  const fecha=new Date().toLocaleDateString("es-MX",{day:"numeric",month:"long",year:"numeric"});
+  el.innerHTML=`<div class="ph"><b>Taller de umbrales del art. 17 · LFPIORPI</b> · 360Educa · ${fecha}</div><h2>${titulo}</h2>${resumen}${qs.length?`<h3>Para repasar (${qs.length})</h3><ol>${qs.map(itemHTML).join("")}</ol>`:"<p>Sin errores: nada que repasar.</p>"}<p class="ref">Montos en veces el valor diario de la UMA. Material didáctico; no sustituye la publicación oficial.</p>`;
+  window.print(); }
 
 /* ---------- Práctica libre ---------- */
 let pmode="obl", pok=0, pn=0;
@@ -421,15 +437,15 @@ function testNext(){ if(T.i>=T.qs.length) return testEnd(); const q=T.qs[T.i];
   render(tq,q,`<div class="qhead"><span class="eyebrow num">Pregunta ${T.i+1} de 20 · ${T.ok} correctas</span></div><div class="pbar"><i style="width:${T.i/20*100}%"></i></div>`,(ok)=>{if(ok)T.ok++;else{T.bad.push(q);addErr(q);}
     document.getElementById("tq-nx").innerHTML=`<button class="btn" type="button" id="tqn">${T.i+1<20?"Siguiente":"Ver resultado"}</button>`;const b=document.getElementById("tqn");b.onclick=()=>{T.i++;testNext();};b.focus({preventScroll:true});}); }
 function testEnd(){ const pct=Math.round(T.ok/20*100);
-  tq.innerHTML=`<div class="big num">${T.ok}/20</div><p class="score">${pct>=85?"Muy bien: estos umbrales ya están.":pct>=65?"Vas bien. Repasa tus errores y vuelve a hacer la prueba.":"Vuelve a la escalera y al mapa de puntos; luego repasa tus errores."}</p>${T.bad.length?`<p class="mini">Fallaste ${T.bad.length}. Ya están en «Mis errores».</p>`:""}<div class="btns"><button class="btn" type="button" id="tagain">Otra prueba</button>${T.bad.length?`<a class="btn ghost" href="#errores" style="text-decoration:none">Repasar mis errores</a>`:""}</div>`;
-  document.getElementById("tagain").onclick=testStart; drawErr(); }
+  tq.innerHTML=`<div class="big num">${T.ok}/20</div><p class="score">${pct>=85?"Muy bien: estos umbrales ya están.":pct>=65?"Vas bien. Repasa tus errores y vuelve a hacer la prueba.":"Vuelve a la escalera y al mapa de puntos; luego repasa tus errores."}</p>${T.bad.length?`<p class="mini">Fallaste ${T.bad.length}. Ya están en «Mis errores».</p>`:""}<div class="btns"><button class="btn" type="button" id="tagain">Otra prueba</button><button class="btn ghost" type="button" id="tprint">Imprimir o guardar en PDF</button>${T.bad.length?`<a class="btn ghost" href="#errores" style="text-decoration:none">Repasar mis errores</a>`:""}</div>`;
+  document.getElementById("tagain").onclick=testStart; const R={ok:T.ok,bad:T.bad.slice(),pct}; document.getElementById("tprint").onclick=()=>doPrint("Prueba de 20 · "+R.ok+"/20 ("+R.pct+" %)",`<p>${R.ok} de 20 correctas.</p>`,R.bad); drawErr(); }
 
 /* ---------- Repaso de errores ---------- */
 const eq=document.getElementById("eq"); let E=null;
 function drawErr(){ if(E) return;
   if(!ERR.length){eq.innerHTML=`<p>No tienes errores guardados. Haz la práctica o la prueba: lo que falles aparecerá aquí.</p>`;return;}
-  eq.innerHTML=`<p><b class="num">${ERR.length}</b> pendientes.</p><ul class="errlist">${ERR.map(e=>{const q=revive(e);return `<li>${q.tipo==="obl"?`<span><b>${q.f.k} · ${q.f.n}</b> con ${fmt(q.m)} UMA${unit==="ambos"?` (${pesos(q.m)})`:""}</span><span class="mini">Respuesta: <b>${OBL[q.r]}</b> · ${regla(q.f)}.</span>`:`<span>${q.q}</span><span class="mini">Respuesta: <b>${q.a}</b></span>`}</li>`;}).join("")}</ul><div class="btns"><button class="btn" type="button" id="ego">Practicar sólo mis errores</button><button class="btn ghost" type="button" id="eclr">Borrar la lista</button></div><p class="mini" id="eclrq" hidden>¿Borrar todos? <button class="btn ghost" type="button" id="eclry">Sí, borrar</button></p>`;
-  document.getElementById("ego").onclick=errStart;
+  eq.innerHTML=`<p><b class="num">${ERR.length}</b> pendientes.</p><ul class="errlist">${ERR.map(e=>{const q=revive(e);return `<li>${q.tipo==="obl"?`<span><b>${q.f.k} · ${q.f.n}</b> con ${fmt(q.m)} UMA${unit==="ambos"?` (${pesos(q.m)})`:""}</span><span class="mini">Respuesta: <b>${OBL[q.r]}</b> · ${regla(q.f)}.</span>`:`<span>${q.q}</span><span class="mini">Respuesta: <b>${q.a}</b></span>`}</li>`;}).join("")}</ul><div class="btns"><button class="btn" type="button" id="ego">Practicar sólo mis errores</button><button class="btn ghost" type="button" id="eprint">Imprimir mi lista de repaso</button><button class="btn ghost" type="button" id="eclr">Borrar la lista</button></div><p class="mini" id="eclrq" hidden>¿Borrar todos? <button class="btn ghost" type="button" id="eclry">Sí, borrar</button></p>`;
+  document.getElementById("ego").onclick=errStart; document.getElementById("eprint").onclick=()=>doPrint("Mis errores · "+ERR.length+" pendientes","",ERR.map(revive));
   document.getElementById("eclr").onclick=()=>{document.getElementById("eclrq").hidden=false;};
   document.getElementById("eclry").onclick=()=>{ERR=[];saveErr();drawErr();};
 }
