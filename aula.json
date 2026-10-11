@@ -1,6 +1,6 @@
 {
- "version": "17",
- "armado": "2026-10-07",
+ "version": "18",
+ "armado": "2026-10-11",
  "herramientas": [
   {
    "n": 1,
@@ -10,7 +10,7 @@
    "peso": 2,
    "abierta": true,
    "estado": "integrada",
-   "archivo_usado": "M2 · datos Página 1 · v10.json"
+   "archivo_usado": "M2 · datos Página 1 · v11.json"
   },
   {
    "n": 2,
@@ -20,7 +20,7 @@
    "peso": 3,
    "abierta": true,
    "estado": "integrada",
-   "archivo_usado": "M2 · datos Página 2 · v9.json"
+   "archivo_usado": "M2 · datos Página 2 · v10.json"
   },
   {
    "n": 3,
@@ -30,7 +30,7 @@
    "peso": 3,
    "abierta": true,
    "estado": "integrada",
-   "archivo_usado": "M2 · datos Página 3 · v3.json"
+   "archivo_usado": "M2 · datos Página 3 · v4.json"
   },
   {
    "n": 4,
@@ -40,7 +40,7 @@
    "peso": 2,
    "abierta": true,
    "estado": "integrada",
-   "archivo_usado": "M2 · datos Página 4 · v3.json"
+   "archivo_usado": "M2 · datos Página 4 · v4.json"
   },
   {
    "n": 5,
@@ -50,7 +50,7 @@
    "peso": 4,
    "abierta": true,
    "estado": "integrada",
-   "archivo_usado": "M2 · datos Página 5 · v4.json"
+   "archivo_usado": "M2 · datos Página 5 · v5.json"
   },
   {
    "n": 6,
@@ -60,7 +60,7 @@
    "peso": 3,
    "abierta": true,
    "estado": "integrada",
-   "archivo_usado": "M2 · datos Página 6 · v6.json"
+   "archivo_usado": "M2 · datos Página 6 · v7.json"
   },
   {
    "n": 7,
@@ -80,7 +80,7 @@
    "peso": 2,
    "abierta": true,
    "estado": "integrada",
-   "archivo_usado": "M2 · datos Página 7 · v6.json"
+   "archivo_usado": "M2 · datos Página 7 · v7.json"
   }
  ],
  "simulacro": {
@@ -95,7 +95,7 @@
    "h7": 2,
    "h8": 2
   },
-  "reactivos": 690
+  "reactivos": 720
  },
  "paginas_extra": [
   {
@@ -110,7 +110,7 @@
   },
   {
    "carpeta": "m2-h8-taller-umbrales",
-   "archivo_usado": "M2 · Taller de umbrales 2.2.1 · v4.html",
+   "archivo_usado": "M2 · Taller de umbrales 2.2.1 · v5.html",
    "h": 8
   }
  ]
