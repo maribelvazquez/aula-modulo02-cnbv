@@ -642,7 +642,7 @@ function tmItemsCol(s){
     if(s.renglones.some(r2=>s.columnas.some((c2,cj)=>(cj!==ci||r2!==r)&&tmVal(r2,c2.k)===v))) return;
     seen.add(v); out.push({t:v,sub:r.t,ci});
   }));
-  return out;
+  return new Set(out.map(x=>x.ci)).size>=2?out:[];   // con casillas, hacen falta piezas de al menos 2 columnas (v24.4)
 }
 const reEsc=x=>x.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
 function tmZona(s,c,ci){
