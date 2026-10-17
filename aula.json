@@ -1,6 +1,6 @@
 {
- "version": "19",
- "armado": "2026-10-11",
+ "version": "20",
+ "armado": "2026-10-17",
  "herramientas": [
   {
    "n": 1,
@@ -10,7 +10,7 @@
    "peso": 2,
    "abierta": true,
    "estado": "integrada",
-   "archivo_usado": "M2 · datos Página 1 · v11.json"
+   "archivo_usado": "M2 · datos Página 1 · v12.json"
   },
   {
    "n": 2,
@@ -20,7 +20,7 @@
    "peso": 3,
    "abierta": true,
    "estado": "integrada",
-   "archivo_usado": "M2 · datos Página 2 · v10.json"
+   "archivo_usado": "M2 · datos Página 2 · v11.json"
   },
   {
    "n": 3,
@@ -30,7 +30,7 @@
    "peso": 3,
    "abierta": true,
    "estado": "integrada",
-   "archivo_usado": "M2 · datos Página 3 · v4.json"
+   "archivo_usado": "M2 · datos Página 3 · v5.json"
   },
   {
    "n": 4,
@@ -40,7 +40,7 @@
    "peso": 2,
    "abierta": true,
    "estado": "integrada",
-   "archivo_usado": "M2 · datos Página 4 · v4.json"
+   "archivo_usado": "M2 · datos Página 4 · v5.json"
   },
   {
    "n": 5,
@@ -50,7 +50,7 @@
    "peso": 4,
    "abierta": true,
    "estado": "integrada",
-   "archivo_usado": "M2 · datos Página 5 · v5.json"
+   "archivo_usado": "M2 · datos Página 5 · v7.json"
   },
   {
    "n": 6,
@@ -60,7 +60,7 @@
    "peso": 3,
    "abierta": true,
    "estado": "integrada",
-   "archivo_usado": "M2 · datos Página 6 · v8.json"
+   "archivo_usado": "M2 · datos Página 6 · v10.json"
   },
   {
    "n": 7,
@@ -95,17 +95,17 @@
    "h7": 2,
    "h8": 2
   },
-  "reactivos": 720
+  "reactivos": 725
  },
  "paginas_extra": [
   {
    "carpeta": "m2-h3-explorador-217",
-   "archivo_usado": "M2 · Explorador 2.1.7 · v1.html",
+   "archivo_usado": "M2 · Explorador 2.1.7 · v2.html",
    "h": 3
   },
   {
    "carpeta": "m2-h6-explorador-plazos",
-   "archivo_usado": "M2 · Explorador 2.1.17 · v1.html",
+   "archivo_usado": "M2 · Explorador 2.1.17 · v3.html",
    "h": 6
   },
   {

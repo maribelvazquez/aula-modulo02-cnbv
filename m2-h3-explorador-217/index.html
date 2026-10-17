@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
 <style>
-/* Layout: herramienta de estudio en una columna ancha; arriba las 5 puertas (ritmo 7·3·2·1·1), debajo matriz, asistente, requisitos, transferencias, trampas y práctica. Paleta de la guía 360Educa, ruta Sector financiero. */
+/* Layout: herramienta de estudio en una columna ancha; arriba las 5 puertas (ritmo 7·3·2·1·1), debajo tabla por sujeto, asistente, requisitos, transferencias, trampas y práctica. Paleta de la guía 360Educa, ruta Sector financiero. */
 :root{
   --bg:#faf5ec; --surface:#ffffff; --surface-2:#f3ede1; --line:#e4dccd;
   --fg:#1b1b1e; --muted:#5b5f62; --carbon:#393e41;
@@ -73,7 +73,7 @@ section{padding-block:30px 6px;display:grid;gap:14px;scroll-margin-top:60px}
 .pill{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:999px;justify-self:start}
 .pill.star{background:var(--amarillo);color:var(--on-color)}
 .pill.warn{background:var(--coral);color:var(--on-color)}
-/* Matriz */
+/* Tabla por sujeto */
 .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
 table{border-collapse:collapse;width:100%;min-width:760px}
 th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
@@ -166,17 +166,17 @@ footer{margin-top:40px;font-size:12.5px;color:var(--muted);display:grid;gap:6px;
 <header class="top">
   <div class="eyebrow">360Educa · Módulo 2 · Certificación CNBV PLD/FT · Temario agosto 2026</div>
   <h1>2.1.7 · <span class="hl">Intercambio de información</span></h1>
-  <p class="lede">Quién puede compartir qué, con quién y con qué requisitos, en las 12 DCG del temario. Elige una puerta, toca una celda de la matriz o pregúntale al asistente «¿Puedo compartir esto?». Todo está cotejado contra el texto de estudio (Bancos al 28-ago-2024).</p>
+  <p class="lede">Quién puede compartir qué, con quién y con qué requisitos, en las 12 DCG del temario. Elige una puerta, toca una celda de la tabla o pregúntale al asistente «¿Puedo compartir esto?». Todo sale del texto vigente de las DCG (Bancos al 28-ago-2024).</p>
   <hr class="membrete">
 </header>
 
 <nav class="idx" aria-label="Secciones">
-  <a href="#puertas">Las 5 puertas</a><a href="#matriz">Matriz por sujeto</a><a href="#asistente">¿Puedo compartir esto?</a><a href="#requisitos">Requisitos lado a lado</a><a href="#transferencias">Transferencias</a><a href="#trampas">Trampas</a><a href="#practica">Práctica</a>
+  <a href="#puertas">Las 5 puertas</a><a href="#tabla-sujetos">Tabla por sujeto</a><a href="#asistente">¿Puedo compartir esto?</a><a href="#requisitos">Requisitos lado a lado</a><a href="#transferencias">Transferencias</a><a href="#trampas">Trampas</a><a href="#practica">Práctica</a>
 </nav>
 
 <section id="puertas">
   <h2>Las 5 puertas del intercambio PLD</h2>
-  <p class="sub">Cada puerta es una forma distinta de intercambiar, con su propio fundamento y sus propios requisitos. El número grande es <b>cuántos de los 12 sujetos</b> la tienen. Para recordarlas: <b>7 · 3 · 2 · 1 · 1</b>. Toca una puerta para marcar en la matriz quién la tiene.</p>
+  <p class="sub">Cada puerta es una forma distinta de intercambiar, con su propio fundamento y sus propios requisitos. El número grande es <b>cuántos de los 12 sujetos</b> la tienen. Para recordarlas: <b>7 · 3 · 2 · 1 · 1</b>. Toca una puerta para marcar en la tabla quién la tiene.</p>
   <div class="ritmo" aria-hidden="true">7 · 3 · 2 · 1 · 1 <span class="lbl">grupo · mismo tipo · extranjeras · transferencias · LPB</span></div>
   <div class="doors" id="doors"></div>
   <div class="extra">
@@ -195,8 +195,8 @@ footer{margin-top:40px;font-size:12.5px;color:var(--muted);display:grid;gap:6px;
   </div>
 </section>
 
-<section id="matriz">
-  <h2>Matriz por sujeto</h2>
+<section id="tabla-sujetos">
+  <h2>Tabla por sujeto</h2>
   <p class="sub">Doce sujetos en el orden de las familias (el color de la orilla es su familia: agrupación didáctica, no legal). Toca un encabezado para ver quién tiene esa puerta, un sujeto para ver todo lo que puede hacer, o una celda para su fundamento.</p>
   <div class="legend">
     <span><span class="c si">✓ 62ª</span> lo prevé su DCG</span>
@@ -254,7 +254,7 @@ footer{margin-top:40px;font-size:12.5px;color:var(--muted);display:grid;gap:6px;
 </section>
 
 <footer>
-  <span>Fuente: las 12 Disposiciones de carácter general en PLD/FT de la bibliografía del temario CNBV (agosto 2026), en las versiones de la carpeta M02. Bancos al 28-ago-2024; ITF, texto original de 2018. Almacenes generales de depósito, Afores, sociedades de inversión, Financiera Nacional de Desarrollo y SOFINCO no están entre las 12 DCG del temario.</span>
+  <span>Fuente: las 12 Disposiciones de carácter general en PLD/FT de la bibliografía del temario CNBV (agosto 2026). Bancos al 28-ago-2024; ITF, texto original de 2018. Almacenes generales de depósito, Afores, sociedades de inversión, Financiera Nacional de Desarrollo y SOFINCO no están entre las 12 DCG del temario.</span>
   <span>Agrupación por familias: criterio didáctico de 360Educa; las diferencias se aprenden sujeto por sujeto. Material didáctico; no sustituye la publicación oficial.</span>
 </footer>
 </div>
@@ -313,10 +313,10 @@ const doorsEl=document.getElementById("doors");
 let selCol=null;
 DOORS.forEach(d=>{const b=document.createElement("button");b.className="door"+(d.debe?" debe":"");b.type="button";b.setAttribute("aria-pressed","false");b.dataset.k=d.k;
  b.innerHTML=`<span class="tag">${d.tag}</span><span class="n num">${d.n}</span><span class="t">${d.t}</span><span class="d">${d.d}</span>`;
- b.addEventListener("click",()=>{setCol(selCol===d.k?null:d.k);document.getElementById("matriz").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});});
+ b.addEventListener("click",()=>{setCol(selCol===d.k?null:d.k);document.getElementById("tabla-sujetos").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});});
  doorsEl.appendChild(b);});
 
-/* Matriz */
+/* Tabla por sujeto */
 const t=document.getElementById("mtx");
 let h="<thead><tr><th scope='col'>Sujeto</th>"+COLS.map(c=>`<th scope="col" data-k="${c.k}" class="${c.x?"col-x":""}"><button type="button" data-col="${c.k}">${c.t}<small>${c.s}</small></button></th>`).join("")+"</tr></thead><tbody>";
 let prev=null;
@@ -459,7 +459,7 @@ const QZ=[
  ["Un banco puede consultar la plataforma de transferencias sobre un Usuario durante los 2 días hábiles bancarios siguientes a la transferencia.",true,"Clientes: mientras dure la relación; Usuarios: 2 días hábiles bancarios.","Bancos 62ª Quáter fr. X"],
  ["La información que un banco recibe en un intercambio puede usarla cualquier entidad.",false,"Sólo la usa la Entidad que la solicitó, salvo que se establezca que puede compartirse.","Bancos 62ª fr. IV"]];
 let qi=0,ok=0,ans=false;const qz=document.getElementById("quiz");
-function q(){if(qi>=QZ.length){qz.innerHTML=`<p class="score">${ok} de ${QZ.length} correctas</p><p class="mini">${ok>=14?"Listo para el examen en este tema.":"Repasa la matriz y los requisitos lado a lado, y vuelve a intentarlo."}</p><div class="qbtns"><button class="btn" type="button" id="qr">Repetir</button></div>`;document.getElementById("qr").onclick=()=>{qi=0;ok=0;q();};return;}
+function q(){if(qi>=QZ.length){qz.innerHTML=`<p class="score">${ok} de ${QZ.length} correctas</p><p class="mini">${ok>=14?"Listo para el examen en este tema.":"Repasa la tabla por sujeto y los requisitos lado a lado, y vuelve a intentarlo."}</p><div class="qbtns"><button class="btn" type="button" id="qr">Repetir</button></div>`;document.getElementById("qr").onclick=()=>{qi=0;ok=0;q();};return;}
  ans=false;const x=QZ[qi];qz.innerHTML=`<span class="eyebrow num">Afirmación ${qi+1} de ${QZ.length} · ${ok} correctas</span><p class="qtext">${x[0]}</p><div class="qbtns"><button class="btn" type="button" data-v="1">Verdadero</button><button class="btn" type="button" data-v="0">Falso</button></div><div id="qfb"></div>`;}
 qz.addEventListener("click",e=>{const b=e.target.closest("button[data-v]");if(b&&!ans){ans=true;const x=QZ[qi];const good=(b.dataset.v==="1")===x[1];if(good)ok++;
  qz.querySelectorAll("button[data-v]").forEach(z=>z.disabled=true);

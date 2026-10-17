@@ -149,6 +149,29 @@ body.recite .shown .nm,body.recite .shown .hookt,body.recite .shown .desc{filter
 .frow .k{font-family:var(--f-display);font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--muted);display:block;margin-bottom:2px}
 .frow ul{margin:4px 0 0;padding-left:18px}
 .note{margin-top:14px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 16px;font-size:15px}
+/* caso_calendario (v24.5) */
+.tcal{margin-top:16px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.tcal h3{margin:4px 0 6px;font-size:18px}
+.tcal .tcsup{margin:0 0 12px;font-size:15px;color:var(--fg)}
+.tctab{width:100%;border-collapse:collapse;font-size:14px}
+.tctab th{text-align:left;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);padding:6px 8px;border-bottom:2px solid var(--line)}
+.tctab td{padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
+.tctab .tcf{white-space:nowrap;font-weight:700;font-variant-numeric:tabular-nums}
+.tctab .tcf .n{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--surface-2);font-size:11px;margin-right:6px}
+.tctab .tcr{font-size:12.5px;color:var(--muted);font-weight:600}
+.tcojo{margin-top:12px;border:2px dashed var(--line);border-radius:12px;padding:10px 14px}
+.tcojo ul{margin:6px 0 0;padding-left:18px;display:grid;gap:6px;font-size:14.5px}
+.tceq{margin:12px 0 0;font-size:13.5px;color:var(--muted)}
+.tccrit{margin:6px 0 0;font-size:13px;font-style:italic;color:var(--muted)}
+@media (max-width:600px){
+ .tctab thead{display:none}
+ .tctab,.tctab tbody,.tctab tr,.tctab td{display:block;width:100%}
+ .tctab tr{border:1px solid var(--line);border-radius:10px;padding:6px 10px;margin-bottom:8px}
+ .tctab td{border:0;padding:3px 0}
+ .tctab .tcf{white-space:normal}
+ .tctab .tcz::before,.tctab .tcr::before{content:attr(data-l) ": ";font-weight:700;color:var(--muted)}
+}
+@media print{.tcal{break-inside:avoid-page}.tctab tr{break-inside:avoid}}
 
 /* escala */
 .scale{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:14px}
@@ -616,6 +639,13 @@ function tmOpenUnida(id,ri){
 }
 const tmCelda=s=>(r,ri,c,ci)=>{const v=tmVal(r,c.k), d=r.det&&r.det[c.k], u=!tmSeguro(r,c.k);
   return `<button class="tmc${tmVacio(v)?" vacio":""}${d?" has":""}${u?" dud":""}" data-tmc="${s.id}|${ri}|${ci}" aria-label="${esc(r.t)} · ${esc(c.t)}: ${esc(v)}"><span class="v">${esc(v)}</span></button>`;};
+// "caso_calendario" (v24.5): caso con fechas debajo de una tabla mínima: supuesto, tabla Fecha · Paso · Plazo · Fundamento, bloque «Ojo», equivalentes y criterio.
+const tmCaso=s=>{const k=s.caso_calendario; if(!k||!(k.pasos||[]).length) return "";
+  return `<div class="tcal" id="cal-${s.id}"><div class="lbl">Caso con calendario</div>${k.titulo?`<h3>${k.titulo}</h3>`:""}${k.supuesto?`<p class="tcsup">${k.supuesto}</p>`:""}`+
+  `<table class="tctab"><thead><tr><th scope="col">Fecha</th><th scope="col">Paso</th><th scope="col">Plazo</th><th scope="col">Fundamento</th></tr></thead><tbody>${k.pasos.map((p,i)=>`<tr><td class="tcf" data-l="Fecha"><span class="n">${i+1}</span>${esc(p.fecha||"")}</td><td class="tcp" data-l="Paso">${p.paso||""}</td><td class="tcz" data-l="Plazo">${esc(p.plazo||"")}</td><td class="tcr" data-l="Fundamento">${esc(p.ref||"")}</td></tr>`).join("")}</tbody></table>`+
+  ((k.ojo||[]).length?`<div class="tcojo"><div class="lbl">Ojo</div><ul>${k.ojo.map(x=>`<li>${x}</li>`).join("")}</ul></div>`:"")+
+  (k.equivalentes?`<p class="tceq"><b>En las demás DCG:</b> ${k.equivalentes}</p>`:"")+
+  (k.criterio?`<p class="tccrit">${k.criterio}</p>`:"")+`</div>`;};
 R.tablamin = s=>{
   const hayDet=s.renglones.some(r=>r.det&&Object.keys(r.det).length), hayDud=s.renglones.some(r=>s.columnas.some(c=>!tmSeguro(r,c.k)));
   return head(s)+
@@ -623,7 +653,7 @@ R.tablamin = s=>{
   `<div class="tmwrap">${tmTabla(s,{cls:"tmmain",cell:tmCelda(s),unir:true})}</div>`+
   `<p class="tmleyenda">Toca una casilla para ver ${hayDet?"el detalle y ":""}su fundamento.${hayDet?" › = tiene detalle.":""}${hayDud?" ? = pendiente de confirmar en el DOF.":""}</p>`+
   (tmFuera(s)?(F=>`<button class="tmfuera" data-tmfu="${s.id}"><span class="lbl">${esc(F.t)}</span><span class="tmsj">${F.m.map(k=>`<span class="sjp" title="${esc(tmNom(s,k))}"><i></i>${esc(k)}</span>`).join("")}</span>${F.det?`<span class="mas">Por qué ›</span>`:""}</button>`)(tmFuera(s)):"")+
-  (s.nota?`<p class="note">${s.nota}</p>`:"")+
+  (s.nota?`<p class="note">${s.nota}</p>`:"")+tmCaso(s)+
   `<div class="tmprac" id="tmp-${s.id}"><div class="lbl">Practica con esta tabla</div><div class="tmbar" role="group" aria-label="Práctica">${TM_MODOS.filter(([m])=>m!=="obl"||(s.umbrales||[]).length).map(([m,t])=>`<button class="fchip" data-tmm="${s.id}:${m}" aria-pressed="false">${t}</button>`).join("")}<span class="tmscore" id="tms-${s.id}"></span></div><div id="tmb-${s.id}" aria-live="polite"></div></div>`;
 };
 function tmOpen(id,ri,ci){
