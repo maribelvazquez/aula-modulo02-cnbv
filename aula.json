@@ -1,6 +1,6 @@
 {
- "version": "20",
- "armado": "2026-10-17",
+ "version": "21",
+ "armado": "2026-10-18",
  "herramientas": [
   {
    "n": 1,
@@ -60,7 +60,7 @@
    "peso": 3,
    "abierta": true,
    "estado": "integrada",
-   "archivo_usado": "M2 · datos Página 6 · v10.json"
+   "archivo_usado": "M2 · datos Página 6 · v11.json"
   },
   {
    "n": 7,

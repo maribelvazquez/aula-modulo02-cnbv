@@ -367,6 +367,17 @@ table.tm{border-collapse:collapse;width:100%;table-layout:fixed;font-size:14.5px
 .tmfuera .tmsj{margin:0}
 .tmfuera .sjp{--c:var(--muted)}
 .tmfuera .mas{font-size:13px;font-weight:700;color:var(--accion)}
+.tmfuera.tmfr{cursor:default;display:block}
+.tmfuera.tmfr:hover{outline:none}
+.tmfrl{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:6px}
+.tmfrl li{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:2px 12px;padding:7px 0 0;border-top:1px solid var(--line);font-size:14px;line-height:1.35}
+.tmfrl li:first-child{border-top:0;padding-top:0}
+.tmfrl .ley{font-weight:600}
+.tmfrl small{grid-column:1/-1;color:var(--muted);font-size:12px}
+.tmfd{margin:8px 0 0;font-size:13px;color:var(--muted)}
+.sjp.etq{white-space:normal}
+.tmcn{display:block;margin-top:6px;font-family:var(--f-body);font-weight:500;font-size:12px;line-height:1.3;color:var(--muted)}
+@media (max-width:600px){.tmfrl li{grid-template-columns:1fr}.tmcn{font-size:11px}}
 .tmzone.fz{border-style:dashed;border-top:2px dashed var(--line)}
 .tm th.rhd{padding:9px 10px;font-weight:700;font-size:14px;background:var(--surface-2);line-height:1.3}
 .tm tr.rt{display:none}
@@ -612,18 +623,23 @@ const tmMiem=(s,c)=>(c.sujetos&&c.sujetos.length)?c.sujetos.slice():(s.chips||[]
 const tmConSuj=s=>s.columnas.some(c=>tmMiem(s,c).length);
 const tmEsSuj=s=>s.columnas.some(c=>(c.sujetos||[]).length);
 // "fuera": sujetos (o chips con col = fuera.k) que no van en ninguna columna. Se muestran debajo de la tabla y son una zona más en «¿En qué columna va?».
-const tmFuera=s=>{const f=s.fuera; if(!f||typeof f!=="object") return null; const k=f.k||"fuera"; const m=(f.sujetos&&f.sujetos.length)?f.sujetos.slice():(s.chips||[]).filter(x=>x.col===k).map(x=>x.t); return m.length?{k,t:f.t||"Fuera de la tabla",det:f.det||"",ref:f.ref||"",m}:null;};
+const tmFuera=s=>{const f=s.fuera; if(!f||typeof f!=="object") return null; const k=f.k||"fuera"; const m=(f.sujetos&&f.sujetos.length)?f.sujetos.slice():(s.chips||[]).filter(x=>x.col===k).map(x=>x.t); return m.length?{k,t:f.t||"Fuera de la tabla",det:f.det||"",ref:f.ref||"",m,ren:(f.renglones||[]).filter(r=>r&&(r.sujetos||r.ley))}:null;};
+// v24.6 · "etiquetas" de columna: {clave: "texto en pantalla"} (p. ej. SOFOM → «SOFOM no regulada»); "nota" de columna: línea bajo su encabezado.
+const tmEtq=(c,k)=>(c&&c.etiquetas&&c.etiquetas[k])||"";
+const tmNomC=(s,c,k)=>tmEtq(c,k)||tmNom(s,k);
+// v24.6 · "fuera.renglones": [{sujetos, ley, ref}] · lista debajo de la tabla, sin montos.
+const tmFueraRen=F=>F.ren.length?`<ul class="tmfrl">${F.ren.map(r=>`<li><b>${esc(r.sujetos||"")}</b><span class="ley">${esc(r.ley||"")}</span>${r.ref?`<small>${esc(r.ref)}</small>`:""}</li>`).join("")}</ul>`:"";
 function tmOpenFuera(id){const s=tbSec(id), F=tmFuera(s); if(!F) return;
   $("#dHead").className="dhead"; $("#dTitle").textContent=F.t;
-  $("#dBody").innerHTML=`<div class="lbl">No va en ninguna columna${F.ref?` · ${esc(F.ref)}`:""}</div><p style="margin:0 0 10px"><b>${tmEsSuj(s)?"Quiénes":"Qué entra"}:</b> ${F.m.map(k=>esc(tmNom(s,k))).join(", ")}</p>${F.det?`<p style="margin:0">${F.det}</p>`:""}`;
+  $("#dBody").innerHTML=`<div class="lbl">No va en ninguna columna${F.ref?` · ${esc(F.ref)}`:""}</div>${F.ren.length?tmFueraRen(F):`<p style="margin:0 0 10px"><b>${tmEsSuj(s)?"Quiénes":"Qué entra"}:</b> ${F.m.map(k=>esc(tmNom(s,k))).join(", ")}</p>`}${F.det?`<p style="margin:0">${F.det}</p>`:""}`;
   lastFocus=document.activeElement; $("#scrim").hidden=false; $("#drawer").hidden=false; $("#dClose").focus();}
-const tmPill=(s,k,ci,extra)=>`<span class="sjp ${colorDe(s.columnas[ci].color,ci)}${extra?" "+extra:""}" title="${esc(tmNom(s,k))}"><i></i>${esc(k)}</span>`;
+const tmPill=(s,k,ci,extra)=>{const e=tmEtq(s.columnas[ci],k); return `<span class="sjp ${colorDe(s.columnas[ci].color,ci)}${e?" etq":""}${extra?" "+extra:""}" title="${esc(e||tmNom(s,k))}"><i></i>${esc(e||k)}</span>`;};
 function tmTabla(s,o){
   o=o||{};
   const cols=o.cols||s.columnas.map((c,ci)=>({c,ci,sj:tmMiem(s,c)}));
   const rows=o.rows||s.renglones.map((r,ri)=>({r,ri}));
   const N=cols.length;
-  const th=cols.map(({c,ci,sj,badk})=>`<th scope="col" class="${colorDe(c.color,ci)}">${o.mini&&sj.length?"":esc(c.t)}${sj.length?`<div class="tmsj">${sj.map(k=>tmPill(s,k,ci,k===badk?"bad":"")).join("")}</div>`:""}</th>`).join("");
+  const th=cols.map(({c,ci,sj,badk})=>`<th scope="col" class="${colorDe(c.color,ci)}">${o.mini&&sj.length?"":esc(c.t)}${sj.length?`<div class="tmsj">${sj.map(k=>tmPill(s,k,ci,k===badk?"bad":"")).join("")}</div>`:""}${!o.mini&&c.nota?`<small class="tmcn">${c.nota}</small>`:""}</th>`).join("");
   const body=rows.map(({r,ri})=>`<tr class="rt"><th colspan="${N}" scope="colgroup">${esc(r.t)}</th></tr><tr><th class="rhd" scope="row">${esc(r.t)}</th>${o.unir&&tmUnido(s,r)?`<td class="tmu" colspan="${N}">${tmCeldaUnida(s,r,ri)}</td>`:cols.map(({c,ci})=>`<td class="${!o.mini&&ci===0?"c0":""}${o.bad&&o.bad(ri,ci)?" bad":""}">${o.cell(r,ri,c,ci)}</td>`).join("")}</tr>`).join("");
   return `<table class="tm${o.mini?" mini":""}${o.cls?" "+o.cls:""}"><thead><tr><th class="cor" scope="col">${esc(s.col_titulo||"Lo que cambia")}</th>${th}</tr></thead><tbody>${body}</tbody></table>`;
 }
@@ -652,7 +668,7 @@ R.tablamin = s=>{
   (s.igual&&s.igual.length?`<div class="tmigual"><div class="lbl">${esc(s.igual_titulo||"Igual para todos")}</div>${s.igual.map(x=>`<span class="ig">${x}</span>`).join("")}</div>`:"")+
   `<div class="tmwrap">${tmTabla(s,{cls:"tmmain",cell:tmCelda(s),unir:true})}</div>`+
   `<p class="tmleyenda">Toca una casilla para ver ${hayDet?"el detalle y ":""}su fundamento.${hayDet?" › = tiene detalle.":""}${hayDud?" ? = pendiente de confirmar en el DOF.":""}</p>`+
-  (tmFuera(s)?(F=>`<button class="tmfuera" data-tmfu="${s.id}"><span class="lbl">${esc(F.t)}</span><span class="tmsj">${F.m.map(k=>`<span class="sjp" title="${esc(tmNom(s,k))}"><i></i>${esc(k)}</span>`).join("")}</span>${F.det?`<span class="mas">Por qué ›</span>`:""}</button>`)(tmFuera(s)):"")+
+  (tmFuera(s)?(F=>F.ren.length?`<div class="tmfuera tmfr"><span class="lbl">${esc(F.t)}</span>${tmFueraRen(F)}${F.det?`<p class="tmfd">${F.det}</p>`:""}</div>`:`<button class="tmfuera" data-tmfu="${s.id}"><span class="lbl">${esc(F.t)}</span><span class="tmsj">${F.m.map(k=>`<span class="sjp" title="${esc(tmNom(s,k))}"><i></i>${esc(k)}</span>`).join("")}</span>${F.det?`<span class="mas">Por qué ›</span>`:""}</button>`)(tmFuera(s)):"")+
   (s.nota?`<p class="note">${s.nota}</p>`:"")+tmCaso(s)+
   `<div class="tmprac" id="tmp-${s.id}"><div class="lbl">Practica con esta tabla</div><div class="tmbar" role="group" aria-label="Práctica">${TM_MODOS.filter(([m])=>m!=="obl"||(s.umbrales||[]).length).map(([m,t])=>`<button class="fchip" data-tmm="${s.id}:${m}" aria-pressed="false">${t}</button>`).join("")}<span class="tmscore" id="tms-${s.id}"></span></div><div id="tmb-${s.id}" aria-live="polite"></div></div>`;
 };
@@ -660,12 +676,12 @@ function tmOpen(id,ri,ci){
   const s=tbSec(id), r=s.renglones[ri], c=s.columnas[ci], v=tmVal(r,c.k), d=r.det&&r.det[c.k], rf=tmRef(r,c.k), u=!tmSeguro(r,c.k);
   $("#dHead").className="dhead "+colorDe(c.color,ci);
   $("#dTitle").textContent=r.t;
-  $("#dBody").innerHTML=`<div class="lbl">${esc(c.t)}${rf?` · ${esc(rf)}`:""}</div><div class="hook">${esc(v)}${u?" · pendiente de confirmar en el DOF":""}</div>${tmMiem(s,c).length?`<p style="margin:0 0 10px"><b>${tmEsSuj(s)?"Quiénes":"Qué entra"}:</b> ${tmMiem(s,c).map(k=>esc(tmNom(s,k))).join(", ")}</p>`:""}${d?`<p style="margin:0">${d}</p>`:""}`;
+  $("#dBody").innerHTML=`<div class="lbl">${esc(c.t)}${rf?` · ${esc(rf)}`:""}</div><div class="hook">${esc(v)}${u?" · pendiente de confirmar en el DOF":""}</div>${tmMiem(s,c).length?`<p style="margin:0 0 10px"><b>${tmEsSuj(s)?"Quiénes":"Qué entra"}:</b> ${tmMiem(s,c).map(k=>esc(tmNomC(s,c,k))).join(", ")}</p>`:""}${c.nota?`<p class="tmcn" style="margin:0 0 10px">${c.nota}</p>`:""}${d?`<p style="margin:0">${d}</p>`:""}`;
   lastFocus=document.activeElement; $("#scrim").hidden=false; $("#drawer").hidden=false; $("#dClose").focus();
 }
 /* 1 · ¿En qué columna va? */
 function tmItemsCol(s){
-  if(tmConSuj(s)){const F=tmFuera(s), N=s.columnas.length; return s.columnas.flatMap((c,ci)=>tmMiem(s,c).map(k=>({t:tmNom(s,k),sub:tmNom(s,k)!==k?k:"",ci}))).concat(F?F.m.map(k=>({t:tmNom(s,k),sub:tmNom(s,k)!==k?k:"",ci:N})):[]);}
+  if(tmConSuj(s)){const F=tmFuera(s), N=s.columnas.length; return s.columnas.flatMap((c,ci)=>tmMiem(s,c).map(k=>({t:tmNomC(s,c,k),sub:tmNomC(s,c,k)!==k?k:"",ci}))).concat(F?F.m.map(k=>({t:tmNom(s,k),sub:tmNom(s,k)!==k?k:"",ci:N})):[]);}
   const out=[], seen=new Set();
   s.renglones.forEach(r=>s.columnas.forEach((c,ci)=>{
     const v=tmVal(r,c.k); if(tmVacio(v)||!tmSeguro(r,c.k)||seen.has(v)) return;
