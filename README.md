@@ -1,4 +1,4 @@
-# Aula del Repaso · Módulo 2 · v22
+# Aula del Repaso · Módulo 2 · v23
 
 Aula de estudio de 360Educa (GMC360). Armada el 19/10/2026 con la plantilla del mapa interactivo (modo aula).
 Un portal (`index.html`), una carpeta por herramienta y el simulacro mixto en `m2-simulacro/`
