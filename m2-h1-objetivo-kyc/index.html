@@ -437,6 +437,28 @@ table.tm.mini{font-size:12.5px}
 .tm.mini td{padding:6px 5px;font-weight:600;overflow-wrap:break-word;hyphens:auto;line-height:1.25}
 .tm.mini .bad{outline:3px solid var(--coral);outline-offset:-3px}
 .tm.mini .sjp.bad{outline-offset:0}
+.tmfx{width:100%;border-collapse:collapse}.tmfx th,.tmfx td{border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.tmfx thead th{border-bottom:2px solid var(--line);color:var(--muted)}.tmfx tr:last-child>*{border-bottom:0}
+/* cuadro de consulta (v24.7) */
+.cuadro{margin:14px 0 16px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.cuadro.solo{margin-top:6px}
+.cuadro h3{margin:2px 0 6px;font-size:18px}
+.cuadro .cqi{margin:0 0 10px;font-size:14.5px}
+.cqt{width:100%;border-collapse:collapse;font-size:14px}
+.cqt th{text-align:left;font-family:var(--f-display);font-size:12.5px;padding:8px;background:var(--surface-2);border-bottom:2px solid var(--line);vertical-align:bottom}
+.cqt td{padding:8px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.35}
+.cqt td.c1{font-weight:700}
+.cqt td[data-dif]{background:var(--principal-halo);font-weight:600;box-shadow:inset 3px 0 0 var(--principal-linea)}
+.cqn{margin:10px 0 0;font-size:13px;color:var(--muted)}
+@media (max-width:600px){
+ .cqt thead{display:none}
+ .cqt,.cqt tbody,.cqt tr,.cqt td{display:block;width:100%}
+ .cqt tr{border:1px solid var(--line);border-radius:10px;padding:6px 10px;margin-bottom:8px}
+ .cqt td{border:0;padding:3px 0}
+ .cqt td:not(.c1)::before{content:attr(data-l) ": ";font-weight:700;color:var(--muted);font-size:12.5px}
+ .cqt td[data-dif]{padding:3px 6px;border-radius:6px}
+}
+@media print{.cqt tr{break-inside:avoid}}
 .tmt .tmc.oc .v{visibility:hidden}
 .tmt .tmc.oc::before{content:"?";color:var(--muted);font-weight:800}
 .tmt .tmc.oc{background:var(--surface-2)}
@@ -612,7 +634,8 @@ const mixA=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],
 // Prácticas: «¿En qué columna va?», «Tapa y recita», «¿Cuál tabla es la correcta?», «Relaciona» y, si hay "umbrales", «¿Qué obligación nace?».
 const TMS={};
 const NOM_STD={BAN:"Bancos",SOFOM:"SOFOM",CB:"Casas de bolsa",ASE:"Asesores en inversiones",FON:"Fondos de inversión",SOCAP:"SOCAP",SOFIPO:"SOFIPO",UC:"Uniones de crédito",CC:"Casas de cambio",CCA:"Centros cambiarios",TD:"Transmisores de dinero",ITF:"ITF"};
-const TM_MODOS=[["col","¿En qué columna va?"],["tapa","Tapa y recita"],["cual","¿Cuál tabla es la correcta?"],["obl","¿Qué obligación nace?"],["rel","Relaciona"]];
+// v24.7: «¿En qué columna va?» se retiró de la barra (sus funciones quedan sin uso); la práctica abre en «¿Cuál tabla es la correcta?».
+const TM_MODOS=[["cual","¿Cuál tabla es la correcta?"],["tapa","Tapa y recita"],["rel","Relaciona"],["obl","¿Qué obligación nace?"]];
 const LETRAS="ABCDEFGH";
 const tmVal=(r,ck)=>{const v=(r.celdas||{})[ck]; return v==null?"":String(v);};
 const tmVacio=v=>!String(v).trim()||/^[—–-]+$/.test(String(v).trim());
@@ -655,6 +678,11 @@ function tmOpenUnida(id,ri){
 }
 const tmCelda=s=>(r,ri,c,ci)=>{const v=tmVal(r,c.k), d=r.det&&r.det[c.k], u=!tmSeguro(r,c.k);
   return `<button class="tmc${tmVacio(v)?" vacio":""}${d?" has":""}${u?" dud":""}" data-tmc="${s.id}|${ri}|${ci}" aria-label="${esc(r.t)} · ${esc(c.t)}: ${esc(v)}"><span class="v">${esc(v)}</span></button>`;};
+// v24.7 · cuadro de consulta: {titulo?, intro?, columnas:[...], filas:[[celda...]], nota?}; celda = texto o {t, dif:true} (resaltada: lo que se sale de la regla).
+const tbCelda=x=>x&&typeof x==="object"?x:{t:x==null?"":String(x)};
+const tbCuadro=(k,cls)=>{if(!k||!(k.filas||[]).length) return ""; const C=k.columnas||[];
+  return `<div class="cuadro${cls?" "+cls:""}">${k.titulo?`<h3>${k.titulo}</h3>`:""}${k.intro?`<p class="cqi">${k.intro}</p>`:""}<table class="cqt">${C.length?`<thead><tr>${C.map(c=>`<th scope="col">${c}</th>`).join("")}</tr></thead>`:""}<tbody>${k.filas.map(f=>`<tr>${f.map((x,i)=>{const c=tbCelda(x); return `<td${i===0?' class="c1"':""}${c.dif?' data-dif="1"':""} data-l="${esc(String(C[i]||"").replace(/<[^>]+>/g,""))}">${c.t}</td>`;}).join("")}</tr>`).join("")}</tbody></table>${k.nota?`<p class="cqn">${k.nota}</p>`:""}</div>`;};
+R.cuadro = s=>head(s)+tbCuadro({columnas:s.columnas,filas:s.filas,nota:s.nota},"solo");
 // "caso_calendario" (v24.5): caso con fechas debajo de una tabla mínima: supuesto, tabla Fecha · Paso · Plazo · Fundamento, bloque «Ojo», equivalentes y criterio.
 const tmCaso=s=>{const k=s.caso_calendario; if(!k||!(k.pasos||[]).length) return "";
   return `<div class="tcal" id="cal-${s.id}"><div class="lbl">Caso con calendario</div>${k.titulo?`<h3>${k.titulo}</h3>`:""}${k.supuesto?`<p class="tcsup">${k.supuesto}</p>`:""}`+
@@ -664,7 +692,7 @@ const tmCaso=s=>{const k=s.caso_calendario; if(!k||!(k.pasos||[]).length) return
   (k.criterio?`<p class="tccrit">${k.criterio}</p>`:"")+`</div>`;};
 R.tablamin = s=>{
   const hayDet=s.renglones.some(r=>r.det&&Object.keys(r.det).length), hayDud=s.renglones.some(r=>s.columnas.some(c=>!tmSeguro(r,c.k)));
-  return head(s)+
+  return head(s)+tbCuadro(s.cuadro_previo,"previo")+
   (s.igual&&s.igual.length?`<div class="tmigual"><div class="lbl">${esc(s.igual_titulo||"Igual para todos")}</div>${s.igual.map(x=>`<span class="ig">${x}</span>`).join("")}</div>`:"")+
   `<div class="tmwrap">${tmTabla(s,{cls:"tmmain",cell:tmCelda(s),unir:true})}</div>`+
   `<p class="tmleyenda">Toca una casilla para ver ${hayDet?"el detalle y ":""}su fundamento.${hayDet?" › = tiene detalle.":""}${hayDud?" ? = pendiente de confirmar en el DOF.":""}</p>`+
@@ -750,8 +778,18 @@ function tmMutaciones(s){
     s.columnas.forEach((c2,cj)=>{ if(cj===ci||!tmMiem(s,c2).length) return; sj.forEach(k=>M.push({t:"move",k,from:ci,to:cj,w:conT((c.trampa_mover||{})[k])})); });});
   return M;
 }
+// v24.7 · "cual_fijas": [{p, h:[col1,col2], o:[4 tablas de renglones [a,b]], a: índice de la correcta, x, ref?}]. Salen primero, en orden al azar; después, las rondas generadas.
+function tmCualFija(id){
+  const s=tbSec(id), g=TMS[id], F=s.cual_fijas||[];
+  if(!g.fq||!g.fq.length){ if(g.fqHecho&&tmMutaciones(s).length>=3) return false; g.fq=mixA(F.map((_,i)=>i)); g.fqHecho=true; }
+  const q=F[g.fq.shift()], ord=mixA(q.o.map((_,i)=>i));
+  g.cual={fija:q,opts:ord.map(i=>({ok:i===q.a,filas:q.o[i]})),done:false,mine:null};
+  tmCualDraw(id); return true;
+}
 function tmCualNuevo(id){
-  const s=tbSec(id), g=TMS[id], pool=tmMutaciones(s), pick=[];
+  const s=tbSec(id), g=TMS[id];
+  if((s.cual_fijas||[]).length&&(!g.fqHecho||(g.fq&&g.fq.length)||tmMutaciones(s).length<3)&&tmCualFija(id)) return;
+  const pool=tmMutaciones(s), pick=[];
   const draw=f=>{const c=pool.filter(f); if(!c.length) return null; let x=Math.random()*c.reduce((a,m)=>a+m.w,0); for(const m of c){x-=m.w; if(x<=0) return m;} return c[c.length-1];};
   const add=m=>{if(!m) return; pool.splice(pool.indexOf(m),1); pick.push(m);};
   add(draw(m=>m.t==="swap")); add(draw(m=>m.t==="move"));
@@ -778,6 +816,10 @@ function tmMutTxt(s,m){
 }
 function tmCualDraw(id){
   const s=tbSec(id), st=TMS[id].cual;
+  if(st.fija){const q=st.fija;
+    const html=st.opts.map((o,i)=>{const cls=st.done?(o.ok?" ok":"")+(st.mine===i?" mine":""):"";
+      return `<div class="tmopt${cls}" role="button" tabindex="${st.done?-1:0}" aria-disabled="${st.done}" data-tmo="${id}|${i}"><div class="tl">Tabla ${LETRAS[i]}</div><table class="tm mini tmfx">${(q.h||[]).length?`<thead><tr>${q.h.map(h=>`<th scope="col">${esc(h)}</th>`).join("")}</tr></thead>`:""}<tbody>${o.filas.map(r=>`<tr>${r.map((c,j)=>j===0?`<th scope="row" class="rhd">${esc(c)}</th>`:`<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;}).join("");
+    $("#tmb-"+id).innerHTML=`<div class="tmq">${esc(q.p)}</div><div class="tmgrid">${html}</div><div id="tmf-${id}">${st.fb||""}</div>`; return;}
   const html=st.opts.map((o,i)=>{
     const cls=st.done?(o.ok?" ok":"")+(st.mine===i?" mine":""):"";
     const t=tmTabla(s,{mini:true,cols:o.cols.map(x=>st.done?x:{...x,badk:undefined}),rows:st.rows.map(ri=>({r:s.renglones[ri],ri})),bad:st.done?(ri,ci)=>o.bad.has(ri+"_"+ci):null,cell:(r,ri,c,ci)=>esc(o.cells[ri][ci])+(tmSeguro(r,c.k)?"":" ?")});
@@ -789,6 +831,7 @@ function tmCualPick(id,i){
   const s=tbSec(id), g=TMS[id], st=g.cual; if(st.done) return; st.done=true; st.mine=i;
   const o=st.opts[i], sc=g.score.cual||(g.score.cual={ok:0,n:0}); sc.n++; if(o.ok) sc.ok++;
   const correcta=LETRAS[st.opts.findIndex(x=>x.ok)];
+  if(st.fija){st.fb=`<div class="tmfb fb">${o.ok?'<span class="ok">Correcto</span>':`<span class="no">Incorrecto</span> La correcta es la <b>tabla ${correcta}</b>.`} ${st.fija.x||""}${st.fija.ref?` <span class="art">${esc(st.fija.ref)}</span>`:""}<div class="qactions"><button class="btn" data-tmotra="${id}">Otra</button></div></div>`; tmCualDraw(id); tmScore(id); return;}
   st.fb=`<div class="tmfb fb">${o.ok?'<span class="ok">Correcto</span> Las otras tres cambiaban esto:':`<span class="no">Incorrecto</span> La correcta es la <b>tabla ${correcta}</b>. Lo que fallaba en la tuya:`}<ul>${(o.ok?st.opts.filter(x=>!x.ok).map(x=>x.mut):[o.mut]).map(m=>tmMutTxt(s,m)).join("")}</ul><div class="qactions"><button class="btn" data-tmotra="${id}">Otra</button></div></div>`;
   tmCualDraw(id); tmScore(id);
 }
@@ -862,7 +905,7 @@ function tmNuevo(id){({col:tmColNuevo,tapa:tmTapaNuevo,cual:tmCualNuevo,obl:tmOb
 function tmModo(id,m){TMS[id].modo=m; document.querySelectorAll(`[data-tmm^="${id}:"]`).forEach(b=>b.setAttribute("aria-pressed",b.dataset.tmm===id+":"+m)); tmNuevo(id);}
 function tmInit(s){
   const g=TMS[s.id]={modo:null,score:{}};
-  g.viable={col:tmItemsCol(s).length>=3,tapa:true,cual:tmMutaciones(s).length>=3,obl:(s.umbrales||[]).some(u=>u.seguro!==false),rel:tmPares(s).length>=4};
+  g.viable={tapa:true,cual:tmMutaciones(s).length>=3||(s.cual_fijas||[]).length>0,obl:(s.umbrales||[]).some(u=>u.seguro!==false),rel:tmPares(s).length>=4};
   document.querySelectorAll(`[data-tmm^="${s.id}:"]`).forEach(b=>{const m=b.dataset.tmm.split(":")[1]; if(!g.viable[m]){b.disabled=true; b.title="Esta tabla no da para esta práctica";}});
   tmModo(s.id,TM_MODOS.map(x=>x[0]).find(m=>g.viable[m]));
 }
