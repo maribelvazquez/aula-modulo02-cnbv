@@ -805,7 +805,7 @@ const tmTitLimpio=x=>String(x||"").replace(/\s*\([^()]*\)/g,m=>TM_REF_RE.test(m)
 function tmExamCelda(s,r,c){const v=tmVal(r,c.k); if(!tmSeguro(r,c.k)||!String(v).trim()) return ""; if(tmVacio(v)) return "—"; const x=tmLimpia(v); if(!x||TM_SUJ_RE.test(x)||x.length>60) return ""; return x;}
 function tmExamRonda(s,ri){
   const r=s.renglones[ri]; if(r.seguro===false) return null;
-  const usa=s.columnas.map((c,ci)=>({c,ci,v:tmExamCelda(s,r,c),m:tmMiem(s,c)})).filter(x=>x.v);
+  const usa=s.columnas.map((c,ci)=>({c,ci,v:tmExamCelda(s,r,c),m:s.examen_filas==="chips"?tmMiem(s,c):(c.sujetos||[]).slice()})).filter(x=>x.v);   // sólo sujetos reales; sin ellos, el renglón lleva el título de la columna
   if(usa.length<2||new Set(usa.map(x=>x.v)).size<2) return null;
   const filas=[]; const usados=new Set();
   const nom=(x,k)=>k==null?x.c.t:tmNomC(s,x.c,k);
@@ -821,7 +821,7 @@ function tmExamRonda(s,ri){
   mixA(vars).forEach(t=>{if(malas.length<3&&!vistos.has(firma(t))){vistos.add(firma(t)); malas.push(t);}});
   if(malas.length<3) return null;
   const x=`<ul class="tmxl">${filas.map(f=>{const rf=tmRef(r,f.x.c.k); return `<li><b>${esc(f.n)}</b>: ${esc(f.v)}${rf&&rf.length<=30?` <span class="art">${esc(rf)}</span>`:""}</li>`;}).join("")}</ul>`;
-  return {p:`¿Qué tabla tiene bien «${tmTitLimpio(r.t)}»?`,h:[tmEsSuj(s)?"Sujeto":"Caso",tmTitLimpio(r.t)],o:[ok].concat(malas),a:0,x};
+  return {p:`¿Qué tabla tiene bien «${tmTitLimpio(r.t)}»?`,h:[tmEsSuj(s)?"Sujeto":(s.col_titulo&&s.col_titulo!=="Lo que cambia"?s.col_titulo:""),tmTitLimpio(r.t)],o:[ok].concat(malas),a:0,x};
 }
 // Tablas sin sujetos (columnas = atributos, renglones = casos; p. ej. fracciones de la LFPIORPI): una ronda = una columna, con hasta 4 renglones.
 function tmExamRondaCol(s,ci){
@@ -837,7 +837,7 @@ function tmExamRondaCol(s,ci){
   const x=`<ul class="tmxl">${filas.map(f=>{const rf=tmRef(f.r,c.k); return `<li><b>${esc(f.r.t)}</b>: ${esc(f.v)}${rf&&rf.length<=30?` <span class="art">${esc(rf)}</span>`:""}</li>`;}).join("")}</ul>`;
   return {p:`¿Qué tabla tiene bien «${c.t}»?`,h:[s.col_titulo&&s.col_titulo!=="Lo que cambia"?s.col_titulo:"Caso",c.t],o:[ok].concat(malas),a:0,x};
 }
-const tmExamPorCol=s=>!s.columnas.some(c=>tmMiem(s,c).length);
+const tmExamPorCol=s=>s.examen_filas!=="chips"&&s.columnas.length<3&&!s.columnas.some(c=>(c.sujetos||[]).length);
 const tmExamUna=(s,i)=>tmExamPorCol(s)?tmExamRondaCol(s,i):tmExamRonda(s,i);
 window.__tm={TMS,get tbSec(){return tbSec;},tmExamRonda:tmExamUna,tmLimpia};   // para las pruebas automáticas
 const tmExamFilas=s=>(tmExamPorCol(s)?s.columnas:s.renglones).map((_,i)=>i).filter(i=>{for(let k=0;k<6;k++) if(tmExamUna(s,i)) return true; return false;});
